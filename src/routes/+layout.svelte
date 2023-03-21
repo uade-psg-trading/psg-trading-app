@@ -1,4 +1,5 @@
 <script>
+	import '../app.css';
 	import Header from './Header.svelte';
 	import './styles.css';
 </script>
@@ -15,7 +16,11 @@
 	</footer>
 </div>
 
-<style>
+<style lang="postcss">
+	/* :global(html) {
+		background-color: theme(colors.gray.100);
+	} */
+
 	.app {
 		display: flex;
 		flex-direction: column;
