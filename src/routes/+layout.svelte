@@ -1,11 +1,14 @@
-<script>
-	import '../app.css';
+<script lang="ts">
+	import type { LayoutServerData } from './$types';
 	import Header from './Header.svelte';
+	import '../app.css';
 	import './styles.css';
+
+	export let data: LayoutServerData;
 </script>
 
 <div class="app">
-	<Header />
+	<Header username={data?.username} />
 
 	<main>
 		<slot />
@@ -28,11 +31,5 @@
 		max-width: 64rem;
 		margin: 0 auto;
 		box-sizing: border-box;
-	}
-
-	@media (min-width: 480px) {
-		footer {
-			padding: 12px 0;
-		}
 	}
 </style>
