@@ -10,7 +10,9 @@
 <div class="app">
 	<Header username={data?.username} />
 
-	<slot />
+	<main class="bg-gray-50 min-h-screen">
+		<slot />
+	</main>
 </div>
 
 <style>

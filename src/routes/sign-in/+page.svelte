@@ -1,7 +1,10 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
+	import logo from '$lib/images/logo/logo.svg';
 	import type { ActionData } from './$types';
-	import Button from '$lib/components/button/button.svelte';
-	import FormInput from '$lib/components/form-input/form-input.svelte';
+	import SecurityButton from '$lib/components/buttons/security-button.svelte';
+	import SsoButton from '$lib/components/buttons/sso-button.svelte';
+	import FormInput from '$lib/components/input/input.svelte';
 	import CheckBox from '$lib/components/check-box/check-box.svelte';
 	import Link from '$lib/components/link/link.svelte';
 
@@ -10,31 +13,21 @@
 </script>
 
 <svelte:head>
-	<title>Sign in</title>
-	<!-- <meta name="description" content="About this app" /> -->
+	<title>Inicia sesion en tu cuenta</title>
 </svelte:head>
 
-<!--
-  This example requires updating your template:
-
-  ```
-  <html class="h-full bg-gray-50">
-  <body class="h-full">
-  ```
--->
-<div class="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+<div class="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
 	<div class="w-full max-w-md space-y-8">
 		<div>
-			<img
-				class="mx-auto h-12 w-auto"
-				src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-				alt="Your Company"
-			/>
+			<img class="mx-auto h-12 w-auto" src={logo} alt="Trading" />
 			<h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-				Sign in to your account
+				Inicie sesion en su cuenta
 			</h2>
+			<h4 class="mt-2 text-center text-5x1 tracking-tight">
+				o <Link href="/register" title="registrese gratis" />
+			</h4>
 		</div>
-		<form class="mt-8 space-y-6" action="/sign-in" method="POST">
+		<form class="mt-8 space-y-6" action="/sign-in" method="POST" use:enhance>
 			<input type="hidden" name="remember" value="true" />
 			<div class="-space-y-px rounded-md shadow-sm">
 				<div>
@@ -51,11 +44,11 @@
 				<div>
 					<FormInput
 						autocomplete="current-password"
-						labelTitle="Password"
+						labelTitle="Contraseña"
 						id="password"
 						name="password"
 						isRequired={true}
-						placeholder="Password"
+						placeholder="Contraseña"
 						type="password"
 					/>
 				</div>
@@ -63,18 +56,19 @@
 			</div>
 			<div class="flex items-center justify-between">
 				<div class="flex items-center">
-					<CheckBox id="remember-me" name="remember-me" title="Remember me" />
+					<CheckBox id="remember-me" name="remember-me" title="Recordarme" />
 				</div>
 
 				<div class="text-sm">
-					<Link href="#" title="Forgot your password?" />
+					<Link href="#" title="¿Olvido su contraseña?" />
 				</div>
 			</div>
 			{#if form?.errorMessage}
 				<div class="text-red-500 text-sm">{form.errorMessage}</div>
 			{/if}
 
-			<Button title="Sign in" buttonType="submit" />
+			<SecurityButton title="Iniciar sesion" buttonType="submit" />
+			<SsoButton title="Iniciar sesion con Google" ssoProvider="google" />
 			<div />
 		</form>
 	</div>
