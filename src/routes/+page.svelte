@@ -35,16 +35,13 @@
 
     <section>
       <div class="buttons">
-        <a
-          href="/portfolio"
-          style="--primary-color: var(--ethereum-blue);"
-          in:scale={{ delay: 800 }}
+        <a href="#" style="--primary-color: var(--ethereum-blue);" in:scale={{ delay: 800 }}
           ><button class="large row" data-before="📊">Create Portfolio ›</button></a
         >
-        <a href="/explorer" style="--primary-color: var(--arbitrum-blue);" in:scale={{ delay: 850 }}
+        <a href="#" style="--primary-color: var(--arbitrum-blue);" in:scale={{ delay: 850 }}
           ><button class="large row" data-before="🧭">Explore Blockchains ›</button></a
         >
-        <a href="/apps" style="--primary-color: var(--gnosis-teal);" in:scale={{ delay: 900 }}
+        <a href="#" style="--primary-color: var(--gnosis-teal);" in:scale={{ delay: 900 }}
           ><button class="large row" data-before="📲">Browse Apps ›</button></a
         >
       </div>
