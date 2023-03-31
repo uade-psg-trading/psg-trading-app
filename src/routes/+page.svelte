@@ -35,10 +35,7 @@
 
 		<section>
 			<div class="buttons">
-				<a
-					href="/portfolio"
-					style="--primary-color: var(--ethereum-blue);"
-					in:scale={{ delay: 800 }}
+				<a href="#" style="--primary-color: var(--ethereum-blue);" in:scale={{ delay: 800 }}
 					><button class="large row" data-before="📊">Create Portfolio ›</button></a
 				>
 				<a href="/explorer" style="--primary-color: var(--arbitrum-blue);" in:scale={{ delay: 850 }}
