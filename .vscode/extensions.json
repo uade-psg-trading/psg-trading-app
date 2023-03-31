@@ -1,16 +1,16 @@
 {
-	"recommendations": [
-		"dbaeumer.vscode-eslint",
-		"ecmel.vscode-html-css",
-		"bierner.color-info",
-		"streetsidesoftware.code-spell-checker",
-		"visualstudioexptteam.vscodeintellicode",
-		"visualstudioexptteam.intellicode-api-usage-examples",
-		"esbenp.prettier-vscode",
-		"syler.sass-indented",
-		"svelte.svelte-vscode",
-		"davidanson.vscode-markdownlint",
-		"ms-playwright.playwright",
-		"bradlc.vscode-tailwindcss"
-	]
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "ecmel.vscode-html-css",
+    "bierner.color-info",
+    "streetsidesoftware.code-spell-checker",
+    "visualstudioexptteam.vscodeintellicode",
+    "visualstudioexptteam.intellicode-api-usage-examples",
+    "esbenp.prettier-vscode",
+    "syler.sass-indented",
+    "svelte.svelte-vscode",
+    "davidanson.vscode-markdownlint",
+    "ms-playwright.playwright",
+    "bradlc.vscode-tailwindcss"
+  ]
 }
