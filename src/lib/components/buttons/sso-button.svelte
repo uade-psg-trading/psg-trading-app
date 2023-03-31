@@ -1,6 +1,5 @@
 <script lang="ts">
   import GoogleIcon from '$lib/icons/google.svelte';
-  import type { HTMLButtonAttributes } from 'svelte/elements';
 
   export let ssoProvider: 'google' | 'microsoft' | 'apple' | 'facebook';
   export let title: string;

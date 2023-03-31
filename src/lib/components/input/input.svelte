@@ -8,7 +8,7 @@
   export let isRequired: boolean;
   export let autocomplete: string | undefined = undefined;
   export let type: HTMLInputAttributes['type'] = 'text';
-  export let value: string = '';
+  export let value = '';
 </script>
 
 <label for={name} class="sr-only">{labelTitle}</label>
