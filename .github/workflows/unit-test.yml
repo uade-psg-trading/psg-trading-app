@@ -1,4 +1,4 @@
-name: SvelteKit CI
+name: ViTest - Unit Tests
 
 on:
   push:

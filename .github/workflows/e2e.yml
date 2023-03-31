@@ -24,8 +24,8 @@ jobs:
           cache: 'npm'
       - run: npm ci && npx playwright install --with-deps
       - run: npm run test:e2e
-      if: always()
-      uses: actions/upload-artifact@v3
-      with:
-        name: playwright-report
-        path: playwright-report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: playwright-report
+          path: playwright-report
