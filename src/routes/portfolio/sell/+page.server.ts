@@ -12,7 +12,7 @@ export const actions: Actions = {
 		}
 
 		if (Object.keys(errors).length > 0) {
-			return fail(400);
+			return fail(400, errors);
 		}
 
 		return {
