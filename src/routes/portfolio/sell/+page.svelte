@@ -3,7 +3,10 @@
   import token_chart from '$lib/images/token_chart.svg';
   import FormInput from '$lib/components/input/input-with-title.svelte';
   import PrimaryButton from '$lib/components/buttons/primary-button.svelte';
+  import Selector from '$lib/components/selector/selector.svelte';
   import { enhance } from '$app/forms';
+  let selectedValue: string;
+  let tokenList = [`$PSG`, `$BAR`, `$CITY`];
 </script>
 
 <svelte:head>
@@ -28,7 +31,13 @@
     <form action="/portfolio/sell" method="POST" class="w-full" use:enhance>
       <div class="flex flex-wrap">
         <div class="w-full md:w-1/2 px-3 mb-6">
-          <FormInput id="token" name="token" isRequired={true} labelTitle="Token" />
+          <Selector
+            id="tokenSelection"
+            name="tokenSelection"
+            value={selectedValue}
+            list={tokenList}
+            labelTitle="Token"
+          />
         </div>
         <div class="w-full md:w-1/2 px-3 mb-6">
           <FormInput id="amount" name="amount" isRequired={true} labelTitle="Cantidad" />
