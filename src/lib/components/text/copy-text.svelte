@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { HTMLInputAttributes } from 'svelte/elements';
   import copyButton from '$lib/images/copy-button.svg';
   export let title: string;
   export let text: string;
