@@ -41,6 +41,8 @@
   },
   "type": "module",
   "dependencies": {
-    "@sveltestack/svelte-query": "^1.6.0"
+    "@sveltestack/svelte-query": "^1.6.0",
+    "fusioncharts": "^3.20.0",
+    "svelte-fusioncharts": "^1.0.0"
   }
 }
