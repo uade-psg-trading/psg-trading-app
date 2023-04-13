@@ -1,8 +1,17 @@
 <script>
-  // import Counter from './Counter.svelte';
-  // import welcome from '$lib/images/svelte-welcome.webp';
-  // import welcome_fallback from '$lib/images/svelte-welcome.png';
-  import { fly, scale, fade } from 'svelte/transition';
+  import { headerStore } from '$lib/stores';
+  import { onMount } from 'svelte';
+  import { fly, scale } from 'svelte/transition';
+
+  // Hay que cambiar esto. No sirve
+  // Es 0 reusable
+  // Tampoco me copa mucho la idea de crear una libreria de rutas.
+  onMount(() => {
+    headerStore.update((value) => {
+      value.title = 'Inicio';
+      return value;
+    });
+  });
 </script>
 
 <svelte:head>

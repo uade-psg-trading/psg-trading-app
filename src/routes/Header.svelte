@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { headerStore } from '$lib/stores';
+
   export let username: string | undefined;
 
   let menuOpened = false;
@@ -9,7 +11,7 @@
 </script>
 
 <nav class="bg-gray-800">
-  <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+  <div class="mx-auto px-2 sm:px-6 lg:px-8">
     <div class="relative flex h-16 items-center justify-between">
       <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
         <!-- Mobile menu button-->
@@ -226,3 +228,8 @@
     </div>
   </div>
 </nav>
+<header>
+  <div class="bg-white p-6 text-gray-900 dark:bg-neutral-700 dark:text-neutral-200">
+    <h3 class="ml-6 text-3xl font-bold">{$headerStore.title}</h3>
+  </div>
+</header>
