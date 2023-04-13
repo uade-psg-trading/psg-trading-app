@@ -16,6 +16,7 @@
   });
   let selectedValue: string;
   let tokenList = [`$PSG`, `$BAR`, `$CITY`];
+  let reasonList = [`SUBE`, `BAJA`];
   const columns = [
     { key: 'id', title: 'ID', value: (row) => row.id, visible: false },
     { key: 'tokenName', title: 'Simbolo', value: (row) => row.tokenName },
@@ -47,7 +48,7 @@
     <WhiteCard>
       <div class="mb-4">
         <h2 class="text-left text-lg font-bold text-indigo-800">Agregar una alarma</h2>
-        <form action="/notification" method="POST" class="w-full" use:enhance>
+        <form action="/notifications" method="POST" class="w-full" use:enhance>
           <div class="flex -mx-3 mt-4">
             <div class="w-1/4 mb-4 px-3">
               <Selector
@@ -63,7 +64,7 @@
                 id="reason"
                 name="reason"
                 value={selectedValue}
-                list={tokenList}
+                list={reasonList}
                 labelTitle="Avisarme si"
               />
             </div>
