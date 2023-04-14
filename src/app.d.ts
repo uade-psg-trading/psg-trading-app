@@ -5,7 +5,7 @@ declare global {
     // interface Error {}
     interface Locals {
       username?: string;
-      // roles?: string[];
+      jwt?: string;
     }
     // interface PageData {}
     // interface Platform {}

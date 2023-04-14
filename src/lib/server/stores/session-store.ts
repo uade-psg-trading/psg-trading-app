@@ -1,13 +1,9 @@
-import { randomBytes } from 'node:crypto';
-
 type SessionInfo = {
   username: string;
-  // roles: string[];
   invalidAt: number;
 };
-type Sid = string;
 
-const sessionStore = new Map<Sid, SessionInfo>();
+const sessionStore = new Map<string, SessionInfo>();
 
 const oneHour = 1000 * 60 * 60;
 let nextClean = Date.now() + oneHour;
@@ -22,22 +18,9 @@ function clean() {
   console.log('next clean date', nextClean);
 }
 
-function getSid(): Sid {
-  return randomBytes(32).toString('hex');
-}
-
-export function createSession(username: string, maxAge: number): string {
-  let sid: Sid = '';
-
-  do {
-    sid = getSid();
-  } while (sessionStore.has(sid));
-
-  // const roles = getUserRoles(username);
-
-  sessionStore.set(sid, {
+export function createSession(username: string, maxAge: number, jwt: string): string {
+  sessionStore.set(jwt, {
     username,
-    // roles,
     invalidAt: Date.now() + maxAge
   });
 
@@ -47,21 +30,21 @@ export function createSession(username: string, maxAge: number): string {
     }, 5000);
   }
 
-  return sid;
+  return jwt;
 }
 
-export function getSession(sid: Sid): SessionInfo | undefined {
-  const session = sessionStore.get(sid);
+export function getSession(jwt: string): SessionInfo | undefined {
+  const session = sessionStore.get(jwt);
   if (session) {
     if (Date.now() > session.invalidAt) {
-      console.log('delete invalid session', sid);
-      sessionStore.delete(sid);
+      console.log('delete invalid session', jwt);
+      sessionStore.delete(jwt);
       return undefined;
     } else {
       return session;
     }
   } else {
-    console.log('session not found', sid);
+    console.log('session not found', jwt);
     return undefined;
   }
 }

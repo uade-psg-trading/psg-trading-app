@@ -39,6 +39,7 @@
             isRequired={true}
             placeholder="Email"
             type="email"
+            value={form?.email}
           />
         </div>
         <div>
