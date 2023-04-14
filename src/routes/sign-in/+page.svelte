@@ -7,9 +7,21 @@
   import FormInput from '$lib/components/input/input.svelte';
   import CheckBox from '$lib/components/check-box/check-box.svelte';
   import Link from '$lib/components/link/link.svelte';
+  import ErrorLabel from '$lib/components/error-label/error-label.svelte';
 
   /** @type {import('./$types').ActionData} */
   export let form: ActionData;
+
+  let loading = false;
+
+  function onEnhanceSubmit() {
+    loading = true;
+
+    return async ({ update }: { update: () => Promise<void> }) => {
+      await update();
+      loading = false;
+    };
+  }
 </script>
 
 <svelte:head>
@@ -27,7 +39,7 @@
         o <Link href="/register" title="registrese gratis" />
       </h4>
     </div>
-    <form class="mt-8 space-y-6" action="/sign-in" method="POST" use:enhance>
+    <form class="mt-8 space-y-6" action="/sign-in" method="POST" use:enhance={onEnhanceSubmit}>
       <input type="hidden" name="remember" value="true" />
       <div class="-space-y-px rounded-md shadow-sm">
         <div>
@@ -39,7 +51,7 @@
             isRequired={true}
             placeholder="Email"
             type="email"
-            value={form?.email}
+            value={form?.email ?? ''}
           />
         </div>
         <div>
@@ -65,10 +77,10 @@
         </div>
       </div>
       {#if form?.errorMessage}
-        <div class="text-red-500 text-sm">{form.errorMessage}</div>
+        <ErrorLabel message={form.errorMessage} />
       {/if}
 
-      <SecurityButton title="Iniciar sesion" buttonType="submit" />
+      <SecurityButton {loading} title="Iniciar sesion" buttonType="submit" />
       <SsoButton title="Iniciar sesion con Google" ssoProvider="google" />
       <div />
     </form>

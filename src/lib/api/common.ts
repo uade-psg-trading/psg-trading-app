@@ -6,7 +6,7 @@ const getHeaders = {
 
 const postHeaders = {
   Accept: 'application/json',
-  'Content-Type': 'application/json; charset=utf-8'
+  'Content-Type': 'application/json'
 };
 
 type Method = 'POST' | 'GET' | 'PUT' | 'DELETE' | 'PATCH';
@@ -21,7 +21,7 @@ type ApiCallArgs = {
 type BasicResponse<T> = {
   success: boolean;
   message?: string;
-  body?: T;
+  data?: T;
 };
 export const apiCall = async <T>({
   url,
@@ -46,18 +46,22 @@ export const apiCall = async <T>({
       body: body && JSON.stringify(body)
     });
 
-    console.log(`method ${method}. Responses: ${JSON.stringify(response)}`);
+    const responseMessage = (await response.json()) as BasicResponse<T>;
+    console.log(
+      `fullUrl ${fullUrl} body ${body} jwt ${jwt} method ${method}. Responses: ${response.status}`
+    );
+
+    console.log(responseMessage);
     if (!response.ok) {
+      const message = responseMessage.message;
       if (response.status === 401) {
-        console.log('Unauthorized');
         throw new Error('Unauthorized');
       }
 
-      console.log('ApiCall Error', response);
-      throw new Error(response.statusText);
+      throw new Error(response.statusText + ' message:' + message);
     }
 
-    return response.json();
+    return responseMessage;
   } catch (error: any) {
     console.log('ApiCall Error', error);
     return {
