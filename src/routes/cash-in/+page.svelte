@@ -12,17 +12,15 @@
 <div class="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
   <div class="rounded p-6 bg-white w-full max-w-screen-lg space-y-8">
     <div>
-      <h2 class="text-left text-lg font-bold text-indigo-800">
-        Transferencia bancaria
-        <p class="text-sm  text-gray-500">
-          Para ingresar dinero a Workflow podes realizar una transferencia al siguiente numero de
-          cuenta.
-        </p>
-        <div>
-          <CopyText title="CBU" text="3220001805006276640017" />
-          <CopyText title="Alias" text="WorkflowDeposito" />
-        </div>
-      </h2>
+      <h2 class="text-left text-lg font-bold text-indigo-800">Transferencia bancaria</h2>
+      <p class="text-sm  text-gray-500">
+        Para ingresar dinero a Workflow podes realizar una transferencia al siguiente numero de
+        cuenta.
+      </p>
+      <div>
+        <CopyText title="CBU" text="3220001805006276640017" />
+        <CopyText title="Alias" text="WorkflowDeposito" />
+      </div>
     </div>
     <div>
       <h2 class="text-left text-lg font-bold text-indigo-800">Tarjeta de crédito</h2>
