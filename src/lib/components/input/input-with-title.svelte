@@ -8,6 +8,7 @@
   export let autocomplete: string | undefined = undefined;
   export let type: HTMLInputAttributes['type'] = 'text';
   export let value = '';
+  export let disabled = false;
 </script>
 
 <label class="block tracking-wide text-gray-700 text-sm mb-2" for={name}>
@@ -21,5 +22,6 @@
   {autocomplete}
   {value}
   required={isRequired}
+  {disabled}
   on:input
 />

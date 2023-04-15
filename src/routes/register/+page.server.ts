@@ -1,45 +1,92 @@
 import { redirect, fail } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { isValidEmail, isValidPassword } from '$lib/utils/validator';
+import { apiEndpoints } from '$lib/api';
 
+function sanitizeFormData(form: RegisterForm): RegisterForm {
+  return {
+    ...form,
+    password: '',
+    confirmPassword: ''
+  };
+}
+
+type RegisterForm = {
+  name: string;
+  lastName: string;
+  dni: string;
+  email: string;
+  country: string;
+  address: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  password: string;
+  confirmPassword: string;
+};
 /** @type {import('./$types').Actions} */
 export const actions: Actions = {
   register: async ({ request }) => {
     const formData = await request.formData();
-    const name = formData.get('name') as string;
-    const email = formData.get('email') as string;
-    const password = formData.get('password') as string;
-    const confirmPassword = formData.get('confirmPassword') as string;
+    const registerForm = Object.fromEntries(formData) as RegisterForm;
 
     const errors: Record<string, unknown> = {};
-    if (!name) {
+    if (!registerForm.name) {
       errors.name = 'required';
     }
 
-    if (!isValidEmail(email)) {
+    if (!isValidEmail(registerForm.email)) {
       errors.email = 'required';
     }
 
-    if (!isValidPassword(password)) {
+    if (isNaN(Number(registerForm.dni))) {
+      errors.dni = 'required';
+    }
+
+    if (!isValidPassword(registerForm.password)) {
       errors.password = 'required';
     }
 
-    if (password !== confirmPassword) {
+    if (registerForm.password !== registerForm.confirmPassword) {
       errors.confirmPassword = 'required';
     }
 
     if (Object.keys(errors).length > 0) {
       const returnData = {
-        data: { name, email },
+        data: sanitizeFormData(registerForm),
         errors
       };
 
       return fail(400, returnData);
     }
 
-    // TODO register the user on BE.
+    const registerResponse = await apiEndpoints.user.createUser({
+      firstName: registerForm.name,
+      dni: Number(registerForm.dni),
+      email: registerForm.email,
+      lastName: registerForm.lastName,
+      password: registerForm.password,
+      location: {
+        country: registerForm.country,
+        direction: registerForm.address,
+        city: registerForm.city,
+        province: registerForm.state,
+        zipCode: registerForm.zipCode
+      }
+    });
+    if (registerResponse) {
+      return redirect(303, '/');
+    }
 
-    // TODO response
-    return redirect(303, '/');
+    return fail(400, {
+      errors: {
+        register: 'error',
+        email: undefined,
+        password: undefined,
+        confirmPassword: undefined,
+        name: undefined
+      },
+      data: sanitizeFormData(registerForm)
+    });
   }
 };
