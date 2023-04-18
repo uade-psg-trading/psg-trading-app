@@ -2,18 +2,17 @@ import { getSession } from '$lib/server/stores/session-store';
 import type { Handle } from '@sveltejs/kit';
 
 export const handle = (async ({ event, resolve }) => {
-	const { cookies } = event;
-	const sid = cookies.get('sid');
-	if (sid) {
-		const session = getSession(sid);
-		if (session) {
-			event.locals.username = session.username;
-			// event.locals.roles = session.roles;
-		} else {
-			cookies.delete('sid');
-		}
-	}
+  const { cookies } = event;
+  const jwt = cookies.get('Auth');
+  if (jwt) {
+    const session = getSession(jwt);
+    if (session) {
+      event.locals.username = session.username;
+      event.locals.jwt = jwt;
+    } else {
+      cookies.delete('Auth');
+    }
+  }
 
-	const response = await resolve(event);
-	return response;
+  return await resolve(event);
 }) satisfies Handle;

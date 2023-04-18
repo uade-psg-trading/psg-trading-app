@@ -1,45 +1,92 @@
 import { redirect, fail } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { isValidEmail, isValidPassword } from '$lib/utils/validator';
+import { apiEndpoints } from '$lib/api';
 
+function sanitizeFormData(form: RegisterForm): RegisterForm {
+  return {
+    ...form,
+    password: '',
+    confirmPassword: ''
+  };
+}
+
+type RegisterForm = {
+  name: string;
+  lastName: string;
+  dni: string;
+  email: string;
+  country: string;
+  address: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  password: string;
+  confirmPassword: string;
+};
 /** @type {import('./$types').Actions} */
 export const actions: Actions = {
-	register: async ({ request }) => {
-		const formData = await request.formData();
-		const name = formData.get('name') as string;
-		const email = formData.get('email') as string;
-		const password = formData.get('password') as string;
-		const confirmPassword = formData.get('confirmPassword') as string;
+  register: async ({ request }) => {
+    const formData = await request.formData();
+    const registerForm = Object.fromEntries(formData) as RegisterForm;
 
-		const errors: Record<string, unknown> = {};
-		if (!name) {
-			errors.name = 'required';
-		}
+    const errors: Record<string, unknown> = {};
+    if (!registerForm.name) {
+      errors.name = 'required';
+    }
 
-		if (!isValidEmail(email)) {
-			errors.email = 'required';
-		}
+    if (!isValidEmail(registerForm.email)) {
+      errors.email = 'required';
+    }
 
-		if (!isValidPassword(password)) {
-			errors.password = 'required';
-		}
+    if (isNaN(Number(registerForm.dni))) {
+      errors.dni = 'required';
+    }
 
-		if (password !== confirmPassword) {
-			errors.confirmPassword = 'required';
-		}
+    if (!isValidPassword(registerForm.password)) {
+      errors.password = 'required';
+    }
 
-		if (Object.keys(errors).length > 0) {
-			const returnData = {
-				data: { name, email },
-				errors
-			};
+    if (registerForm.password !== registerForm.confirmPassword) {
+      errors.confirmPassword = 'required';
+    }
 
-			return fail(400, returnData);
-		}
+    if (Object.keys(errors).length > 0) {
+      const returnData = {
+        data: sanitizeFormData(registerForm),
+        errors
+      };
 
-		// TODO register the user on BE.
+      return fail(400, returnData);
+    }
 
-		// TODO response
-		return redirect(303, '/');
-	}
+    const registerResponse = await apiEndpoints.user.createUser({
+      firstName: registerForm.name,
+      dni: Number(registerForm.dni),
+      email: registerForm.email,
+      lastName: registerForm.lastName,
+      password: registerForm.password,
+      location: {
+        country: registerForm.country,
+        direction: registerForm.address,
+        city: registerForm.city,
+        province: registerForm.state,
+        zipCode: registerForm.zipCode
+      }
+    });
+    if (registerResponse) {
+      return redirect(303, '/');
+    }
+
+    return fail(400, {
+      errors: {
+        register: 'error',
+        email: undefined,
+        password: undefined,
+        confirmPassword: undefined,
+        name: undefined
+      },
+      data: sanitizeFormData(registerForm)
+    });
+  }
 };
