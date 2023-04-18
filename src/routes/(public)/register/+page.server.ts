@@ -75,7 +75,7 @@ export const actions: Actions = {
       }
     });
     if (registerResponse) {
-      return redirect(303, '/');
+      throw redirect(303, '/');
     }
 
     return fail(400, {

@@ -48,3 +48,7 @@ export function getSession(jwt: string): SessionInfo | undefined {
     return undefined;
   }
 }
+
+export function deleteSession(jwt: string) {
+  sessionStore.delete(jwt);
+}

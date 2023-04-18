@@ -7,10 +7,10 @@ import { apiEndpoints } from '$lib/api';
 function performLogin(cookies: Cookies, username: string, jwt: string) {
   const maxAge = 1000 * 60 * 60 * 24 * 30; // 30 days
   const sessionJwt = createSession(username, maxAge, jwt);
-  cookies.set('Auth', `${sessionJwt}`, {
+  cookies.set('Auth', sessionJwt, {
     httpOnly: true,
     path: '/',
-    secure: true,
+    secure: false,
     sameSite: 'strict',
     maxAge
   });

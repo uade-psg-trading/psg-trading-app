@@ -1,16 +1,33 @@
 <script lang="ts">
   import { headerStore } from '$lib/stores';
+  import { onMount } from 'svelte';
 
   export let username: string | undefined;
 
   let menuOpened = false;
-
   function toggleMenu() {
     menuOpened = !menuOpened;
   }
+
+  onMount(() => {
+    const listener = (e: MouseEvent) => {
+      if (e.target instanceof HTMLElement) {
+        if (e.target.closest('#user-menu-button')) {
+          return;
+        }
+      }
+
+      menuOpened = false;
+    };
+    document.addEventListener('click', listener);
+
+    return () => {
+      document.removeEventListener('click', listener);
+    };
+  });
 </script>
 
-<nav class="bg-gray-800">
+<nav data-sveltekit-reload={username ? '' : 'off'} class="bg-gray-800">
   <div class="mx-auto px-2 sm:px-6 lg:px-8">
     <div class="relative flex h-16 items-center justify-between">
       <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -120,6 +137,7 @@
           </a>
 
           <!-- Profile dropdown -->
+          <!-- svelte-ignore a11y-click-events-have-key-events -->
           <div on:click={toggleMenu} class="relative ml-3">
             <div>
               <button
@@ -156,27 +174,26 @@
               aria-labelledby="user-menu-button"
               tabindex="-1"
             >
-              <!-- Active: "bg-gray-100", Not Active: "" -->
               <a
                 href="#"
-                class="block px-4 py-2 text-sm text-gray-700"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
                 role="menuitem"
                 tabindex="-1"
                 id="user-menu-item-0">Your Profile</a
               >
               <a
                 href="#"
-                class="block px-4 py-2 text-sm text-gray-700"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
                 role="menuitem"
                 tabindex="-1"
                 id="user-menu-item-1">Settings</a
               >
               <a
-                href="#"
-                class="block px-4 py-2 text-sm text-gray-700"
+                href="/sign-out"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
                 role="menuitem"
                 tabindex="-1"
-                id="user-menu-item-2">Sign out</a
+                id="user-menu-item-2">Cerrar sesion</a
               >
             </div>
           </div>
