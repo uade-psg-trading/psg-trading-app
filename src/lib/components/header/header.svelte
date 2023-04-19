@@ -193,6 +193,8 @@
                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
                 role="menuitem"
                 tabindex="-1"
+                data-sveltekit-preload-data="off"
+                data-sveltekit-reload
                 id="user-menu-item-2">Cerrar sesion</a
               >
             </div>
