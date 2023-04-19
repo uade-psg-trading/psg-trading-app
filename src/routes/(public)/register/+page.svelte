@@ -20,6 +20,10 @@
       loading = false;
     };
   }
+
+  function goBack() {
+    history.back();
+  }
 </script>
 
 <svelte:head>
@@ -172,7 +176,7 @@
         {/if}
         <div class="md:w-1/2 flex flex-row justify-end">
           <div class="md:w-1/4 mr-2">
-            <SecondaryButton disabled={loading} title="Cancelar" />
+            <SecondaryButton on:click={goBack} disabled={loading} title="Cancelar" />
           </div>
           <div class="md:w-1/4">
             <PrimaryButton {loading} title="Registrarse" buttonType="submit" />

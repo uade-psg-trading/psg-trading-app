@@ -1,22 +1,9 @@
 <script>
-  import { headerStore } from '$lib/stores';
-  import { onMount } from 'svelte';
   import { fly, scale } from 'svelte/transition';
-
-  // Hay que cambiar esto. No sirve
-  // Es 0 reusable
-  // Tampoco me copa mucho la idea de crear una libreria de rutas.
-  onMount(() => {
-    headerStore.update((value) => {
-      value.title = 'Inicio';
-      return value;
-    });
-  });
 </script>
 
 <svelte:head>
-  <title>Home</title>
-  <meta name="description" content="Svelte demo app" />
+  <title>Inicio</title>
 </svelte:head>
 
 <main in:fly={{ x: 300 }} out:fly={{ x: -300 }}>
@@ -29,10 +16,6 @@
         &
         <b>explore</b>
         <br />
-        <!-- the
-					<b>blockchain</b>/<b>web 3.0</b>
-					<b>metaverse</b> -->
-        <!-- <b>blockchains</b> & -->
         the
         <b>decentralized world wide web</b>
         with

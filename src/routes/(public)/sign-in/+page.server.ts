@@ -1,20 +1,8 @@
 import type { Actions } from './$types';
 import { redirect, type Cookies } from '@sveltejs/kit';
-import { createSession } from '$lib/server/stores/session-store';
 import { isValidEmail, isValidPassword } from '$lib/utils/validator';
 import { apiEndpoints } from '$lib/api';
-
-function performLogin(cookies: Cookies, username: string, jwt: string) {
-  const maxAge = 1000 * 60 * 60 * 24 * 30; // 30 days
-  const sessionJwt = createSession(username, maxAge, jwt);
-  cookies.set('Auth', `${sessionJwt}`, {
-    httpOnly: true,
-    path: '/',
-    secure: true,
-    sameSite: 'strict',
-    maxAge
-  });
-}
+import { newSession } from '$lib/server/cookie-manager';
 
 /** @type {import('./$types').Actions} */
 export const actions: Actions = {
@@ -27,7 +15,7 @@ export const actions: Actions = {
     if (valid) {
       const loginApi = await apiEndpoints.session.login(email, password);
       if (loginApi) {
-        performLogin(cookies, email, loginApi.jwt);
+        newSession(cookies, email, loginApi.jwt);
         throw redirect(302, '/');
       }
     }

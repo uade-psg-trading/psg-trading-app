@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { LayoutServerData } from './$types';
-  import Header from './Header.svelte';
+  import Header from '$lib/components/header/header.svelte';
   import '../app.css';
+  import type { LayoutServerData } from './$types';
   import './styles.css';
 
   export let data: LayoutServerData;
@@ -10,7 +10,7 @@
 <div class="app">
   <Header username={data?.username} />
 
-  <main class="bg-gray-50 min-h-screen flex justify-center">
+  <main class="bg-gray-50 min-h-screen">
     <slot />
   </main>
 </div>
