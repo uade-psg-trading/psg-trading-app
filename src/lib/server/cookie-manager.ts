@@ -30,10 +30,10 @@ export const newSession = (cookies: Cookies, username: string, jwt: string) => {
 
   const sessionJwt = createSession(username, sessionMaxAge, jwt);
   cookies.set(jwtCookie, sessionJwt, {
-    httpOnly: true,
-    path: '/',
-    secure: true,
-    sameSite: 'strict',
+    // httpOnly: true,
+    // path: '/',
+    // secure: true,
+    // sameSite: 'strict',
     maxAge: sessionMaxAge
   });
 };
@@ -44,13 +44,13 @@ export const removeSession = (cookies: Cookies, locals: App.Locals) => {
     deleteSession(jwt);
     cookies.delete(jwtCookie, {
       // httpOnly: true,
-      path: '/'
+      // path: '/'
       // secure: true,
       // sameSite: 'strict'
     });
     cookies.set(jwtCookie, '', {
       // httpOnly: true,
-      path: '/',
+      // path: '/',
       // secure: true,
       // sameSite: 'strict',
       maxAge: 0

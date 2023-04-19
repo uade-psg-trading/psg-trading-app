@@ -189,7 +189,7 @@
                 id="user-menu-item-1">Settings</a
               >
               <a
-                href="/sign-out"
+                href="/sign-out?random={Math.random()}"
                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
                 role="menuitem"
                 tabindex="-1"
