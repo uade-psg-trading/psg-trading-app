@@ -213,8 +213,8 @@
                   role="menuitem"
                   tabindex="-1"
                   id="user-menu-item-{index}"
-                  data-sveltekit-reload={!!route.shouldReload ? '' : 'off'}
-                  data-sveltekit-preload-data={!!route.preloadData ? '' : 'off'}>{route.name}</a
+                  data-sveltekit-reload={route.shouldReload ? '' : 'off'}
+                  data-sveltekit-preload-data={route.preloadData ? '' : 'off'}>{route.name}</a
                 >
               {/each}
             </div>
