@@ -1,15 +1,27 @@
 <script>
+  import { onMount } from 'svelte';
   import { enhance } from '$app/forms';
+  import { headerStore } from '$lib/stores';
   import PrimaryButton from '$lib/components/buttons/primary-button.svelte';
   import FormInput from '$lib/components/input/input-with-title.svelte';
   import CopyText from '$lib/components/text/copy-text.svelte';
+
+  // Hay que cambiar esto. No sirve
+  // Es 0 reusable
+  // Tampoco me copa mucho la idea de crear una libreria de rutas.
+  onMount(() => {
+    headerStore.update((value) => {
+      value.title = 'Ingresar dinero';
+      return value;
+    });
+  });
 </script>
 
 <svelte:head>
   <title>Ingresar Dinero</title>
 </svelte:head>
 
-<div class="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+<div class="flex pt-0 pb-6 px-4 sm:px-6 lg:px-8">
   <div class="rounded p-6 bg-white w-full max-w-screen-lg space-y-8">
     <div>
       <h2 class="text-left text-lg font-bold text-indigo-800">Transferencia bancaria</h2>

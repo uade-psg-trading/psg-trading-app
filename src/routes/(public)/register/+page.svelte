@@ -1,10 +1,11 @@
 <script lang="ts">
-  import logo from '$lib/images/logo/logo.svg';
   import type { ActionData } from './$types';
+  import { enhance } from '$app/forms';
+  import { goto } from '$app/navigation';
+  import logo from '$lib/images/logo/logo.svg';
   import FormInput from '$lib/components/input/input-with-title.svelte';
   import PrimaryButton from '$lib/components/buttons/primary-button.svelte';
   import SecondaryButton from '$lib/components/buttons/secondary-button.svelte';
-  import { enhance, type SubmitFunction } from '$app/forms';
   import ErrorLabel from '$lib/components/error-label/error-label.svelte';
 
   /** @type {import('./$types').ActionData} */
@@ -21,8 +22,8 @@
     };
   }
 
-  function goBack() {
-    history.back();
+  function goSignIn() {
+    goto('/sign-in');
   }
 </script>
 
@@ -176,7 +177,7 @@
         {/if}
         <div class="md:w-1/2 flex flex-row justify-end">
           <div class="md:w-1/4 mr-2">
-            <SecondaryButton on:click={goBack} disabled={loading} title="Cancelar" />
+            <SecondaryButton on:click={goSignIn} disabled={loading} title="Cancelar" />
           </div>
           <div class="md:w-1/4">
             <PrimaryButton {loading} title="Registrarse" buttonType="submit" />
