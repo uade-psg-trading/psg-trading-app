@@ -10,7 +10,7 @@
 <div class="app">
   <Header username={data?.username} />
 
-  <main class="bg-gray-50 min-h-screen flex justify-center">
+  <main class="bg-gray-50 min-h-screen">
     <slot />
   </main>
 </div>

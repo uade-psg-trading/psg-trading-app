@@ -1,51 +1,99 @@
 <script lang="ts">
-  import { headerStore } from '$lib/stores';
+  import { page } from '$app/stores';
   import { onMount } from 'svelte';
 
   export let username: string | undefined;
 
-  let menuOpened = false;
-  function toggleMenu() {
-    menuOpened = !menuOpened;
+  let showUserMenu = false;
+  let showMobileMenu = false;
+  function toggleUserMenu() {
+    showUserMenu = !showUserMenu;
+  }
+
+  function toggleMobileMenu() {
+    showMobileMenu = !showMobileMenu;
+  }
+
+  function isCurrentRoute(currentRoute: string) {
+    return $page.url.pathname === currentRoute ? 'bg-gray-900' : '';
   }
 
   onMount(() => {
-    const listener = (e: MouseEvent) => {
+    const userMenuListener = (e: MouseEvent) => {
       if (e.target instanceof HTMLElement) {
         if (e.target.closest('#user-menu-button')) {
           return;
         }
       }
 
-      menuOpened = false;
+      showUserMenu = false;
     };
-    document.addEventListener('click', listener);
 
+    const mobileMenuListener = (e: MouseEvent) => {
+      if (e.target instanceof HTMLElement) {
+        if (e.target.closest('#mobile-button-container')) {
+          return;
+        }
+      }
+
+      showMobileMenu = false;
+    };
+
+    document.addEventListener('click', userMenuListener);
+    document.addEventListener('click', mobileMenuListener);
     return () => {
-      document.removeEventListener('click', listener);
+      document.removeEventListener('click', userMenuListener);
+      document.removeEventListener('click', mobileMenuListener);
     };
   });
+
+  const routes = [
+    {
+      name: 'Portfolio',
+      href: '/portfolio'
+    },
+    {
+      name: 'Ingresar Dinero',
+      href: '/cash-in'
+    },
+    {
+      name: 'Historial de Operaciones',
+      href: '/history'
+    }
+  ];
+
+  const profileMenuRoutes = [
+    {
+      name: 'Perfil',
+      href: '/profile'
+    },
+    {
+      name: 'Cerrar Sesión',
+      href: '/sign-out',
+      shouldReload: true,
+      preloadData: false,
+      generateRandom: true
+    }
+  ];
 </script>
 
-<nav data-sveltekit-reload={username ? '' : 'off'} class="bg-gray-800">
+<nav class="bg-gray-800">
   <div class="mx-auto px-2 sm:px-6 lg:px-8">
     <div class="relative flex h-16 items-center justify-between">
-      <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
-        <!-- Mobile menu button-->
+      <div
+        id="mobile-button-container"
+        class="absolute inset-y-0 left-0 flex items-center sm:hidden"
+      >
         <button
+          id="mobile-menu-button"
           type="button"
           class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
           aria-controls="mobile-menu"
           aria-expanded="false"
+          on:click={toggleMobileMenu}
         >
-          <span class="sr-only">Open main menu</span>
-          <!--
-							Icon when menu is closed.
-	
-							Menu open: "hidden", Menu closed: "block"
-						-->
           <svg
-            class="block h-6 w-6"
+            class="pointer-events-none block h-6 w-6 {showMobileMenu && 'hidden'}"
             fill="none"
             viewBox="0 0 24 24"
             stroke-width="1.5"
@@ -58,13 +106,8 @@
               d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
             />
           </svg>
-          <!--
-							Icon when menu is open.
-	
-							Menu open: "block", Menu closed: "hidden"
-						-->
           <svg
-            class="hidden h-6 w-6"
+            class="pointer-events-none h-6 w-6 {!showMobileMenu && 'hidden'}"
             fill="none"
             viewBox="0 0 24 24"
             stroke-width="1.5"
@@ -93,20 +136,21 @@
             <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
             <a
               href="/"
-              class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium"
-              aria-current="page">Home</a
+              class="{isCurrentRoute('/')} text-white rounded-md px-3 py-2 text-sm font-medium"
+              aria-current="page"
+              data-sveltekit-reload>Inicio</a
             >
             {#if username}
-              <a
-                href="/portfolio"
-                class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
-                >Portfolio</a
-              >
-              <a
-                href="/cash-in"
-                class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
-                >Ingresar Dinero</a
-              >
+              {#each routes as route}
+                <a
+                  href={route.href}
+                  class="{isCurrentRoute(
+                    route.href
+                  )} text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                  data-sveltekit-reload
+                  data-sveltekit-preload-data="off">{route.name}</a
+                >
+              {/each}
             {/if}
           </div>
         </div>
@@ -138,7 +182,7 @@
 
           <!-- Profile dropdown -->
           <!-- svelte-ignore a11y-click-events-have-key-events -->
-          <div on:click={toggleMenu} class="relative ml-3">
+          <div on:click={toggleUserMenu} class="relative ml-3">
             <div>
               <button
                 type="button"
@@ -147,7 +191,6 @@
                 aria-expanded="false"
                 aria-haspopup="true"
               >
-                <span class="sr-only">Open user menu</span>
                 <img
                   class="h-8 w-8 rounded-full"
                   src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
@@ -155,48 +198,25 @@
                 />
               </button>
             </div>
-
-            <!--
-							Dropdown menu, show/hide based on menu state.
-	
-							Entering: "transition ease-out duration-100"
-								From: "transform opacity-0 scale-95"
-								To: "transform opacity-100 scale-100"
-							Leaving: "transition ease-in duration-75"
-								From: "transform opacity-100 scale-100"
-								To: "transform opacity-0 scale-95"
-						-->
             <div
-              hidden={!menuOpened}
+              hidden={!showUserMenu}
               class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
               role="menu"
               aria-orientation="vertical"
               aria-labelledby="user-menu-button"
               tabindex="-1"
             >
-              <a
-                href="#"
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                role="menuitem"
-                tabindex="-1"
-                id="user-menu-item-0">Your Profile</a
-              >
-              <a
-                href="#"
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                role="menuitem"
-                tabindex="-1"
-                id="user-menu-item-1">Settings</a
-              >
-              <a
-                href="/sign-out?random={Math.random()}"
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                role="menuitem"
-                tabindex="-1"
-                data-sveltekit-preload-data="off"
-                data-sveltekit-reload
-                id="user-menu-item-2">Cerrar sesion</a
-              >
+              {#each profileMenuRoutes as route, index}
+                <a
+                  href={route.generateRandom ? `${route.href}?random=${Math.random()}` : route.href}
+                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                  role="menuitem"
+                  tabindex="-1"
+                  id="user-menu-item-{index}"
+                  data-sveltekit-reload={!!route.shouldReload ? '' : 'off'}
+                  data-sveltekit-preload-data={!!route.preloadData ? '' : 'off'}>{route.name}</a
+                >
+              {/each}
             </div>
           </div>
         </div>
@@ -217,38 +237,22 @@
     </div>
   </div>
 
-  <!-- Mobile menu, show/hide based on menu state. -->
-  <div class="sm:hidden" id="mobile-menu">
+  <div hidden={!showMobileMenu} class="sm:hidden" id="mobile-menu">
     <div class="space-y-1 px-2 pt-2 pb-3">
-      <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
       <a
-        href="#"
-        class="bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium"
-        aria-current="page">Dashboard</a
+        href="/"
+        class="{isCurrentRoute('')} text-white block rounded-md px-3 py-2 text-base font-medium"
+        aria-current="page">Inicio</a
       >
-
-      <a
-        href="#"
-        class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
-        >Team</a
-      >
-
-      <a
-        href="#"
-        class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
-        >Projects</a
-      >
-
-      <a
-        href="#"
-        class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
-        >Calendar</a
-      >
+      {#each routes as route}
+        <a
+          href={route.href}
+          class="{isCurrentRoute(
+            route.href
+          )} text-white block rounded-md px-3 py-2 text-base font-medium"
+          aria-current="page">{route.name}</a
+        >
+      {/each}
     </div>
   </div>
 </nav>
-<header>
-  <div class="bg-white p-6 text-gray-900 dark:bg-neutral-700 dark:text-neutral-200">
-    <h3 class="ml-6 text-3xl font-bold">{$headerStore.title}</h3>
-  </div>
-</header>

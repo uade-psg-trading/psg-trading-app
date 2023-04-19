@@ -1,52 +1,33 @@
 <script lang="ts">
-  import FusionCharts from 'fusioncharts';
-  import Charts from 'fusioncharts/fusioncharts.charts';
-  import FusionTheme from 'fusioncharts/themes/fusioncharts.theme.fusion';
-  import SvelteFC, { fcRoot } from 'svelte-fusioncharts';
-  fcRoot(FusionCharts, Charts, FusionTheme);
+  import { Pie } from 'svelte-chartjs';
+  import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale } from 'chart.js';
 
-  let dataSource = {
-      chart: {
-        showValues: '0',
-        showLabels: '0',
-        showPercentInTooltip: '0',
-        theme: 'fusion',
-        legendPosition: 'right',
-        legendItemFontSize: '16',
-        legendNumColumns: '3'
-      },
-      data: [
-        {
-          label: 'Equity',
-          value: '300000'
-        },
-        {
-          label: 'Debt',
-          value: '230000'
-        },
-        {
-          label: 'Bullion',
-          value: '180000'
-        },
-        {
-          label: 'Real-estate',
-          value: '270000'
-        },
-        {
-          label: 'Insurance',
-          value: '20000'
-        }
-      ]
-    },
-    chartConfig = {
-      type: 'pie2d',
-      renderAt: 'chart-container',
-      height: '35%',
-      width: '80%',
-      dataSource
-    };
+  const data = {
+    labels: ['Red', 'Green', 'Yellow', 'Grey', 'Dark Grey'],
+    datasets: [
+      {
+        data: [300, 50, 100, 40, 120],
+        backgroundColor: ['#F7464A', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360', '#AC64AD'],
+        hoverBackgroundColor: ['#FF5A5E', '#5AD3D1', '#FFC870', '#A8B3C5', '#616774', '#DA92DB']
+      }
+    ]
+  };
+
+  ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
 </script>
 
 <div id="chart-container">
-  <SvelteFC {...chartConfig} />
+  <Pie
+    {data}
+    options={{
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'right'
+        }
+      }
+    }}
+    width={192}
+    height={192}
+  />
 </div>

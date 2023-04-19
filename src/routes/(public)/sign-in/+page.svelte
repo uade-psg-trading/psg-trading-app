@@ -25,15 +25,15 @@
 </script>
 
 <svelte:head>
-  <title>Inicia sesion en tu cuenta</title>
+  <title>Inicia sesión en tu cuenta</title>
 </svelte:head>
 
-<div class="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+<div class="flex justify-center py-12 px-4 sm:px-6 lg:px-8">
   <div class="w-full max-w-md space-y-8">
     <div>
       <img class="mx-auto h-12 w-auto" src={logo} alt="Trading" />
       <h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-        Inicie sesion en su cuenta
+        Inicie sesión en su cuenta
       </h2>
       <h4 class="mt-2 text-center text-5x1 tracking-tight">
         o <Link href="/register" title="registrese gratis" />
