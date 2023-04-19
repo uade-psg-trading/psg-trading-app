@@ -6,5 +6,6 @@ export const load = (async ({ locals }) => {
   if (!username) {
     throw error(401, 'No puedes acceder aquí');
   }
-  return {};
+
+  return { username };
 }) satisfies LayoutServerLoad;
