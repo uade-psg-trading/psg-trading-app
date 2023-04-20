@@ -37,22 +37,6 @@ type NewUser = {
   password: string;
 } & User;
 export const user = {
-  get: async (jwt: string) => {
-    const userApi = await authenticatedGet<User>('/api/users', jwt);
-
-    if (userApi.success) {
-      return userApi.data;
-    }
-
-    return null;
-  },
-  createUser: async (newUser: NewUser) => {
-    const userApi = await unauthenticatedPost<User>('/api/users', newUser);
-
-    if (userApi.success) {
-      return userApi.data;
-    }
-
-    return null;
-  }
+  get: async (jwt: string) => await authenticatedGet<User>('/api/users', jwt),
+  createUser: async (newUser: NewUser) => await unauthenticatedPost<User>('/api/users', newUser)
 };

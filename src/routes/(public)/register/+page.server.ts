@@ -74,13 +74,14 @@ export const actions: Actions = {
         zipCode: registerForm.zipCode
       }
     });
-    if (registerResponse) {
+    if (registerResponse.success) {
       throw redirect(303, '/');
     }
 
     return fail(400, {
       errors: {
         register: 'error',
+        registerMessage: registerResponse.message,
         email: undefined,
         password: undefined,
         confirmPassword: undefined,

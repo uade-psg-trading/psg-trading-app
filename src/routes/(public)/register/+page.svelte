@@ -175,6 +175,11 @@
             <ErrorLabel message="Ha ocurrido un error durante el registro." />
           </div>
         {/if}
+        {#if form?.errors?.registerMessage}
+          <div class="mb-3">
+            <ErrorLabel message={form?.errors?.registerMessage || ''} />
+          </div>
+        {/if}
         <div class="md:w-1/2 flex flex-row justify-end">
           <div class="md:w-1/4 mr-2">
             <SecondaryButton on:click={goSignIn} disabled={loading} title="Cancelar" />
