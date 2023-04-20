@@ -86,7 +86,7 @@
         </div>
         <div class="justify-end flex ">
           <div class="px-3 mb-6 md:mb-0">
-            <PrimaryButton title="Proceder al ingreso de dinero por ($5000)" buttonType="submit" />
+            <PrimaryButton title="Ingresar dinero" buttonType="submit" />
           </div>
         </div>
       </form>
