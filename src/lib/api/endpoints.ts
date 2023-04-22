@@ -53,7 +53,7 @@ type NewTransaction = {
   balance: number;
   operation: string;
 };
-// TODO: Sacar external id 
+// TODO: Sacar external id
 export const transaction = {
   createTransaction: async (jwt: string, newTransaction: NewTransaction) => {
     const createTransaction = await authenticatedPost<Transaction>(
