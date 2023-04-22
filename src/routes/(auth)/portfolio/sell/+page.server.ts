@@ -28,9 +28,9 @@ export const actions: Actions = {
     } else {
       const createTransactionResponse = await apiEndpoints.transaction.createTransaction(jwt, {
         token: sellForm.tokenSelection,
-        quantity: sellForm.amount,
-        price: '100',
-        balance: '100',
+        quantity: Number(sellForm.amount),
+        price: 100,
+        balance: 100,
         operation: 'SELL'
       });
       if (createTransactionResponse) {

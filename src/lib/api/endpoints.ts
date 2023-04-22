@@ -48,11 +48,12 @@ type Transaction = {
 
 type NewTransaction = {
   token: string;
-  quantity: string;
-  price: string;
-  balance: string;
+  quantity: number;
+  price: number;
+  balance: number;
   operation: string;
 };
+// TODO: Sacar external id 
 export const transaction = {
   createTransaction: async (jwt: string, newTransaction: NewTransaction) => {
     const createTransaction = await authenticatedPost<Transaction>(
