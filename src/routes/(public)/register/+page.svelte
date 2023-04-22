@@ -7,20 +7,12 @@
   import PrimaryButton from '$lib/components/buttons/primary-button.svelte';
   import SecondaryButton from '$lib/components/buttons/secondary-button.svelte';
   import ErrorLabel from '$lib/components/error-label/error-label.svelte';
+  import Swal from 'sweetalert2';
 
   /** @type {import('./$types').ActionData} */
   export let form: ActionData;
 
   let loading = false;
-
-  function onEnhanceSubmit() {
-    loading = true;
-
-    return async ({ update }: { update: () => Promise<void> }) => {
-      await update();
-      loading = false;
-    };
-  }
 
   function goSignIn() {
     goto('/sign-in');
@@ -39,7 +31,28 @@
         Registro de cuenta
       </h2>
     </div>
-    <form action="?/register" method="POST" class="w-full" use:enhance={onEnhanceSubmit}>
+    <form
+      action="?/register"
+      method="POST"
+      class="w-full"
+      use:enhance={() => {
+        loading = true;
+        return async ({ update, result }) => {
+          await update();
+          loading = false;
+          if (result.type === 'success') {
+            Swal.fire({
+              title: 'Registro finalizado',
+              text: 'Serás redirigido a la pantalla de inicio de sesión.',
+              icon: 'success',
+              confirmButtonText: 'Aceptar'
+            }).then(() => {
+              goSignIn();
+            });
+          }
+        };
+      }}
+    >
       <div class="flex flex-wrap -mx-3 mb-6">
         <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <FormInput
