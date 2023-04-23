@@ -1,7 +1,6 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import { onMount } from 'svelte';
-  import { writable } from 'svelte/store';
 
   type Route = {
     name: string;
@@ -15,7 +14,7 @@
   };
   let showUserMenu = false;
   let showMobileMenu = false;
-  const showSubMenu = writable<Route | null>(null);
+  let showTradeSubmenu = false;
 
   function toggleUserMenu() {
     showUserMenu = !showUserMenu;
@@ -25,6 +24,11 @@
     showMobileMenu = !showMobileMenu;
   }
 
+  function toggleSubMenu(route: Route) {
+    if (route.subMenuRoutes) {
+      showTradeSubmenu = !showTradeSubmenu;
+    }
+  }
   function isCurrentRoute(currentRoute: string) {
     return $page.url.pathname === currentRoute ? 'bg-gray-900' : '';
   }
@@ -57,16 +61,6 @@
       document.removeEventListener('click', mobileMenuListener);
     };
   });
-
-  function toggleSubMenu(route: Route) {
-    if (route.subMenuRoutes) {
-      if ($showSubMenu === route) {
-        showSubMenu.set(null);
-      } else {
-        showSubMenu.set(route);
-      }
-    }
-  }
 
   const routes = [
     {
@@ -179,18 +173,21 @@
                   data-sveltekit-reload
                   data-sveltekit-preload-data="off">{route.name}</a
                 >
-                {#if route.subMenuRoutes && $showSubMenu === route}
-                  <div class="absolute top-full left-0 mt-2 bg-gray-800">
-                    {#each route.subMenuRoutes as subMenuRoute}
-                      <a
-                        href={subMenuRoute.href}
-                        class="{isCurrentRoute(
-                          subMenuRoute.href
-                        )} block text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
-                        data-sveltekit-reload
-                        data-sveltekit-preload-data="off">{subMenuRoute.name}</a
-                      >
-                    {/each}
+
+                {#if route.subMenuRoutes}
+                  <div hidden={!showTradeSubmenu}>
+                    <div class="absolute top-full left-0 mt-2 bg-gray-800">
+                      {#each route.subMenuRoutes as subMenuRoute}
+                        <a
+                          href={subMenuRoute.href}
+                          class="{isCurrentRoute(
+                            subMenuRoute.href
+                          )} block text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                          data-sveltekit-reload
+                          data-sveltekit-preload-data="off">{subMenuRoute.name}</a
+                        >
+                      {/each}
+                    </div>
                   </div>
                 {/if}
               </div>
