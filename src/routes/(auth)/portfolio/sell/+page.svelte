@@ -5,12 +5,33 @@
   import PrimaryButton from '$lib/components/buttons/primary-button.svelte';
   import Selector from '$lib/components/selector/selector.svelte';
   import { enhance } from '$app/forms';
+  import CandleChart from '$lib/components/charts/candle-chart/candle-chart.svelte';
+
   let selectedValue: string;
   let tokenList = [`$PSG`, `$BAR`, `$CITY`];
 </script>
 
 <svelte:head>
   <title>Vender Activo</title>
+  <script src="https://s3.tradingview.com/tv.js"></script>
+  <script>
+    // Asigna la función global al objeto `window` para que sea accesible en Svelte
+    window.initializeTradingView = function () {
+      new TradingView.widget({
+        autosize: true,
+        symbol: 'SKILLING:PSGUSD',
+        interval: 'D',
+        timezone: 'Etc/UTC',
+        theme: 'light',
+        style: '1',
+        locale: 'en',
+        toolbar_bg: '#f1f3f6',
+        enable_publishing: false,
+        allow_symbol_change: true,
+        container_id: 'tradingview_f6e86'
+      });
+    };
+  </script>
 </svelte:head>
 
 <div class="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -51,6 +72,7 @@
         </div>
       </div>
     </form>
-    <img class="mx-auto w-1/2" src={token_chart} alt="Chart" />
+
+    <CandleChart />
   </div>
 </div>
