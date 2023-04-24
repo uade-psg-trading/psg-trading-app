@@ -6,7 +6,8 @@ const getHeaders = {
 
 const postHeaders = {
   Accept: 'application/json',
-  'Content-Type': 'application/json'
+  'Content-Type': 'application/json',
+  'access-control-allow-origin': '*'
 };
 
 type Method = 'POST' | 'GET' | 'PUT' | 'DELETE' | 'PATCH';
@@ -41,7 +42,7 @@ export const apiCall = async <T>({
       method,
       headers: {
         ...(method === 'POST' ? postHeaders : getHeaders),
-        ...((jwt && { Authorization: `${jwt}` }) || {})
+        ...((jwt && { Authorization: `Bearer ${jwt}` }) || {})
       },
       body: body && JSON.stringify(body)
     });
