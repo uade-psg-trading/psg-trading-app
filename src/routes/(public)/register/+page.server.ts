@@ -1,4 +1,4 @@
-import { redirect, fail } from '@sveltejs/kit';
+import { fail } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { isValidEmail, isValidPassword } from '$lib/utils/validator';
 import { apiEndpoints } from '$lib/api';
@@ -75,7 +75,7 @@ export const actions: Actions = {
       }
     });
     if (registerResponse.success) {
-      throw redirect(303, '/');
+      return {};
     }
 
     return fail(400, {
