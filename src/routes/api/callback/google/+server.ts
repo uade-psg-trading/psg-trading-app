@@ -9,27 +9,31 @@ export const GET = (async ({ url, cookies, locals }) => {
     throw redirect(307, '/portfolio');
   }
 
-  console.log('Entre al get de api google provider');
   const code = url.searchParams.get('code');
   if (code) {
-    console.log('codigo', code);
-    const { tokens } = await oauth2client.getToken(code);
-    oauth2client.setCredentials(tokens);
-    const {
-      tokens: { id_token }
-    } = await oauth2client.getToken(code);
+    try {
+      const {
+        tokens: { id_token }
+      } = await oauth2client.getToken(code);
 
-    console.log('token', id_token);
-    if (id_token) {
-      const sessionData = await session.validateGoogleToken(id_token);
-      console.log('session', sessionData);
-      if (sessionData.success && sessionData.data) {
-        const { jwt, username } = sessionData.data;
-        newSession(cookies, username, jwt);
-        throw redirect(302, '/portfolio');
-      } else {
-        throw error(500, 'Hubo un error con nuestros servidores');
+      if (id_token) {
+        const sessionData = await session.validateGoogleToken(id_token, 'psg');
+        if (sessionData.success && sessionData.data) {
+          const { jwt, username } = sessionData.data;
+          newSession(cookies, username, jwt);
+          return new Response(null, {
+            status: 302,
+            headers: {
+              location: '/portfolio',
+              'cache-control': 'no-store no-cache'
+            }
+          });
+        } else {
+          throw error(500, 'Hubo un error con nuestros servidores');
+        }
       }
+    } catch {
+      throw error(500, 'Hubo un error con nuestros servidores');
     }
   }
 

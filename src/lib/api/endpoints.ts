@@ -18,8 +18,8 @@ export const session = {
 
     return null;
   },
-  validateGoogleToken: async (token: string) =>
-    await unauthenticatedPost<Credentials>('/api/session/google', { token })
+  validateGoogleToken: async (token: string, tenant: string) =>
+    await unauthenticatedPost<Credentials>('/api/session/google', { token, tenant })
 };
 
 type User = {
