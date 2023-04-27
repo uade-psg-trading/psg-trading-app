@@ -1,7 +1,7 @@
 name: Bump version
 on:
   push:
-    branches: ['main', 'develop']
+    branches: ['main', 'develop', 'emanuelbrea-patch-1']
 jobs:
   build:   
     runs-on: ubuntu-latest
@@ -15,7 +15,7 @@ jobs:
         uses: juliansangillo/tag-version@v1.5
         with:
           production-branch: main
-          test-branch: test
-          dev-branch: develop
+          test-branch: develop
+          dev-branch: emanuelbrea-patch-1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}          
