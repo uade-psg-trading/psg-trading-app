@@ -16,7 +16,7 @@ jobs:
         uses: juliansangillo/tag-version@v1.5
         with:
           production-branch: main
-          test-branch: emanuelbrea-patch-1
-          dev-branch: develop
+          test-branch: test
+          dev-branch: emanuelbrea-patch-1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}          
