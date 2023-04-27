@@ -48,11 +48,6 @@ export const apiCall = async <T>({
     });
 
     const responseMessage = (await response.json()) as BasicResponse<T>;
-    console.log(
-      `fullUrl ${fullUrl} body ${body} jwt ${jwt} method ${method}. Responses: ${response.status}`
-    );
-
-    console.log(responseMessage);
     if (!response.ok) {
       const message = responseMessage.message;
       if (response.status === 401) {

@@ -4,7 +4,7 @@ import { createSession, getSession } from './session-store';
 describe('SessionStore', () => {
   it('should create a new session', () => {
     // Get new sid
-    const sid = createSession('test', 1000);
+    const sid = createSession('test', 1000, 'eYasdiasfosa');
 
     // Then it should exists
     const session = getSession(sid);
