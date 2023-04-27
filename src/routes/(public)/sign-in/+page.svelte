@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { goto } from '$app/navigation';
   import { enhance } from '$app/forms';
   import logo from '$lib/images/logo/logo.svg';
   import type { ActionData } from './$types';
@@ -12,15 +13,21 @@
   /** @type {import('./$types').ActionData} */
   export let form: ActionData;
 
-  let loading = false;
+  let signInButtonLoading = false;
+  let redirectLoading = false;
 
   function onEnhanceSubmit() {
-    loading = true;
+    signInButtonLoading = true;
 
     return async ({ update }: { update: () => Promise<void> }) => {
       await update();
-      loading = false;
+      signInButtonLoading = false;
     };
+  }
+
+  function goToGoogle() {
+    redirectLoading = true;
+    goto('/sign-in/google');
   }
 </script>
 
@@ -80,8 +87,13 @@
         <ErrorLabel message={form.errorMessage} />
       {/if}
 
-      <SecurityButton {loading} title="Iniciar sesion" buttonType="submit" />
-      <SsoButton title="Iniciar sesion con Google" ssoProvider="google" />
+      <SecurityButton loading={signInButtonLoading} title="Iniciar sesion" buttonType="submit" />
+      <SsoButton
+        loading={redirectLoading}
+        on:click={goToGoogle}
+        title="Iniciar sesion con Google"
+        ssoProvider="google"
+      />
       <div />
     </form>
   </div>

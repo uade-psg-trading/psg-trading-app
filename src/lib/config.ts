@@ -5,5 +5,3 @@ export const getEndpoints = () => {
     api: PUBLIC_API_URL || 'http://localhost:8000'
   };
 };
-
-console.log(getEndpoints());
