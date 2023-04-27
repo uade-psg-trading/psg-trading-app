@@ -1,10 +1,11 @@
 <script lang="ts">
   import psg_logo from '$lib/images/logo/psg_logo.svg';
-  import token_chart from '$lib/images/token_chart.svg';
   import FormInput from '$lib/components/input/input-with-title.svelte';
   import PrimaryButton from '$lib/components/buttons/primary-button.svelte';
   import Selector from '$lib/components/selector/selector.svelte';
   import { enhance } from '$app/forms';
+  import CandleChart from '$lib/components/charts/candle-chart/candle-chart.svelte';
+
   let selectedValue: string;
   let tokenList = [`$PSG`, `$BAR`, `$CITY`];
 </script>
@@ -51,6 +52,6 @@
         </div>
       </div>
     </form>
-    <img class="mx-auto w-1/2" src={token_chart} alt="Chart" />
+    <CandleChart />
   </div>
 </div>
