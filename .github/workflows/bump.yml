@@ -7,11 +7,16 @@ jobs:
   build:   
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout  
+        uses: actions/checkout@v3
+        with:  
+          fetch-depth: 0  
       - name: Bump version and push tag
-        id: tag_version
-        uses: mathieudutour/github-tag-action@v6.1
+        id: version
+        uses: juliansangillo/tag-version@v1.5
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}         
+          production-branch: main
+          test-branch: emanuelbrea-patch-1
+          dev-branch: develop
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}          
