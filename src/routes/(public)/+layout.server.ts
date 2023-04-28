@@ -4,7 +4,7 @@ import type { LayoutServerLoad } from './$types';
 
 export const load = (async ({ locals, cookies }) => {
   const session = getCurrentSession(cookies, locals);
-  if (!session) {
+  if (session) {
     throw redirect(307, '/portfolio');
   }
 
