@@ -1,4 +1,4 @@
-import { redirect, fail } from '@sveltejs/kit';
+import { fail } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { isValidEmail, isValidPassword } from '$lib/utils/validator';
 import { apiEndpoints } from '$lib/api';
@@ -74,13 +74,14 @@ export const actions: Actions = {
         zipCode: registerForm.zipCode
       }
     });
-    if (registerResponse) {
-      return redirect(303, '/');
+    if (registerResponse.success) {
+      return {};
     }
 
     return fail(400, {
       errors: {
         register: 'error',
+        registerMessage: registerResponse.message,
         email: undefined,
         password: undefined,
         confirmPassword: undefined,

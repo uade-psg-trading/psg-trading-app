@@ -6,7 +6,8 @@ const getHeaders = {
 
 const postHeaders = {
   Accept: 'application/json',
-  'Content-Type': 'application/json'
+  'Content-Type': 'application/json',
+  'access-control-allow-origin': '*'
 };
 
 type Method = 'POST' | 'GET' | 'PUT' | 'DELETE' | 'PATCH';
@@ -41,17 +42,12 @@ export const apiCall = async <T>({
       method,
       headers: {
         ...(method === 'POST' ? postHeaders : getHeaders),
-        ...((jwt && { Authorization: `${jwt}` }) || {})
+        ...((jwt && { Authorization: `Bearer ${jwt}` }) || {})
       },
       body: body && JSON.stringify(body)
     });
 
     const responseMessage = (await response.json()) as BasicResponse<T>;
-    console.log(
-      `fullUrl ${fullUrl} body ${body} jwt ${jwt} method ${method}. Responses: ${response.status}`
-    );
-
-    console.log(responseMessage);
     if (!response.ok) {
       const message = responseMessage.message;
       if (response.status === 401) {

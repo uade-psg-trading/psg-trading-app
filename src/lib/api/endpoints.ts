@@ -1,6 +1,7 @@
-import { unauthenticatedPost, authenticatedGet } from './calls';
+import { unauthenticatedPost, authenticatedGet, authenticatedPost } from './calls';
 
 type Credentials = {
+  username: string;
   jwt: string;
   refreshToken: string;
 };
@@ -16,7 +17,9 @@ export const session = {
     }
 
     return null;
-  }
+  },
+  validateGoogleToken: async (token: string, tenant: string) =>
+    await unauthenticatedPost<Credentials>('/api/session/google', { token, tenant })
 };
 
 type User = {
@@ -37,20 +40,32 @@ type NewUser = {
   password: string;
 } & User;
 export const user = {
-  get: async (jwt: string) => {
-    const userApi = await authenticatedGet<User>('/api/users', jwt);
+  get: async (jwt: string) => await authenticatedGet<User>('/api/users', jwt),
+  createUser: async (newUser: NewUser) => await unauthenticatedPost<User>('/api/users', newUser)
+};
 
-    if (userApi.success) {
-      return userApi.data;
-    }
+type Transaction = {
+  id: string;
+  transactionTime: string;
+} & NewTransaction;
 
-    return null;
-  },
-  createUser: async (newUser: NewUser) => {
-    const userApi = await unauthenticatedPost<User>('/api/users', newUser);
-
-    if (userApi.success) {
-      return userApi.data;
+type NewTransaction = {
+  token: string;
+  quantity: number;
+  price: number;
+  balance: number;
+  operation: string;
+};
+// TODO: Sacar external id
+export const transaction = {
+  createTransaction: async (jwt: string, newTransaction: NewTransaction) => {
+    const createTransaction = await authenticatedPost<Transaction>(
+      '/api/transaction/adaa7718-faad-4803-92c9-d9c4d365f221',
+      jwt,
+      newTransaction
+    );
+    if (createTransaction.success) {
+      return createTransaction.data;
     }
 
     return null;
