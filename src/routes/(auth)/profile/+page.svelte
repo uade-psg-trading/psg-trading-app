@@ -58,7 +58,7 @@
               readonly={true}
             />
           </div>
-          <div class="w-4/6 px-3 ">
+          <div class="w-4/6 px-3">
             <FormInput
               id="email"
               name="email"
