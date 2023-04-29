@@ -8,20 +8,24 @@
   export let autocomplete: string | undefined = undefined;
   export let type: HTMLInputAttributes['type'] = 'text';
   export let value = '';
-  export let disabled = false;
+  export let readonly = false;
+  const classValue =
+    'appearance-none block w-full  text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500';
+  const classValueDisabled = `${classValue} bg-gray-300`;
+  const classValueEnabled = `${classValue} bg-white`;
 </script>
 
 <label class="block tracking-wide text-gray-700 text-sm mb-2" for={name}>
   {labelTitle}
 </label>
 <input
-  class="appearance-none block w-full bg-white text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+  class={readonly ? classValueDisabled : classValueEnabled}
   {id}
   {name}
   {type}
   {autocomplete}
   {value}
   required={isRequired}
-  {disabled}
+  {readonly}
   on:input
 />
