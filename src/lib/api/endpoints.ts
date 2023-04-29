@@ -6,6 +6,7 @@ import {
 } from './calls';
 
 type Credentials = {
+  username: string;
   jwt: string;
   refreshToken: string;
 };
@@ -21,7 +22,9 @@ export const session = {
     }
 
     return null;
-  }
+  },
+  validateGoogleToken: async (token: string, tenant: string) =>
+    await unauthenticatedPost<Credentials>('/api/session/google', { token, tenant })
 };
 
 type User = {
