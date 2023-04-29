@@ -56,7 +56,7 @@ export const actions: Actions = {
       password: profileForm.password,
       location: {
         country: profileForm.country,
-        direction: profileForm.address,
+        address: profileForm.address,
         city: profileForm.city,
         province: profileForm.state,
         zipCode: profileForm.zipCode
