@@ -25,7 +25,7 @@
   <div class="rounded p-6 bg-white w-full max-w-screen-lg space-y-8">
     <div>
       <h2 class="text-left text-lg font-bold text-indigo-800">Transferencia bancaria</h2>
-      <p class="text-sm  text-gray-500">
+      <p class="text-sm text-gray-500">
         Para ingresar dinero a Workflow podes realizar una transferencia al siguiente numero de
         cuenta.
       </p>
@@ -84,7 +84,7 @@
             </div>
           </div>
         </div>
-        <div class="justify-end flex ">
+        <div class="justify-end flex">
           <div class="px-3 mb-6 md:mb-0">
             <PrimaryButton title="Ingresar dinero" buttonType="submit" />
           </div>

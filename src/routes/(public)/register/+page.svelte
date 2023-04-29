@@ -87,7 +87,7 @@
               <ErrorLabel message="El DNI ingresado no es correcto." />
             {/if}
           </div>
-          <div class="w-4/6 px-3 ">
+          <div class="w-4/6 px-3">
             <FormInput
               id="email"
               name="email"
