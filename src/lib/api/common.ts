@@ -41,7 +41,7 @@ export const apiCall = async <T>({
     const response = await fetch(fullUrl, {
       method,
       headers: {
-        ...(method === 'POST' || method === 'PUT' ? postHeaders : getHeaders),
+        ...(['POST', 'PUT'].includes(method) ? postHeaders : getHeaders),
         ...((jwt && { Authorization: `Bearer ${jwt}` }) || {})
       },
       body: body && JSON.stringify(body)

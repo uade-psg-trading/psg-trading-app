@@ -8,6 +8,7 @@
   export let autocomplete: string | undefined = undefined;
   export let type: HTMLInputAttributes['type'] = 'text';
   export let value = '';
+  export let disabled = false;
   export let readonly = false;
   const classBase =
     'appearance-none block w-full  text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500';
@@ -26,6 +27,7 @@
   {autocomplete}
   {value}
   required={isRequired}
+  {disabled}
   {readonly}
   on:input
 />
