@@ -13,13 +13,11 @@ export const getCurrentSession = (cookies: Cookies, locals: App.Locals): string 
   const session = getSession(jwt);
   if (!session) {
     cookies.delete(jwtCookie);
-    locals.jwt = undefined;
-    locals.username = undefined;
+    locals.session = undefined;
     return null;
   }
 
-  locals.username = session.username;
-  locals.jwt = jwt;
+  locals.session = { jwt };
   return jwt;
 };
 
@@ -56,7 +54,6 @@ export const removeSession = (cookies: Cookies, locals: App.Locals) => {
       maxAge: 0
     });
 
-    locals.jwt = undefined;
-    locals.username = undefined;
+    locals.session = undefined;
   }
 };

@@ -1,6 +1,7 @@
 import { getCurrentSession } from '$lib/server/cookie-manager';
 import { error } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
+import { getCurrentTenant } from '$lib/tenant-manager';
 
 export const load = (async ({ cookies, locals }) => {
   const session = getCurrentSession(cookies, locals);
@@ -8,5 +9,6 @@ export const load = (async ({ cookies, locals }) => {
     throw error(401, 'Lo que estas buscando parece que no existe');
   }
 
-  return {};
+  const tenant = getCurrentTenant(locals);
+  return { tenant };
 }) satisfies LayoutServerLoad;

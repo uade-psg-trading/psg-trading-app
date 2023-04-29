@@ -1,16 +1,16 @@
 <script lang="ts">
-  import type { ActionData } from './$types';
+  import Swal from 'sweetalert2';
+  import type { ActionData, PageData } from './$types';
   import { enhance } from '$app/forms';
   import { goto } from '$app/navigation';
-  import logo from '$lib/images/logo/logo.svg';
   import FormInput from '$lib/components/input/input-with-title.svelte';
   import PrimaryButton from '$lib/components/buttons/primary-button.svelte';
   import SecondaryButton from '$lib/components/buttons/secondary-button.svelte';
   import ErrorLabel from '$lib/components/error-label/error-label.svelte';
-  import Swal from 'sweetalert2';
+  import AppLogo from '$lib/components/app-logo/app-logo.svelte';
 
-  /** @type {import('./$types').ActionData} */
   export let form: ActionData;
+  export let data: PageData;
 
   let loading = false;
 
@@ -26,7 +26,7 @@
 <div class="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
   <div class="rounded p-6 bg-white w-full max-w-screen-lg space-y-8">
     <div>
-      <img class="mx-auto h-12 w-auto" src={logo} alt="Trading" />
+      <AppLogo tenant={data.tenant.id} />
       <h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
         Registro de cuenta
       </h2>
@@ -87,7 +87,7 @@
               <ErrorLabel message="El DNI ingresado no es correcto." />
             {/if}
           </div>
-          <div class="w-4/6 px-3 ">
+          <div class="w-4/6 px-3">
             <FormInput
               id="email"
               name="email"
