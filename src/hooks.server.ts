@@ -1,5 +1,5 @@
 import { getCurrentSession } from '$lib/server/cookie-manager';
-import { getTenant } from '$lib/server/tenant-manager';
+import { getTenant } from '$lib/tenant-manager';
 import type { Handle } from '@sveltejs/kit';
 
 export const handle = (async ({ event, resolve }) => {

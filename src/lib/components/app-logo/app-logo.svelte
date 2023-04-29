@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { TenantType } from '$lib/server/tenant-manager';
+  import type { TenantType } from '$lib/tenant-manager';
   import { getTenantLogo } from '$lib/utils/tenant-logo';
 
   export let tenant: TenantType;

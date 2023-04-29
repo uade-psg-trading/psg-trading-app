@@ -1,7 +1,7 @@
 import { getCurrentSession } from '$lib/server/cookie-manager';
 import { error } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
-import { getCurrentTenant } from '$lib/server/tenant-manager';
+import { getCurrentTenant } from '$lib/tenant-manager';
 
 export const load = (async ({ cookies, locals }) => {
   const session = getCurrentSession(cookies, locals);

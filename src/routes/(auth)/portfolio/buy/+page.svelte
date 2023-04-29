@@ -1,12 +1,15 @@
 <script lang="ts">
-  import psg_logo from '$lib/images/logo/psg_logo.svg';
+  import type { PageData } from './$types';
   import FormInput from '$lib/components/input/input-with-title.svelte';
   import PrimaryButton from '$lib/components/buttons/primary-button.svelte';
   import Selector from '$lib/components/selector/selector.svelte';
   import { enhance } from '$app/forms';
   import CandleChart from '$lib/components/charts/candle-chart/candle-chart.svelte';
+  import AppLogo from '$lib/components/app-logo/app-logo.svelte';
   let selectedValue: string;
   let tokenList = [`$PSG`, `$BAR`, `$CITY`];
+
+  export let data: PageData;
 </script>
 
 <svelte:head>
@@ -17,7 +20,7 @@
   <div class="rounded p-6 bg-white w-full max-w-screen-lg space-y-8">
     <div class="flex">
       <div class="w-1/6 ">
-        <img class="mx-auto " src={psg_logo} alt="Trading" />
+        <AppLogo tenant={data.tenant.id} />
       </div>
       <div class="w-4/6 ">
         <h1 class="mt-6 text-center text-4xl font-bold tracking-tight text-gray-900">

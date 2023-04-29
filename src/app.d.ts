@@ -1,6 +1,6 @@
 // See https://kit.svelte.dev/docs/types#app
 
-import type { TenantType } from '$lib/server/tenant-manager';
+import type { TenantType } from '$lib/tenant-manager';
 
 // for information about these interfaces
 declare global {

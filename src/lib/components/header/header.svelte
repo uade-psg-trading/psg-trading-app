@@ -1,8 +1,8 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { page } from '$app/stores';
-  import AppLogo from '../app-logo/app-logo.svelte';
-  import type { TenantType } from '$lib/server/tenant-manager';
+  import AppLogo from '$lib/components/app-logo/app-logo.svelte';
+  import type { TenantType } from '$lib/tenant-manager';
 
   type Route = {
     name: string;
