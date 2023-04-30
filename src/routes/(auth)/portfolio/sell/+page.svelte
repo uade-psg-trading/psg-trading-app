@@ -8,6 +8,8 @@
   import AppLogo from '$lib/components/app-logo/app-logo.svelte';
   import Swal from 'sweetalert2';
   import { goto } from '$app/navigation';
+  import { onMount } from 'svelte';
+  import { headerStore } from '$lib/stores';
 
   let selectedValue: string;
   let tokenList = [`$PSG`, `$BAR`, `$CITY`];
@@ -17,6 +19,12 @@
   function goHome() {
     goto('/');
   }
+  onMount(() => {
+    headerStore.update((value) => {
+      value.title = 'Vender token';
+      return value;
+    });
+  });
 </script>
 
 <svelte:head>
