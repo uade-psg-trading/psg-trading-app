@@ -34,13 +34,13 @@ export const actions: Actions = {
       }
     );
     if (createTransactionResponse.success) {
-      throw redirect(303, '/');
+      return {};
     }
 
     return fail(400, {
       errors: {
         message: createTransactionResponse.message
       }
-    });    
+    });
   }
 };

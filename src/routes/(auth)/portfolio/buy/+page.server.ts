@@ -30,7 +30,7 @@ export const actions: Actions = {
       quantity: Number(buyForm.amount)
     });
     if (createTransactionResponse.success) {
-      throw redirect(303, '/');
+      return {};
     }
 
     return fail(400, {

@@ -31,7 +31,7 @@ export const actions: Actions = {
       paymentMethod: 'CREDIT_CARD'
     });
     if (createPaymentResponse.success) {
-      throw redirect(303, '/');
+      return {};
     }
 
     return fail(400, {

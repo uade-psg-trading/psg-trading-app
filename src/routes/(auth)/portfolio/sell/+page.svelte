@@ -6,11 +6,17 @@
   import { enhance } from '$app/forms';
   import CandleChart from '$lib/components/charts/candle-chart/candle-chart.svelte';
   import AppLogo from '$lib/components/app-logo/app-logo.svelte';
+  import Swal from 'sweetalert2';
+  import { goto } from '$app/navigation';
 
   let selectedValue: string;
   let tokenList = [`$PSG`, `$BAR`, `$CITY`];
 
   export let data: PageData;
+
+  function goHome() {
+    goto('/');
+  }
 </script>
 
 <svelte:head>
@@ -32,7 +38,26 @@
         <h2 class="mt-10 text-center text-base text-gray-900">$ 5.2808112</h2>
       </div>
     </div>
-    <form action="/portfolio/sell" method="POST" class="w-full" use:enhance>
+    <form
+      action="/portfolio/sell"
+      method="POST"
+      class="w-full"
+      use:enhance={() => {
+        return async ({ update, result }) => {
+          await update();
+          if (result.type === 'success') {
+            Swal.fire({
+              title: 'Venta exitosa',
+              text: 'Vendiste de manera exitosa el Token',
+              icon: 'success',
+              confirmButtonText: 'Aceptar'
+            }).then(() => {
+              goHome();
+            });
+          }
+        };
+      }}
+    >
       <div class="flex flex-wrap">
         <div class="w-full md:w-1/2 px-3 mb-6">
           <Selector

@@ -5,6 +5,8 @@
   import PrimaryButton from '$lib/components/buttons/primary-button.svelte';
   import FormInput from '$lib/components/input/input-with-title.svelte';
   import CopyText from '$lib/components/text/copy-text.svelte';
+  import Swal from 'sweetalert2';
+  import { goto } from '$app/navigation';
 
   // Hay que cambiar esto. No sirve
   // Es 0 reusable
@@ -15,6 +17,9 @@
       return value;
     });
   });
+  function goHome() {
+    goto('/');
+  }
 </script>
 
 <svelte:head>
@@ -40,7 +45,26 @@
         Para ingresar dinero a Workflow con tarjeta de credito podes completar los datos de tu
         tarjeta favorita y cargar saldo con un solo click.
       </p>
-      <form action="/cash-in" method="POST" class="w-full" use:enhance>
+      <form
+        action="/cash-in"
+        method="POST"
+        class="w-full"
+        use:enhance={() => {
+          return async ({ update, result }) => {
+            await update();
+            if (result.type === 'success') {
+              Swal.fire({
+                title: 'Ingreso de dinero exitoso',
+                text: 'Ingresaste de manera exitosa el dinero.',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+              }).then(() => {
+                goHome();
+              });
+            }
+          };
+        }}
+      >
         <div class="-mx-3">
           <div class="w-3/6 mb-4 px-3">
             <FormInput
