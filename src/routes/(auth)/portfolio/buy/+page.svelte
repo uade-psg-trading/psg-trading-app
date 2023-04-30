@@ -7,7 +7,7 @@
   import CandleChart from '$lib/components/charts/candle-chart/candle-chart.svelte';
   import AppLogo from '$lib/components/app-logo/app-logo.svelte';
   import { goto } from '$app/navigation';
-    import Swal from 'sweetalert2';
+  import Swal from 'sweetalert2';
   let selectedValue: string;
   let tokenList = [`$PSG`, `$BAR`, `$CITY`];
   function goHome() {
