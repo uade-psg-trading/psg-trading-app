@@ -7,10 +7,12 @@
   export let ssoProvider: 'google' | 'microsoft' | 'apple' | 'facebook';
   export let title: string;
   export let loading = false;
+  export let disabled = false;
 </script>
 
 <button
   {type}
+  {disabled}
   class="group relative flex w-full justify-center rounded bg-white py-2 px-3 text-sm font-semibold shadow text-gray-800 hover:bg-gray-100 border border-gray-400"
   on:click
 >

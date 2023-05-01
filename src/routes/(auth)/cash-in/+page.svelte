@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
   import { enhance } from '$app/forms';
   import { headerStore } from '$lib/stores';
@@ -17,6 +17,23 @@
       return value;
     });
   });
+
+  function onEnhanceSubmit() {
+    return async ({ update, result }: any) => {
+      await update();
+      if (result.type === 'success') {
+        Swal.fire({
+          title: 'Ingreso de dinero exitoso',
+          text: 'Ingresaste de manera exitosa el dinero.',
+          icon: 'success',
+          confirmButtonText: 'Aceptar'
+        }).then(() => {
+          goHome();
+        });
+      }
+    };
+  }
+
   function goHome() {
     goto('/');
   }
@@ -45,26 +62,7 @@
         Para ingresar dinero a Workflow con tarjeta de credito podes completar los datos de tu
         tarjeta favorita y cargar saldo con un solo click.
       </p>
-      <form
-        action="/cash-in"
-        method="POST"
-        class="w-full"
-        use:enhance={() => {
-          return async ({ update, result }) => {
-            await update();
-            if (result.type === 'success') {
-              Swal.fire({
-                title: 'Ingreso de dinero exitoso',
-                text: 'Ingresaste de manera exitosa el dinero.',
-                icon: 'success',
-                confirmButtonText: 'Aceptar'
-              }).then(() => {
-                goHome();
-              });
-            }
-          };
-        }}
-      >
+      <form action="/cash-in" method="POST" class="w-full" use:enhance={onEnhanceSubmit}>
         <div class="-mx-3">
           <div class="w-3/6 mb-4 px-3">
             <FormInput

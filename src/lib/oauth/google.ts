@@ -5,7 +5,6 @@ import { google } from 'googleapis';
 export const oauth2client = new google.auth.OAuth2(
   GOOGLE_CLIENT_ID,
   GOOGLE_SECRET,
-  // import.meta.env.VITE_HOST_URL + "/callback/google"
   `${PUBLIC_HOST_URL}/api/callback/google`
 );
 

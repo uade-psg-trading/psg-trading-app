@@ -11,6 +11,22 @@
   function goHome() {
     goto('/');
   }
+
+  function onEnhanceSubmit() {
+    return async ({ update, result }: any) => {
+      await update();
+      if (result.type === 'success') {
+        Swal.fire({
+          title: 'Actualización exitosa',
+          text: 'Actualizaste de manera exitosa tu perfil.',
+          icon: 'success',
+          confirmButtonText: 'Aceptar'
+        }).then(() => {
+          goHome();
+        });
+      }
+    };
+  }
 </script>
 
 <svelte:head>
@@ -25,26 +41,7 @@
         Editar perfil
       </h2>
     </div>
-    <form
-      action="/profile"
-      method="POST"
-      class="w-full"
-      use:enhance={() => {
-        return async ({ update, result }) => {
-          await update();
-          if (result.type === 'success') {
-            Swal.fire({
-              title: 'Actualización exitosa',
-              text: 'Actualizaste de manera exitosa tu perfil.',
-              icon: 'success',
-              confirmButtonText: 'Aceptar'
-            }).then(() => {
-              goHome();
-            });
-          }
-        };
-      }}
-    >
+    <form action="/profile" method="POST" class="w-full" use:enhance={onEnhanceSubmit}>
       <div class="flex flex-wrap -mx-3 mb-6">
         <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <FormInput

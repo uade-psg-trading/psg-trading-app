@@ -1,3 +1,4 @@
+import type { TenantType } from '$lib/tenant-manager';
 import {
   unauthenticatedPost,
   authenticatedGet,
@@ -9,21 +10,15 @@ type Credentials = {
   username: string;
   jwt: string;
   refreshToken: string;
+  tenant: string;
 };
 export const session = {
-  login: async (email: string, password: string) => {
-    const loginApi = await unauthenticatedPost<Credentials>('/api/session', {
+  login: async (email: string, password: string) =>
+    await unauthenticatedPost<Credentials>('/api/session', {
       email,
       password
-    });
-
-    if (loginApi.success) {
-      return loginApi.data;
-    }
-
-    return null;
-  },
-  validateGoogleToken: async (token: string, tenant: string) =>
+    }),
+  validateGoogleToken: async (token: string, tenant: TenantType) =>
     await unauthenticatedPost<Credentials>('/api/session/google', { token, tenant })
 };
 
