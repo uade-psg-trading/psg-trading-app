@@ -61,22 +61,17 @@ type Transaction = {
 type NewTransaction = {
   token: string;
   quantity: number;
-  price: number;
-  balance: number;
-  operation: string;
 };
-// TODO: Sacar external id
 export const transaction = {
-  createTransaction: async (jwt: string, newTransaction: NewTransaction) => {
-    const createTransaction = await authenticatedPost<Transaction>(
-      '/api/transaction/adaa7718-faad-4803-92c9-d9c4d365f221',
-      jwt,
-      newTransaction
-    );
-    if (createTransaction.success) {
-      return createTransaction.data;
-    }
+  createTransaction: async (jwt: string, operation: string, newTransaction: NewTransaction) =>
+    await authenticatedPost<Transaction>(`/api/transaction/${operation}`, jwt, newTransaction)
+};
 
-    return null;
-  }
+type Payment = {
+  amount: number;
+  paymentMethod: string;
+};
+export const payments = {
+  createPayment: async (jwt: string, newPayment: Payment) =>
+    await authenticatedPost<Payment>('/api/payments', jwt, newPayment)
 };

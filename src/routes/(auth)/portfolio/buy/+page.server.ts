@@ -8,7 +8,6 @@ type BuyForm = {
   tokenSelection: string;
 };
 
-/** @type {import('./$types').Actions} */
 export const actions: Actions = {
   default: async ({ cookies, locals, request }) => {
     const formData = await request.formData();
@@ -25,17 +24,19 @@ export const actions: Actions = {
           message: 'Error with token'
         }
       });
-    } else {
-      const createTransactionResponse = await apiEndpoints.transaction.createTransaction(jwt, {
-        token: buyForm.tokenSelection,
-        quantity: Number(buyForm.amount),
-        price: 100,
-        balance: 100,
-        operation: 'BUY'
-      });
-      if (createTransactionResponse) {
-        throw redirect(303, '/');
-      }
     }
+    const createTransactionResponse = await apiEndpoints.transaction.createTransaction(jwt, 'buy', {
+      token: buyForm.tokenSelection.replace('$', ''),
+      quantity: Number(buyForm.amount)
+    });
+    if (createTransactionResponse.success) {
+      return {};
+    }
+
+    return fail(400, {
+      errors: {
+        message: createTransactionResponse.message
+      }
+    });
   }
 };
