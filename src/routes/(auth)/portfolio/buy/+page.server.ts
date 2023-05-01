@@ -1,11 +1,32 @@
 import { apiEndpoints } from '$lib/api';
 import { getCurrentSession } from '$lib/server/cookie-manager';
 import { fail, redirect } from '@sveltejs/kit';
-import type { Actions } from './$types';
+import type { Actions, PageServerLoad } from './$types';
 
 type BuyForm = {
   amount: string;
   tokenSelection: string;
+};
+export const load: PageServerLoad = async ({ cookies, locals }) => {
+  const jwt = getCurrentSession(cookies, locals);
+  if (jwt == null) {
+    return fail(400, {
+      errors: {
+        message: 'Error with token'
+      }
+    });
+  }
+  const coinsResponse = await apiEndpoints.coins.getCoinList(jwt);
+  if (coinsResponse.success && coinsResponse.data) {
+    return {
+      tokenList: coinsResponse.data.filter((item) => item.token).map((item) => item.symbol)
+    };
+  }
+  return fail(400, {
+    errors: {
+      message: coinsResponse.message
+    }
+  });
 };
 
 export const actions: Actions = {
@@ -26,7 +47,7 @@ export const actions: Actions = {
       });
     }
     const createTransactionResponse = await apiEndpoints.transaction.createTransaction(jwt, 'buy', {
-      token: buyForm.tokenSelection.replace('$', ''),
+      token: buyForm.tokenSelection,
       quantity: Number(buyForm.amount)
     });
     if (createTransactionResponse.success) {

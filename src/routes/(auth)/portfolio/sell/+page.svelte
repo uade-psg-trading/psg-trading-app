@@ -72,7 +72,7 @@
             id="tokenSelection"
             name="tokenSelection"
             value={selectedValue}
-            list={tokenList}
+            list={data.tokenList ?? []}
             labelTitle="Token"
           />
         </div>
