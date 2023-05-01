@@ -63,7 +63,7 @@ export const actions: Actions = {
       }
     });
     if (updateUserResponse.success) {
-      throw redirect(303, '/');
+      return {};
     }
 
     return fail(400, {

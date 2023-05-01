@@ -5,9 +5,10 @@
   import FormInput from '$lib/components/input/input-with-title.svelte';
   import PrimaryButton from '$lib/components/buttons/primary-button.svelte';
   import SecondaryButton from '$lib/components/buttons/secondary-button.svelte';
+  import Swal from 'sweetalert2';
   export let data;
 
-  function goToHome() {
+  function goHome() {
     goto('/');
   }
 </script>
@@ -24,7 +25,26 @@
         Editar perfil
       </h2>
     </div>
-    <form action="/profile" method="POST" class="w-full" use:enhance>
+    <form
+      action="/profile"
+      method="POST"
+      class="w-full"
+      use:enhance={() => {
+        return async ({ update, result }) => {
+          await update();
+          if (result.type === 'success') {
+            Swal.fire({
+              title: 'Actualización exitosa',
+              text: 'Actualizaste de manera exitosa tu perfil.',
+              icon: 'success',
+              confirmButtonText: 'Aceptar'
+            }).then(() => {
+              goHome();
+            });
+          }
+        };
+      }}
+    >
       <div class="flex flex-wrap -mx-3 mb-6">
         <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <FormInput
@@ -144,7 +164,7 @@
       <div class="justify-end items-end flex px-3 mb-6 md:mb-0">
         <div class="md:w-1/2 flex flex-row justify-end">
           <div class="md:w-1/4 mr-2">
-            <SecondaryButton on:click={goToHome} title="Cancelar" />
+            <SecondaryButton on:click={goHome} title="Cancelar" />
           </div>
           <div class="md:w-1/3">
             <PrimaryButton buttonType="submit" title="Guardar cambios" />
