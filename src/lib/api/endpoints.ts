@@ -41,15 +41,15 @@ type User = {
   };
 };
 
-type FullUser = {
+type UserWithSecureData = {
   password: string;
 } & User;
 // TODO: Sacar user id
 export const user = {
   get: async (jwt: string) => await authenticatedGet<User>('/api/users/1', jwt),
-  createUser: async (newUser: FullUser) => await unauthenticatedPost<User>('/api/users', newUser),
-  updateUser: async (jwt: string, user: FullUser) =>
-    await authenticatedPut<User>('/api/users/1', jwt, user)
+  createUser: async (newUser: UserWithSecureData) => await unauthenticatedPost<User>('/api/users', newUser),
+  updateUser: async (jwt: string, updatedUser: UserWithSecureData) =>
+    await authenticatedPut<User>('/api/users/1', jwt, updatedUser)
 };
 
 type Transaction = {
