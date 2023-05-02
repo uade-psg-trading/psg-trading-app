@@ -1,9 +1,19 @@
-export type TenantType = 'default' | 'psg' | 'lazio';
+export type TenantType = 'trading' | 'psg' | 'lazio';
 
-export const TENANTS: TenantType[] = ['psg', 'lazio'];
+export const TENANTS: TenantType[] = ['trading', 'psg', 'lazio'];
 
 const getTenants = () => {
   return TENANTS;
+};
+
+export const isTenantUrl = (url: URL, tenant: TenantType) => {
+  const tenantSubdomain = getTenantSubdomain(tenant);
+  return url.hostname.startsWith(tenantSubdomain);
+};
+
+export const getTenantUrl = (url: URL, tenant: TenantType) => {
+  const tenantSubdomain = getTenantSubdomain(tenant);
+  return new URL(`${tenantSubdomain}${url.pathname}${url.search}${url.hash}`, url.origin);
 };
 
 export const isHostNameInTenants = (hostname: TenantType) => getTenants().includes(hostname);
@@ -19,7 +29,7 @@ export const getTenant = (url: URL, locals: App.Locals): TenantType => {
     return tenantHostName;
   }
 
-  return 'default';
+  return 'trading';
 };
 
 export const getCurrentTenant = (locals: App.Locals) => {
@@ -33,12 +43,5 @@ export const setCurrentTenant = (locals: App.Locals, tenant: TenantType) => {
 };
 
 export const getTenantSubdomain = (tenant: TenantType) => {
-  return tenant === 'default' || !tenant ? '' : `${tenant}.`;
-};
-
-export const createTenantUrl = (url: URL, tenant: string, appPath = '') => {
-  const tenantSubdomain = getTenantSubdomain(tenant as TenantType);
-  const hostName = url.hostname.includes('.') ? url.hostname.split('.')[1] : url.hostname;
-  const tenantUrl = `${url.protocol}//${tenantSubdomain}${hostName}:${url.port}/${appPath}`;
-  return tenantUrl;
+  return `${tenant}.`;
 };

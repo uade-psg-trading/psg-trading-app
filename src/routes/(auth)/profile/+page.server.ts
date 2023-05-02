@@ -12,7 +12,7 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
       }
     });
   }
-  const userResponse = await apiEndpoints.user.get(jwt);
+  const userResponse = await apiEndpoints.user.me(jwt);
   if (userResponse.success) {
     return userResponse.data;
   }

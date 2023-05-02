@@ -11,6 +11,7 @@ export function createSession(username: string, maxAge: number, jwt: string): st
     invalidAt: Date.now() + maxAge
   });
 
+  console.log('saved session', sessionStore.entries());
   // if (Date.now() > nextClean) {
   //   setTimeout(() => {
   //     clean();

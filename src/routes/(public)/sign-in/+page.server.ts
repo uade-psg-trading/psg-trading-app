@@ -15,9 +15,9 @@ export const actions: Actions = {
     if (valid) {
       const loginApi = await apiEndpoints.session.login(email, password);
       if (loginApi.success && loginApi.data) {
-        const { jwt, username, tenant } = loginApi.data;
+        const { jwt, username } = loginApi.data;
         newSession(cookies, username, jwt);
-        throw redirect(302, '/api/tenant?tenant=' + tenant);
+        throw redirect(302, '/');
       }
     }
 

@@ -3,7 +3,7 @@ import { error, redirect } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { session } from '$lib/api/endpoints';
 import { getCurrentSession, newSession } from '$lib/server/cookie-manager';
-import { createTenantUrl, getCurrentTenant } from '$lib/tenant-manager';
+import { getCurrentTenant } from '$lib/tenant-manager';
 
 export const GET = (async ({ url, cookies, locals }) => {
   if (getCurrentSession(cookies, locals)) {
@@ -21,15 +21,9 @@ export const GET = (async ({ url, cookies, locals }) => {
         const currentTenant = getCurrentTenant(locals);
         const sessionData = await session.validateGoogleToken(id_token, currentTenant.id);
         if (sessionData.success && sessionData.data) {
-          const { jwt, username, tenant } = sessionData.data;
+          const { jwt, username } = sessionData.data;
           newSession(cookies, username, jwt);
-          return new Response(null, {
-            status: 302,
-            headers: {
-              location: createTenantUrl(url, tenant, 'portfolio'),
-              'cache-control': 'no-store no-cache'
-            }
-          });
+          throw redirect(307, '/portfolio');
         } else {
           throw error(500, 'Hubo un error con nuestros servidores');
         }

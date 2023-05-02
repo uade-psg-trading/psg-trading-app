@@ -42,7 +42,7 @@ type UserWithSecureData = {
 } & User;
 
 export const user = {
-  get: async (jwt: string) => await authenticatedGet<User>('/api/users/me', jwt),
+  me: async (jwt: string) => await authenticatedGet<User>('/api/users/me', jwt),
   createUser: async (newUser: UserWithSecureData) =>
     await unauthenticatedPost<User>('/api/users', newUser),
   updateUser: async (jwt: string, updatedUser: UserWithSecureData) =>
