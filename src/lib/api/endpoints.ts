@@ -84,3 +84,19 @@ export type Token = {
 export const tokenList = {
   getTokenList: async (jwt: string) => await authenticatedGet<Token[]>('/api/coin', jwt)
 };
+
+type Balance = {
+  symbol: {
+    symbol: string;
+    name: string;
+    token: boolean;
+  };
+  price: number;
+  percent_change_24h: number;
+  amount: number;
+  yield: number;
+  total: number;
+};
+export const balance = {
+  getBalanceList: async (jwt: string) => await authenticatedGet<Balance[]>('/api/balances', jwt)
+};

@@ -25,88 +25,19 @@
     { key: 'realYield', title: 'Valorizado', value: (row) => row.realYield },
     { key: 'alert', title: 'Alarma', value: (row) => row.alert ?? '' }
   ];
-  const rows = [
+  const rowDefault = [
     {
       id: 1,
-      name: 'Bitcoin',
-      price: '$ 45.000',
-      quantity: '0.0001',
-      variation: '0.5%',
-      yield: '$ 0.00',
-      realYield: '$ 0.00',
-      alert: undefined
-    },
-    {
-      id: 5,
-      name: 'Bitcoin',
-      price: '$ 45.000',
-      quantity: '0.0001',
-      variation: '0.5%',
-      yield: '$ 0.00',
-      realYield: '$ 0.00',
-      alert: undefined
-    },
-    {
-      id: 4,
-      name: 'Bitcoin',
-      price: '$ 45.000',
-      quantity: '0.0001',
-      variation: '0.5%',
-      yield: '$ 0.00',
-      realYield: '$ 0.00',
-      alert: undefined
-    },
-    {
-      id: 3,
-      name: 'Bitcoin',
-      price: '$ 45.000',
-      quantity: '0.0001',
-      variation: '0.5%',
-      yield: '$ 0.00',
-      realYield: '$ 0.00',
-      alert: undefined
-    },
-    {
-      id: 2,
-      name: 'Bitcoin',
-      price: '$ 45.000',
-      quantity: '0.0001',
-      variation: '0.5%',
-      yield: '$ 0.00',
-      realYield: '$ 0.00',
-      alert: undefined
-    },
-    {
-      id: 8,
-      name: 'Bitcoin',
-      price: '$ 45.000',
-      quantity: '0.0001',
-      variation: '0.5%',
-      yield: '$ 0.00',
-      realYield: '$ 0.00',
-      alert: undefined
-    },
-    {
-      id: 7,
-      name: 'Bitcoin',
-      price: '$ 45.000',
-      quantity: '0.0001',
-      variation: '0.5%',
-      yield: '$ 0.00',
-      realYield: '$ 0.00',
-      alert: undefined
-    },
-    {
-      id: 6,
-      name: 'Bitcoin',
-      price: '$ 45.000',
-      quantity: '0.0001',
-      variation: '0.5%',
-      yield: '$ 0.00',
-      realYield: '$ 0.00',
+      name: '',
+      price: '',
+      quantity: '',
+      variation: '',
+      yield: '',
+      realYield: '',
       alert: undefined
     }
   ];
+  export let data;
 </script>
 
 <svelte:head>
@@ -132,7 +63,7 @@
       <PieChart />
     </WhiteCard>
     <div class="col-span-6">
-      <Table showOptionsMenu={true} {rows} {columns} />
+      <Table showOptionsMenu={true} rows={data.balanceList ?? rowDefault} {columns} />
     </div>
   </div>
   <!-- <div class="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">

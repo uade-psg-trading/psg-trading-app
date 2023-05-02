@@ -98,9 +98,6 @@
           </div>
           <div class="flex">
             <div class="w-2/6 mb-4 px-3">
-              <FormInput id="day" name="day" isRequired={true} labelTitle="Día" type="number" />
-            </div>
-            <div class="w-2/6 mb-4 px-3">
               <FormInput id="month" name="month" isRequired={true} labelTitle="Mes" type="number" />
             </div>
             <div class="w-2/6 mb-4 px-3">

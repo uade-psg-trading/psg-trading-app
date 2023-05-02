@@ -81,11 +81,11 @@
       subMenuRoutes: [
         {
           name: 'Vender',
-          href: '/portfolio/sell'
+          href: '/portfolio/Vender'
         },
         {
           name: 'Comprar',
-          href: '/portfolio/buy'
+          href: '/portfolio/Comprar'
         }
       ]
     }
