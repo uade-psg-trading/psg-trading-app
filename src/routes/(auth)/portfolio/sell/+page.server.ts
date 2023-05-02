@@ -1,12 +1,19 @@
 import { apiEndpoints } from '$lib/api';
 import { getCurrentSession } from '$lib/server/cookie-manager';
 import { fail, redirect } from '@sveltejs/kit';
-import type { Actions } from './$types';
+import type { Actions, PageServerLoad } from './$types';
 
 type SellForm = {
   amount: string;
   tokenSelection: string;
 };
+
+export const load = (async ({ locals, cookies }) => {
+  const jwt = getCurrentSession(cookies, locals);
+  const result = await apiEndpoints.tokenList.getTokenList(jwt ?? '');
+  console.log(result.data);
+  return { result };
+}) satisfies PageServerLoad;
 
 export const actions: Actions = {
   default: async ({ cookies, locals, request }) => {

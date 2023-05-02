@@ -12,9 +12,9 @@
   import { headerStore } from '$lib/stores';
 
   let selectedValue: string;
-  let tokenList = [`$PSG`, `$BAR`, `$CITY`];
 
   export let data: PageData;
+  const tokenList = data.result.data;
 
   function goHome() {
     goto('/');
@@ -72,7 +72,7 @@
             id="tokenSelection"
             name="tokenSelection"
             value={selectedValue}
-            list={tokenList}
+            list={tokenList?.map((symbol) => symbol.symbol)}
             labelTitle="Token"
           />
         </div>
