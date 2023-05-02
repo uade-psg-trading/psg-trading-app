@@ -1,4 +1,9 @@
-import { unauthenticatedPost, authenticatedGet, authenticatedPost } from './calls';
+import {
+  unauthenticatedPost,
+  authenticatedGet,
+  authenticatedPost,
+  authenticatedPut
+} from './calls';
 
 type Credentials = {
   username: string;
@@ -29,19 +34,23 @@ type User = {
   email: string;
   location: {
     country: string;
-    direction: string;
+    address: string;
     city: string;
     province: string;
     zipCode: string;
   };
 };
 
-type NewUser = {
+type UserWithSecureData = {
   password: string;
 } & User;
+
 export const user = {
-  get: async (jwt: string) => await authenticatedGet<User>('/api/users', jwt),
-  createUser: async (newUser: NewUser) => await unauthenticatedPost<User>('/api/users', newUser)
+  get: async (jwt: string) => await authenticatedGet<User>('/api/users/me', jwt),
+  createUser: async (newUser: UserWithSecureData) =>
+    await unauthenticatedPost<User>('/api/users', newUser),
+  updateUser: async (jwt: string, updatedUser: UserWithSecureData) =>
+    await authenticatedPut<User>('/api/users', jwt, updatedUser)
 };
 
 type Transaction = {

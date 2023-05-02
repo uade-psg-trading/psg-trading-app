@@ -68,7 +68,7 @@ export const actions: Actions = {
       password: registerForm.password,
       location: {
         country: registerForm.country,
-        direction: registerForm.address,
+        address: registerForm.address,
         city: registerForm.city,
         province: registerForm.state,
         zipCode: registerForm.zipCode

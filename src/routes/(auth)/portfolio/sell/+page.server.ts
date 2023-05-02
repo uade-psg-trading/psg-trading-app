@@ -1,6 +1,6 @@
 import { apiEndpoints } from '$lib/api';
 import { getCurrentSession } from '$lib/server/cookie-manager';
-import { fail, redirect } from '@sveltejs/kit';
+import { fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
 type SellForm = {
