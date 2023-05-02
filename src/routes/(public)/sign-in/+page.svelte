@@ -1,17 +1,17 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { enhance } from '$app/forms';
-  import logo from '$lib/images/logo/logo.svg';
-  import type { ActionData } from './$types';
+  import type { ActionData, PageData } from './$types';
   import SecurityButton from '$lib/components/buttons/security-button.svelte';
   import SsoButton from '$lib/components/buttons/sso-button.svelte';
   import FormInput from '$lib/components/input/input.svelte';
   import CheckBox from '$lib/components/check-box/check-box.svelte';
   import Link from '$lib/components/link/link.svelte';
   import ErrorLabel from '$lib/components/error-label/error-label.svelte';
+  import AppLogo from '$lib/components/app-logo/app-logo.svelte';
 
-  /** @type {import('./$types').ActionData} */
   export let form: ActionData;
+  export let data: PageData;
 
   let signInButtonLoading = false;
   let redirectLoading = false;
@@ -38,7 +38,7 @@
 <div class="flex justify-center py-12 px-4 sm:px-6 lg:px-8">
   <div class="w-full max-w-md space-y-8">
     <div>
-      <img class="mx-auto h-12 w-auto" src={logo} alt="Trading" />
+      <AppLogo tenant={data.tenant.id} />
       <h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
         Inicie sesión en su cuenta
       </h2>
@@ -86,9 +86,14 @@
       {#if form?.errorMessage}
         <ErrorLabel message={form.errorMessage} />
       {/if}
-
-      <SecurityButton loading={signInButtonLoading} title="Iniciar sesion" buttonType="submit" />
+      <SecurityButton
+        disabled={signInButtonLoading || redirectLoading}
+        loading={signInButtonLoading}
+        title="Iniciar sesion"
+        buttonType="submit"
+      />
       <SsoButton
+        disabled={signInButtonLoading || redirectLoading}
         loading={redirectLoading}
         on:click={goToGoogle}
         title="Iniciar sesion con Google"

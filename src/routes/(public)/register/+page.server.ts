@@ -2,6 +2,7 @@ import { fail } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { isValidEmail, isValidPassword } from '$lib/utils/validator';
 import { apiEndpoints } from '$lib/api';
+import { getCurrentTenant } from '$lib/tenant-manager';
 
 function sanitizeFormData(form: RegisterForm): RegisterForm {
   return {
@@ -26,7 +27,7 @@ type RegisterForm = {
 };
 /** @type {import('./$types').Actions} */
 export const actions: Actions = {
-  register: async ({ request }) => {
+  register: async ({ request, locals }) => {
     const formData = await request.formData();
     const registerForm = Object.fromEntries(formData) as RegisterForm;
 
@@ -60,15 +61,17 @@ export const actions: Actions = {
       return fail(400, returnData);
     }
 
+    const tenant = getCurrentTenant(locals).id;
     const registerResponse = await apiEndpoints.user.createUser({
       firstName: registerForm.name,
       dni: Number(registerForm.dni),
       email: registerForm.email,
       lastName: registerForm.lastName,
       password: registerForm.password,
+      tenantId: tenant,
       location: {
         country: registerForm.country,
-        direction: registerForm.address,
+        address: registerForm.address,
         city: registerForm.city,
         province: registerForm.state,
         zipCode: registerForm.zipCode

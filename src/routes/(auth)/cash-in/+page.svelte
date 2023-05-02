@@ -1,10 +1,12 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
   import { enhance } from '$app/forms';
   import { headerStore } from '$lib/stores';
   import PrimaryButton from '$lib/components/buttons/primary-button.svelte';
   import FormInput from '$lib/components/input/input-with-title.svelte';
   import CopyText from '$lib/components/text/copy-text.svelte';
+  import Swal from 'sweetalert2';
+  import { goto } from '$app/navigation';
 
   // Hay que cambiar esto. No sirve
   // Es 0 reusable
@@ -15,6 +17,26 @@
       return value;
     });
   });
+
+  function onEnhanceSubmit() {
+    return async ({ update, result }: any) => {
+      await update();
+      if (result.type === 'success') {
+        Swal.fire({
+          title: 'Ingreso de dinero exitoso',
+          text: 'Ingresaste de manera exitosa el dinero.',
+          icon: 'success',
+          confirmButtonText: 'Aceptar'
+        }).then(() => {
+          goHome();
+        });
+      }
+    };
+  }
+
+  function goHome() {
+    goto('/');
+  }
 </script>
 
 <svelte:head>
@@ -25,7 +47,7 @@
   <div class="rounded p-6 bg-white w-full max-w-screen-lg space-y-8">
     <div>
       <h2 class="text-left text-lg font-bold text-indigo-800">Transferencia bancaria</h2>
-      <p class="text-sm  text-gray-500">
+      <p class="text-sm text-gray-500">
         Para ingresar dinero a Workflow podes realizar una transferencia al siguiente numero de
         cuenta.
       </p>
@@ -40,7 +62,7 @@
         Para ingresar dinero a Workflow con tarjeta de credito podes completar los datos de tu
         tarjeta favorita y cargar saldo con un solo click.
       </p>
-      <form action="/cash-in" method="POST" class="w-full" use:enhance>
+      <form action="/cash-in" method="POST" class="w-full" use:enhance={onEnhanceSubmit}>
         <div class="-mx-3">
           <div class="w-3/6 mb-4 px-3">
             <FormInput
@@ -84,7 +106,7 @@
             </div>
           </div>
         </div>
-        <div class="justify-end flex ">
+        <div class="justify-end flex">
           <div class="px-3 mb-6 md:mb-0">
             <PrimaryButton title="Ingresar dinero" buttonType="submit" />
           </div>

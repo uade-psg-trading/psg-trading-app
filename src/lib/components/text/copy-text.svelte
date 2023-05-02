@@ -13,6 +13,6 @@
     <span class="text-sm text-gray-500 mr-1.5">{text}</span>
   </p>
   <button on:click={handleCopy}>
-    <img class="w-4 h-4 " src={copyButton} alt="Copy" />
+    <img class="w-4 h-4" src={copyButton} alt="Copy" />
   </button>
 </div>

@@ -1,36 +1,28 @@
 <script lang="ts">
-  import Swal from 'sweetalert2';
-  import type { ActionData, PageData } from './$types';
   import { enhance } from '$app/forms';
   import { goto } from '$app/navigation';
+  import logo from '$lib/images/logo/logo.svg';
   import FormInput from '$lib/components/input/input-with-title.svelte';
   import PrimaryButton from '$lib/components/buttons/primary-button.svelte';
   import SecondaryButton from '$lib/components/buttons/secondary-button.svelte';
-  import ErrorLabel from '$lib/components/error-label/error-label.svelte';
-  import AppLogo from '$lib/components/app-logo/app-logo.svelte';
+  import Swal from 'sweetalert2';
+  export let data;
 
-  export let form: ActionData;
-  export let data: PageData;
-
-  let loading = false;
-
-  function goSignIn() {
-    goto('/sign-in');
+  function goHome() {
+    goto('/');
   }
 
   function onEnhanceSubmit() {
-    loading = true;
     return async ({ update, result }: any) => {
       await update();
-      loading = false;
       if (result.type === 'success') {
         Swal.fire({
-          title: 'Registro finalizado',
-          text: 'Serás redirigido a la pantalla de inicio de sesión.',
+          title: 'Actualización exitosa',
+          text: 'Actualizaste de manera exitosa tu perfil.',
           icon: 'success',
           confirmButtonText: 'Aceptar'
         }).then(() => {
-          goSignIn();
+          goHome();
         });
       }
     };
@@ -38,18 +30,18 @@
 </script>
 
 <svelte:head>
-  <title>Register a new account</title>
+  <title>Profile</title>
 </svelte:head>
 
 <div class="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
   <div class="rounded p-6 bg-white w-full max-w-screen-lg space-y-8">
     <div>
-      <AppLogo tenant={data.tenant.id} />
+      <img class="mx-auto h-12 w-auto" src={logo} alt="Trading" />
       <h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-        Registro de cuenta
+        Editar perfil
       </h2>
     </div>
-    <form action="?/register" method="POST" class="w-full" use:enhance={onEnhanceSubmit}>
+    <form action="/profile" method="POST" class="w-full" use:enhance={onEnhanceSubmit}>
       <div class="flex flex-wrap -mx-3 mb-6">
         <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <FormInput
@@ -58,12 +50,8 @@
             autocomplete="name"
             isRequired={true}
             labelTitle="Name"
-            value={form?.data?.name ?? ''}
-            disabled={loading}
+            value={data.firstName}
           />
-          {#if form?.errors?.name}
-            <ErrorLabel message="El campo nombre parece no estar correcto." />
-          {/if}
         </div>
         <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <FormInput
@@ -71,18 +59,21 @@
             name="lastName"
             isRequired={true}
             labelTitle="Apellido"
-            value={form?.data?.email ?? ''}
-            disabled={loading}
+            value={data.lastName}
           />
         </div>
       </div>
       <div class="flex flex-wrap -mx-3 mb-6">
         <div class="w-full flex flex-wrap mb-6">
           <div class="w-3/6 px-3 mb-6">
-            <FormInput id="dni" name="dni" isRequired={true} labelTitle="DNI" />
-            {#if form?.errors?.email}
-              <ErrorLabel message="El DNI ingresado no es correcto." />
-            {/if}
+            <FormInput
+              id="dni"
+              name="dni"
+              isRequired={true}
+              labelTitle="DNI"
+              value={String(data.dni)}
+              readonly={true}
+            />
           </div>
           <div class="w-4/6 px-3">
             <FormInput
@@ -92,59 +83,57 @@
               isRequired={true}
               labelTitle="Correo electronico"
               type="email"
-              disabled={loading}
+              value={data.email}
+              readonly={true}
             />
-            {#if form?.errors?.email}
-              <ErrorLabel message="El campo email no parece ser correcto." />
-            {/if}
           </div>
         </div>
         <div class="w-full flex flex-wrap mb-6">
           <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
             <FormInput
-              disabled={loading}
               id="country"
               name="country"
               isRequired={true}
               labelTitle="País"
+              value={data.location?.country}
             />
           </div>
           <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
             <FormInput
-              disabled={loading}
               id="address"
               name="address"
               isRequired={true}
               labelTitle="Dirección"
+              value={data.location?.address}
             />
           </div>
         </div>
         <div class="flex flex-wrap mb-6">
           <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
             <FormInput
-              disabled={loading}
               id="city"
               name="city"
               isRequired={true}
               labelTitle="Ciudad"
+              value={data.location?.city}
             />
           </div>
           <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
             <FormInput
-              disabled={loading}
               id="state"
               name="state"
               isRequired={true}
               labelTitle="Provincia"
+              value={data.location?.province}
             />
           </div>
           <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
             <FormInput
-              disabled={loading}
               id="zipCode"
               name="zipCode"
               isRequired={true}
               labelTitle="Código postal"
+              value={data.location?.zipCode}
             />
           </div>
         </div>
@@ -156,13 +145,7 @@
               isRequired={true}
               labelTitle="Contraseña"
               type="password"
-              disabled={loading}
             />
-            {#if form?.errors?.password}
-              <ErrorLabel
-                message="La password no cumple con nuestras policies de seguridad. Recuerde que deben tener al menos 1 mayuscula, 1 minuscula, 1 simbolo y al menos 7 letras"
-              />
-            {/if}
           </div>
           <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
             <FormInput
@@ -171,31 +154,17 @@
               isRequired={true}
               labelTitle="Repetir contraseña"
               type="password"
-              disabled={loading}
             />
-            {#if form?.errors?.confirmPassword}
-              <ErrorLabel message="Las passwords ingresadas no coinciden" />
-            {/if}
           </div>
         </div>
       </div>
-      <div class="justify-end items-end flex flex-col px-3 mb-6 md:mb-0">
-        {#if form?.errors?.register}
-          <div class="mb-3">
-            <ErrorLabel message="Ha ocurrido un error durante el registro." />
-          </div>
-        {/if}
-        {#if form?.errors?.registerMessage}
-          <div class="mb-3">
-            <ErrorLabel message={form?.errors?.registerMessage || ''} />
-          </div>
-        {/if}
+      <div class="justify-end items-end flex px-3 mb-6 md:mb-0">
         <div class="md:w-1/2 flex flex-row justify-end">
           <div class="md:w-1/4 mr-2">
-            <SecondaryButton on:click={goSignIn} disabled={loading} title="Cancelar" />
+            <SecondaryButton on:click={goHome} title="Cancelar" />
           </div>
-          <div class="md:w-1/4">
-            <PrimaryButton disabled={loading} {loading} title="Registrarse" buttonType="submit" />
+          <div class="md:w-1/3">
+            <PrimaryButton buttonType="submit" title="Guardar cambios" />
           </div>
         </div>
       </div>

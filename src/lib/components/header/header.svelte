@@ -1,6 +1,8 @@
 <script lang="ts">
-  import { page } from '$app/stores';
   import { onMount } from 'svelte';
+  import { page } from '$app/stores';
+  import AppLogo from '$lib/components/app-logo/app-logo.svelte';
+  import type { TenantType } from '$lib/tenant-manager';
 
   type Route = {
     name: string;
@@ -12,6 +14,8 @@
     name: string;
     href: string;
   };
+
+  export let tenant: TenantType;
   let showUserMenu = false;
   let showMobileMenu = false;
   let showTradeSubmenu = false;
@@ -149,16 +153,8 @@
       </div>
       <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
         <div class="flex flex-shrink-0 items-center">
-          <img
-            class="block h-8 w-auto lg:hidden"
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-            alt="Your Company"
-          />
-          <img
-            class="hidden h-8 w-auto lg:block"
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-            alt="Your Company"
-          />
+          <AppLogo {tenant} customClasses="block h-8 w-auto lg:hidden" />
+          <AppLogo {tenant} customClasses="hidden h-8 w-auto lg:block" />
         </div>
         <div class="hidden sm:ml-6 sm:block">
           <div class="flex space-x-4">

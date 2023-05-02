@@ -1,11 +1,14 @@
 import { redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
+import { getCurrentSession } from '$lib/server/cookie-manager';
+import { getCurrentTenant } from '$lib/tenant-manager';
 
-export const load = (async ({ locals }) => {
-  const { username } = locals;
-  if (username) {
+export const load = (async ({ locals, cookies }) => {
+  const session = getCurrentSession(cookies, locals);
+  if (session) {
     throw redirect(307, '/portfolio');
   }
 
-  return {};
+  const tenant = getCurrentTenant(locals);
+  return { tenant };
 }) satisfies LayoutServerLoad;
