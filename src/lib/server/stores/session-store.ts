@@ -11,7 +11,6 @@ export function createSession(username: string, maxAge: number, jwt: string): st
     invalidAt: Date.now() + maxAge
   });
 
-  console.log('saved session', sessionStore.entries());
   // if (Date.now() > nextClean) {
   //   setTimeout(() => {
   //     clean();
@@ -25,14 +24,12 @@ export function getSession(jwt: string): SessionInfo | undefined {
   const session = sessionStore.get(jwt);
   if (session) {
     if (Date.now() > session.invalidAt) {
-      console.log('delete invalid session', jwt);
       sessionStore.delete(jwt);
       return undefined;
     } else {
       return session;
     }
   } else {
-    console.log('session not found', jwt);
     return undefined;
   }
 }

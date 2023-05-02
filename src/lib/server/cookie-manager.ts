@@ -41,8 +41,6 @@ export const newSession = (cookies: Cookies, username: string, jwt: string) => {
       domain: PUBLIC_COOKIE_DOMAIN
     });
   }
-
-  console.log('cookies', cookies.getAll());
 };
 
 export const removeSession = (cookies: Cookies, locals: App.Locals) => {

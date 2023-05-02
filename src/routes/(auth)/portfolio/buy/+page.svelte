@@ -75,10 +75,13 @@
         <div class="w-full md:w-1/2 px-3 mb-6">
           <FormInput id="amount" name="amount" isRequired={true} labelTitle="Cantidad" />
         </div>
-        <div>
-          <h1 class="px-3 mt-6 text-center text-lg font-bold tracking-tight text-gray-700">
+        <div class="px-3 my-6 flex flex-row justify-between w-full">
+          <h1 class="text-center text-lg font-bold tracking-tight text-gray-700">
             Saldo disponible para operar: $2
           </h1>
+          <a class="text-indigo-800 underline self-center" href="/cash-in"
+            >Ingresar dinero en la plataforma</a
+          >
         </div>
       </div>
       <div class="justify-end items-end flex px-3 mb-6 md:mb-0">
