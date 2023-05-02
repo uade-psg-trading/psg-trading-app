@@ -11,18 +11,35 @@
   import { onMount } from 'svelte';
   import { headerStore } from '$lib/stores';
 
+  export let data: PageData;
+
   let selectedValue: string;
   let tokenList = [`$PSG`, `$BAR`, `$CITY`];
   function goHome() {
     goto('/');
   }
-  export let data: PageData;
   onMount(() => {
     headerStore.update((value) => {
       value.title = 'Comprar token';
       return value;
     });
   });
+
+  function onEnhanceSubmit() {
+    return async ({ update, result }: any) => {
+      await update();
+      if (result.type === 'success') {
+        Swal.fire({
+          title: 'Compra exitosa',
+          text: 'Compraste de manera exitosa el Token',
+          icon: 'success',
+          confirmButtonText: 'Aceptar'
+        }).then(() => {
+          goHome();
+        });
+      }
+    };
+  }
 </script>
 
 <svelte:head>
@@ -44,26 +61,7 @@
         <h2 class="mt-10 text-center text-base text-gray-900">$ 5.2808112</h2>
       </div>
     </div>
-    <form
-      action="/portfolio/buy"
-      method="POST"
-      class="w-full"
-      use:enhance={() => {
-        return async ({ update, result }) => {
-          await update();
-          if (result.type === 'success') {
-            Swal.fire({
-              title: 'Compra exitosa',
-              text: 'Compraste de manera exitosa el Token',
-              icon: 'success',
-              confirmButtonText: 'Aceptar'
-            }).then(() => {
-              goHome();
-            });
-          }
-        };
-      }}
-    >
+    <form action="/portfolio/buy" method="POST" class="w-full" use:enhance={onEnhanceSubmit}>
       <div class="flex flex-wrap">
         <div class="w-full md:w-1/2 px-3 mb-6">
           <Selector
