@@ -16,20 +16,21 @@
   export let data: PageData;
   const tokenList = data.result.data;
   const operation = data.operation;
+  const operationLabel = data.operation == 'sell' ? 'Vender' : 'Comprar';
 
   function goHome() {
     goto('/');
   }
   onMount(() => {
     headerStore.update((value) => {
-      value.title = operation + ' token';
+      value.title = `${operationLabel} token`;
       return value;
     });
   });
 </script>
 
 <svelte:head>
-  <title>{operation} Activo</title>
+  <title>{operationLabel} Activo</title>
 </svelte:head>
 
 <div class="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -57,7 +58,7 @@
           if (result.type === 'success') {
             Swal.fire({
               title: 'Operación exitosa',
-              text: 'Pudiste ' + operation + ' de manera exitosa el Token',
+              text: 'Pudiste ' + operationLabel + ' de manera exitosa el Token',
               icon: 'success',
               confirmButtonText: 'Aceptar'
             }).then(() => {
@@ -86,7 +87,7 @@
       <div class="justify-end items-end flex px-3 mb-6 md:mb-0">
         <div class="md:w-1/2 flex flex-row justify-end">
           <div class="md:w-1/4">
-            <PrimaryButton title={operation} buttonType="submit" />
+            <PrimaryButton title={operationLabel} buttonType="submit" />
           </div>
         </div>
       </div>
