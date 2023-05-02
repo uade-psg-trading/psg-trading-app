@@ -75,3 +75,19 @@ export const payments = {
   createPayment: async (jwt: string, newPayment: Payment) =>
     await authenticatedPost<Payment>('/api/payments', jwt, newPayment)
 };
+
+type Balance = {
+  symbol: {
+    symbol: string;
+    name: string;
+    token: boolean;
+  };
+  price: number;
+  percent_change_24h: number;
+  amount: number;
+  yield: number;
+  total: number;
+};
+export const balance = {
+  getBalanceList: async (jwt: string) => await authenticatedGet<Balance[]>('/api/balances', jwt)
+};

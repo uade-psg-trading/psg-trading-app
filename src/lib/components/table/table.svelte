@@ -5,7 +5,7 @@
     value: (row: Row) => string | number | undefined;
     sortable?: boolean;
     visible?: boolean;
-    classes?: boolean;
+    classes?: string;
   };
 
   type Row = {
