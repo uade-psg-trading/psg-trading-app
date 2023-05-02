@@ -1,4 +1,6 @@
 import type { Cookies } from '@sveltejs/kit';
+import { PUBLIC_COOKIE_DOMAIN } from '$env/static/public';
+import { VERCEL_ENV } from '$env/static/private';
 import { getSession, createSession, deleteSession } from './stores/session-store';
 
 const jwtCookie = 'Auth';
@@ -27,20 +29,38 @@ export const newSession = (cookies: Cookies, username: string, jwt: string) => {
   }
 
   const sessionJwt = createSession(username, sessionMaxAge, jwt);
-  cookies.set(jwtCookie, sessionJwt, {
-    path: '/',
-    maxAge: sessionMaxAge
-  });
+  if (VERCEL_ENV === 'preview') {
+    cookies.set(jwtCookie, sessionJwt, {
+      path: '/',
+      maxAge: sessionMaxAge
+    });
+  } else {
+    cookies.set(jwtCookie, sessionJwt, {
+      path: '/',
+      maxAge: sessionMaxAge,
+      domain: PUBLIC_COOKIE_DOMAIN
+    });
+  }
+
+  console.log('cookies', cookies.getAll());
 };
 
 export const removeSession = (cookies: Cookies, locals: App.Locals) => {
   const jwt = cookies.get(jwtCookie);
   if (jwt) {
     deleteSession(jwt);
-    cookies.set(jwtCookie, '', {
-      path: '/',
-      maxAge: 0
-    });
+    if (VERCEL_ENV === 'preview') {
+      cookies.set(jwtCookie, '', {
+        path: '/',
+        maxAge: 0
+      });
+    } else {
+      cookies.set(jwtCookie, '', {
+        path: '/',
+        maxAge: 0,
+        domain: PUBLIC_COOKIE_DOMAIN
+      });
+    }
 
     locals.session = undefined;
   }
