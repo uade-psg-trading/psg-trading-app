@@ -6,12 +6,13 @@ import type { PageServerLoad } from './$types';
 export const load: PageServerLoad = async ({ cookies, locals }) => {
   const jwt = getCurrentSession(cookies, locals);
   if (jwt == null) {
-    return fail(400, {
+    return {
       errors: {
         message: 'Error with token'
       }
-    });
+    };
   }
+
   const balanceResponse = await apiEndpoints.balance.getBalanceList(jwt);
   if (balanceResponse.success && balanceResponse.data) {
     return {
@@ -29,9 +30,10 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
       })
     };
   }
-  return fail(400, {
+
+  return {
     errors: {
       message: balanceResponse.message
     }
-  });
+  };
 };
