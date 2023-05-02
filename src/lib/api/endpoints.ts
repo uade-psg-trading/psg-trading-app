@@ -27,6 +27,7 @@ type User = {
   lastName: string;
   dni: number;
   email: string;
+  tenantId: string;
   location: {
     country: string;
     address: string;
