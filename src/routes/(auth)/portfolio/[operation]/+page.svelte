@@ -15,7 +15,8 @@
   export let data: PageData;
   export let form: ActionData;
   let selectedValue: string | undefined = undefined;
-  const tokenList = data.result;
+  const genericTokenList = data.generalTokens;
+  const clientTokenList = data.clientTokens;
   const operation = data.operation;
   const operationLabel = data.operation == 'sell' ? 'Vender' : 'Comprar';
 
@@ -44,6 +45,22 @@
         });
       }
     };
+  }
+
+  function getTokenList() {
+    if (operation == 'sell') {
+      return (
+        clientTokenList
+          ?.filter((symbol) => symbol.symbol != 'USD')
+          .map((symbol) => symbol.symbol) || []
+      );
+    } else {
+      return (
+        genericTokenList
+          ?.filter((symbol) => symbol.symbol != 'USD')
+          .map((symbol) => symbol.symbol) || []
+      );
+    }
   }
 </script>
 
@@ -78,9 +95,7 @@
             id="tokenSelection"
             name="tokenSelection"
             value={selectedValue}
-            list={tokenList
-              ?.filter((symbol) => symbol.symbol != 'USD')
-              .map((symbol) => symbol.symbol) || []}
+            list={getTokenList()}
             labelTitle="Token"
           />
         </div>
