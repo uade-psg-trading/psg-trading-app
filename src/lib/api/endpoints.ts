@@ -72,6 +72,15 @@ export const payments = {
     await authenticatedPost<Payment>('/api/payments', jwt, newPayment)
 };
 
+export type Token = {
+  symbol: string;
+  name: string;
+  token: boolean;
+};
+export const tokenList = {
+  getTokenList: async (jwt: string) => await authenticatedGet<Token[]>('/api/coin', jwt)
+};
+
 type Balance = {
   symbol: {
     symbol: string;

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { PageData } from './$types';
+  import type { ActionData, PageData } from './$types';
   import FormInput from '$lib/components/input/input-with-title.svelte';
   import PrimaryButton from '$lib/components/buttons/primary-button.svelte';
   import Selector from '$lib/components/selector/selector.svelte';
@@ -10,10 +10,15 @@
   import { goto } from '$app/navigation';
   import { onMount } from 'svelte';
   import { headerStore } from '$lib/stores';
+  import ErrorLabel from '$lib/components/error-label/error-label.svelte';
+  import { error } from '@sveltejs/kit';
 
   export let data: PageData;
+  export let form: ActionData;
   let selectedValue: string;
-  let tokenList = [`$PSG`, `$BAR`, `$CITY`];
+  const tokenList = data.result;
+  const operation = data.operation;
+  const operationLabel = data.operation == 'sell' ? 'Vender' : 'Comprar';
 
   function goHome() {
     goto('/');
@@ -21,7 +26,7 @@
 
   onMount(() => {
     headerStore.update((value) => {
-      value.title = 'Vender token';
+      value.title = `${operationLabel} token`;
       return value;
     });
   });
@@ -44,7 +49,7 @@
 </script>
 
 <svelte:head>
-  <title>Vender Activo</title>
+  <title>{operationLabel} Activo</title>
 </svelte:head>
 
 <div class="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -62,14 +67,35 @@
         <h2 class="mt-10 text-center text-base text-gray-900">$ 5.2808112</h2>
       </div>
     </div>
-    <form action="/portfolio/sell" method="POST" class="w-full" use:enhance={onEnhanceSubmit}>
+    <form
+      action="/portfolio/{operation}"
+      method="POST"
+      class="w-full"
+      use:enhance={() => {
+        return async ({ update, result }) => {
+          await update();
+          if (result.type === 'success') {
+            Swal.fire({
+              title: 'Operación exitosa',
+              text: 'Pudiste ' + operationLabel + ' de manera exitosa el Token',
+              icon: 'success',
+              confirmButtonText: 'Aceptar'
+            }).then(() => {
+              goHome();
+            });
+          }
+        };
+      }}
+    >
       <div class="flex flex-wrap">
         <div class="w-full md:w-1/2 px-3 mb-6">
           <Selector
             id="tokenSelection"
             name="tokenSelection"
             value={selectedValue}
-            list={tokenList}
+            list={tokenList
+              ?.filter((symbol) => symbol.symbol != 'USD')
+              .map((symbol) => symbol.symbol) || []}
             labelTitle="Token"
           />
         </div>
@@ -79,8 +105,14 @@
       </div>
       <div class="justify-end items-end flex px-3 mb-6 md:mb-0">
         <div class="md:w-1/2 flex flex-row justify-end">
+          {#if data.error}
+            <ErrorLabel message={data.error} />
+          {/if}
+          {#if form?.errors?.message}
+            <ErrorLabel message={form.errors?.message} />
+          {/if}
           <div class="md:w-1/4">
-            <PrimaryButton title="Vender" buttonType="submit" />
+            <PrimaryButton title={operationLabel} buttonType="submit" />
           </div>
         </div>
       </div>
