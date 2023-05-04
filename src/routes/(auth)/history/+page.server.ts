@@ -12,7 +12,6 @@ export const load = (async ({ parent }) => {
   }
 
   const transactions = transactionsResponse.data || [];
-  console.log(transactions);
   return {
     transactions: transactions.map((transaction) => {
       return {
