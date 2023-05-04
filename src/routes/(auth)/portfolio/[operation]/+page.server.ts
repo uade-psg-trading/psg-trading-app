@@ -12,11 +12,13 @@ type operationForm = {
 export const load = (async ({ locals, cookies, params }) => {
   const operation = params.operation;
   const jwt = getCurrentSession(cookies, locals);
-  const result = await apiEndpoints.tokenList.getTokenList(jwt ?? '');
-  if (result.success) {
-    return { result: result.data, operation };
+  const generalTokenLIst = await apiEndpoints.tokenList.getTokenList(jwt ?? '');
+  const balanceTokenList = await apiEndpoints.balance.getBalanceList(jwt ?? '');
+  if (generalTokenLIst.success && balanceTokenList.success) {
+    const clientTokensSymbol = balanceTokenList.data?.map((balance) => balance.symbol);
+    return { generalTokens: generalTokenLIst.data, operation, clientTokens: clientTokensSymbol };
   }
-  return { error: result.message, operation };
+  return { error: generalTokenLIst.message, operation };
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {

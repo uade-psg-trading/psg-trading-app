@@ -1,6 +1,5 @@
 import { apiEndpoints } from '$lib/api';
 import { getCurrentSession } from '$lib/server/cookie-manager';
-import { fail } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ cookies, locals }) => {
