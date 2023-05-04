@@ -30,16 +30,23 @@ export const user = {
 };
 
 type Transaction = {
-  id: string;
-  transactionTime: string;
-} & NewTransaction;
+  id: number;
+  token: Token;
+  quantity: number;
+  price: number;
+  balance: number;
+  operation: string;
+  transactionTime: Date;
+};
 
 type NewTransaction = {
   token: string;
   quantity: number;
 };
+
 export const transaction = {
-  createTransaction: async (jwt: string, operation: string, newTransaction: NewTransaction) =>
+  get: async (jwt: string) => await authenticatedGet<Transaction[]>('/api/transaction', jwt),
+  create: async (jwt: string, operation: string, newTransaction: NewTransaction) =>
     await authenticatedPost<Transaction>(`/api/transaction/${operation}`, jwt, newTransaction)
 };
 
