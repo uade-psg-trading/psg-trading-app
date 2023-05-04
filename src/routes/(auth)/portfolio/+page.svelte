@@ -4,6 +4,7 @@
   import { headerStore } from '$lib/stores';
   import PieChart from '$lib/components/charts/pie-chart/pie-chart.svelte';
   import Table from '$lib/components/table/table.svelte';
+  import { balance } from '$lib/api/endpoints.js';
 
   // Hay que cambiar esto. No sirve
   // Es 0 reusable
@@ -52,18 +53,22 @@
     <WhiteCard classes="col-span-3 md:col-span-2 lg:col-span-1 flex flex-col justify-between">
       <div class="mb-4">
         <h3 class="text-lg text-black">Ganancia - Pérdida</h3>
-        <span class="text-base text-green-400">$345.545,70</span>
+        <span
+          class="text-base {Number(data.summary?.totalRealYield) >= 0
+            ? 'text-green-400'
+            : 'text-red-400'}">$ {data.summary?.totalRealYield}</span
+        >
       </div>
       <div>
         <h3 class="text-lg text-black">Activos valorizados</h3>
-        <span class="text-base text-gray-900">$1.004.234,82</span>
+        <span class="text-base text-gray-900">{data.summary?.totalYield}</span>
       </div>
     </WhiteCard>
     <WhiteCard classes="col-span-3 md:col-span-4 lg:col-span-5">
       <PieChart />
     </WhiteCard>
     <div class="col-span-6">
-      <Table showOptionsMenu={true} rows={data.balanceList ?? rowDefault} {columns} />
+      <Table showOptionsMenu={true} rows={data.balances ?? rowDefault} {columns} />
     </div>
   </div>
   <!-- <div class="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
