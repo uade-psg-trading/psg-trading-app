@@ -5,9 +5,6 @@
   import PieChart from '$lib/components/charts/pie-chart/pie-chart.svelte';
   import Table from '$lib/components/table/table.svelte';
 
-  // Hay que cambiar esto. No sirve
-  // Es 0 reusable
-  // Tampoco me copa mucho la idea de crear una libreria de rutas.
   onMount(() => {
     headerStore.update((value) => {
       value.title = 'Portfolio';
@@ -16,14 +13,23 @@
   });
 
   const columns = [
-    { key: 'id', title: 'ID', value: (row) => row.id, visible: false },
-    { key: 'name', title: 'Activo', value: (row) => row.name, classes: 'text-gray-900' },
-    { key: 'price', title: 'Precio', value: (row) => row.price },
-    { key: 'quantity', title: 'Cantidad', value: (row) => row.quantity },
-    { key: 'variation', title: 'Variacion diaria', value: (row) => row.variation },
-    { key: 'yield', title: 'Rendimiento', value: (row) => row.yield },
-    { key: 'realYield', title: 'Valorizado', value: (row) => row.realYield },
-    { key: 'alert', title: 'Alarma', value: (row) => row.alert ?? '' }
+    { key: 'id', title: 'ID', value: (row: { id: any }) => row.id, visible: false },
+    {
+      key: 'name',
+      title: 'Activo',
+      value: (row: { name: string }) => row.name,
+      classes: 'text-gray-900'
+    },
+    { key: 'price', title: 'Precio', value: (row: { price: any }) => row.price },
+    { key: 'quantity', title: 'Cantidad', value: (row: { quantity: any }) => row.quantity },
+    {
+      key: 'variation',
+      title: 'Variacion diaria',
+      value: (row: { variation: any }) => row.variation
+    },
+    { key: 'yield', title: 'Rendimiento', value: (row: { yield: any }) => row.yield },
+    { key: 'realYield', title: 'Valorizado', value: (row: { realYield: any }) => row.realYield },
+    { key: 'alert', title: 'Alarma', value: (row: { alert: any }) => row.alert ?? '' }
   ];
   const rowDefault = [
     {
@@ -66,12 +72,4 @@
       <Table showOptionsMenu={true} rows={data.balanceList ?? rowDefault} {columns} />
     </div>
   </div>
-  <!-- <div class="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-    <div class="rounded p-6 bg-white w-full max-w-screen-lg space-y-8">
-      <div class="buttons">
-        <a href="/portfolio/sell"><button class="large row">Vender</button></a>
-        <a href="/portfolio/buy"><button class="large row">Comprar</button></a>
-      </div>
-    </div>
-  </div> -->
 </div>

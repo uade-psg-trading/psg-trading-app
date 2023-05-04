@@ -1,9 +1,9 @@
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ cookies, locals, parent }) => {
-  const { portfolioBalance } = await parent();
+export const load: PageServerLoad = async ({ parent }) => {
+  const { portfolioBalance, portfolioError } = await parent();
 
-  if (portfolioBalance.length > 0) {
+  if (!portfolioError) {
     return {
       balanceList: portfolioBalance.map((balance) => {
         return {
@@ -20,9 +20,9 @@ export const load: PageServerLoad = async ({ cookies, locals, parent }) => {
     };
   }
 
-  // return {
-  //   errors: {
-  //     message: balanceResponse.message
-  //   }
-  // };
+  return {
+    errors: {
+      message: portfolioError
+    }
+  };
 };

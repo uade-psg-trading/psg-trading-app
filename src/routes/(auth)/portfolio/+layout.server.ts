@@ -4,37 +4,38 @@ import type { LayoutServerLoad } from './$types';
 type PortfolioPageLoad = {
   tokens: Token[];
   portfolioBalance: Balance[];
+  portfolioError: string | undefined;
+  tokensError: string | undefined;
 };
 
 export const load = (async ({ parent }): Promise<PortfolioPageLoad> => {
   const parentValues = await parent();
   const jwt = parentValues.session;
-  const [tokens, portfolioBalance] = await Promise.all([
-    getAllTokens(jwt),
-    getPortfolioBalance(jwt)
-  ]);
+  const [tokens, balance] = await Promise.all([getAllTokens(jwt), getPortfolioBalance(jwt)]);
 
   return {
     ...parentValues,
-    portfolioBalance,
-    tokens
+    portfolioBalance: balance.data,
+    tokens: tokens.data,
+    portfolioError: balance.message,
+    tokensError: tokens.message
   };
 }) satisfies LayoutServerLoad;
 
 async function getAllTokens(jwt: string) {
   const result = await apiEndpoints.tokenList.getTokenList(jwt ?? '');
   if (result.success) {
-    return result.data || [];
+    return { message: undefined, data: result.data || [] };
   }
 
-  return [];
+  return { message: result.message, data: [] };
 }
 
 async function getPortfolioBalance(jwt: string) {
-  const balanceTokenList = await apiEndpoints.balance.getBalanceList(jwt ?? '');
-  if (balanceTokenList.success) {
-    return balanceTokenList.data || [];
+  const result = await apiEndpoints.balance.getBalanceList(jwt ?? '');
+  if (result.success) {
+    return { message: undefined, data: result.data || [] };
   }
 
-  return [];
+  return { message: result.message, data: [] };
 }
