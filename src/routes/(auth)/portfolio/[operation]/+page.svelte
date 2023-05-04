@@ -19,10 +19,6 @@
   const operation = data.operation;
   const operationLabel = data.operation == 'sell' ? 'Vender' : 'Comprar';
 
-  function goHome() {
-    goto('/');
-  }
-
   onMount(() => {
     headerStore.update((value) => {
       value.title = `${operationLabel} token`;
@@ -40,7 +36,7 @@
           icon: 'success',
           confirmButtonText: 'Aceptar'
         }).then(() => {
-          goHome();
+          goto(`/portfolio/${operation}`);
         });
       }
     };
