@@ -20,8 +20,8 @@ async function handleTenant(url: URL, locals: App.Locals, jwt: string | null) {
     let defaultUrl = PUBLIC_HOST_URL;
     if (meApi.success) {
       locals.UserData = meApi.data;
-      currentTenantId = (meApi.data?.tenant.tenantId || 'trading') as TenantType;
-      defaultUrl = meApi.data?.tenant.domain || PUBLIC_HOST_URL;
+      currentTenantId = (meApi.data?.tenant?.tenantId || 'trading') as TenantType;
+      defaultUrl = meApi.data?.tenant?.domain || PUBLIC_HOST_URL;
       setCurrentTenant(locals, currentTenantId);
     } else {
       locals.UserData = undefined;

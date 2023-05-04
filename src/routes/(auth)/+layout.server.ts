@@ -10,5 +10,5 @@ export const load = (async ({ cookies, locals }) => {
   }
 
   const tenant = getCurrentTenant(locals);
-  return { tenant };
+  return { tenant, session };
 }) satisfies LayoutServerLoad;
