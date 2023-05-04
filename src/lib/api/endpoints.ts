@@ -5,13 +5,8 @@ import {
   authenticatedPost,
   authenticatedPut
 } from './calls';
+import type { Alert, AlertOperator, Balance, Credentials, Payment, Token, User } from './types';
 
-type Credentials = {
-  username: string;
-  jwt: string;
-  refreshToken: string;
-  tenant: string;
-};
 export const session = {
   login: async (email: string, password: string) =>
     await unauthenticatedPost<Credentials>('/api/session', {
@@ -20,21 +15,6 @@ export const session = {
     }),
   validateGoogleToken: async (token: string, tenant: TenantType) =>
     await unauthenticatedPost<Credentials>('/api/session/google', { token, tenant })
-};
-
-type User = {
-  firstName: string;
-  lastName: string;
-  dni: number;
-  email: string;
-  tenantId: string;
-  location: {
-    country: string;
-    address: string;
-    city: string;
-    province: string;
-    zipCode: string;
-  };
 };
 
 type UserWithSecureData = {
@@ -63,27 +43,26 @@ export const transaction = {
     await authenticatedPost<Transaction>(`/api/transaction/${operation}`, jwt, newTransaction)
 };
 
-type Payment = {
-  amount: number;
-  paymentMethod: string;
-};
 export const payments = {
   createPayment: async (jwt: string, newPayment: Payment) =>
     await authenticatedPost<Payment>('/api/payments', jwt, newPayment)
 };
 
-type Balance = {
-  symbol: {
-    symbol: string;
-    name: string;
-    token: boolean;
-  };
-  price: number;
-  percent_change_24h: number;
-  amount: number;
-  yield: number;
-  total: number;
+export const tokenList = {
+  getTokenList: async (jwt: string) => await authenticatedGet<Token[]>('/api/coin', jwt)
 };
+
 export const balance = {
   getBalanceList: async (jwt: string) => await authenticatedGet<Balance[]>('/api/balances', jwt)
+};
+
+type NewAlert = {
+  operator: AlertOperator;
+  token: string;
+  amount: number;
+};
+export const alerts = {
+  get: async (jwt: string) => await authenticatedGet<Alert[]>('/api/alert', jwt),
+  create: async (jwt: string, newAlert: NewAlert) =>
+    await authenticatedPost<Alert>('/api/alert', jwt, newAlert)
 };

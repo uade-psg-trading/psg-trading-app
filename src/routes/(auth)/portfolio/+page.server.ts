@@ -1,23 +1,13 @@
-import { apiEndpoints } from '$lib/api';
-import { getCurrentSession } from '$lib/server/cookie-manager';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ cookies, locals }) => {
-  const jwt = getCurrentSession(cookies, locals);
-  if (jwt == null) {
-    return {
-      errors: {
-        message: 'Error with token'
-      }
-    };
-  }
+export const load: PageServerLoad = async ({ parent }) => {
+  const { portfolioBalance, portfolioError } = await parent();
 
-  const balanceResponse = await apiEndpoints.balance.getBalanceList(jwt);
-  if (balanceResponse.success && balanceResponse.data) {
+  if (!portfolioError) {
     let totalYield = 0;
     let totalRealYield = 0;
     const balanceData = {
-      balances: balanceResponse.data.map((balance) => {
+      balances: portfolioBalance.map((balance) => {
         totalYield += balance.yield;
         totalRealYield += balance.total;
         return {
@@ -41,7 +31,7 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
 
   return {
     errors: {
-      message: balanceResponse.message
+      message: portfolioError
     }
   };
 };

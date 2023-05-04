@@ -8,6 +8,8 @@
   export let autocomplete: string | undefined = undefined;
   export let type: HTMLInputAttributes['type'] = 'text';
   export let value = '';
+  export let min: string | undefined = undefined;
+  export let max: string | undefined = undefined;
   export let disabled = false;
   export let readonly = false;
   const classBase =
@@ -20,6 +22,8 @@
   {labelTitle}
 </label>
 <input
+  {min}
+  {max}
   class={readonly ? classReadOnly : classDefault}
   {id}
   {name}

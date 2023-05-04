@@ -1,13 +1,12 @@
-// See https://kit.svelte.dev/docs/types#app
-
 import type { TenantType } from '$lib/tenant-manager';
+import type { User as UserData } from '$lib/api';
 
-// for information about these interfaces
 declare global {
   namespace App {
     // interface Error {}
     interface Locals {
       session?: Session;
+      UserData?: UserData;
       tenant: Tenant;
     }
     // interface PageData {}
