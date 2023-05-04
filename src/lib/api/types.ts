@@ -48,3 +48,11 @@ export type Token = {
   name: string;
   token: boolean;
 };
+
+export type AlertOperator = 'GREATER' | 'LOWER';
+export type Alert = {
+  alertId: number;
+  symbol: Token;
+  amount: number;
+  operator: AlertOperator;
+};

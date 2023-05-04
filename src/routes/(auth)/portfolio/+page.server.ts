@@ -1,21 +1,11 @@
-import { apiEndpoints } from '$lib/api';
-import { getCurrentSession } from '$lib/server/cookie-manager';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ cookies, locals }) => {
-  const jwt = getCurrentSession(cookies, locals);
-  if (jwt == null) {
-    return {
-      errors: {
-        message: 'Error with token'
-      }
-    };
-  }
+export const load: PageServerLoad = async ({ parent }) => {
+  const { portfolioBalance, portfolioError } = await parent();
 
-  const balanceResponse = await apiEndpoints.balance.getBalanceList(jwt);
-  if (balanceResponse.success && balanceResponse.data) {
+  if (!portfolioError) {
     return {
-      balanceList: balanceResponse.data.map((balance) => {
+      balanceList: portfolioBalance.map((balance) => {
         return {
           id: balance.symbol.symbol,
           name: balance.symbol.name,
@@ -32,7 +22,7 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
 
   return {
     errors: {
-      message: balanceResponse.message
+      message: portfolioError
     }
   };
 };

@@ -1,30 +1,49 @@
 import { apiEndpoints } from '$lib/api';
 import { getCurrentSession } from '$lib/server/cookie-manager';
+import { filterFiat } from '$lib/utils/helpers';
 import { fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
-type operationForm = {
+type BuySellForm = {
   operation: string;
   amount: string;
   tokenSelection: string;
 };
 
-export const load = (async ({ locals, cookies, params }) => {
-  const operation = params.operation;
-  const jwt = getCurrentSession(cookies, locals);
-  const generalTokenList = await apiEndpoints.tokenList.getTokenList(jwt ?? '');
-  const balanceTokenList = await apiEndpoints.balance.getBalanceList(jwt ?? '');
-  if (generalTokenList.success && balanceTokenList.success) {
-    const clientTokensSymbol = balanceTokenList.data?.map((balance) => balance.symbol);
-    return { generalTokens: generalTokenList.data, operation, clientTokens: clientTokensSymbol };
+export const load = (async ({ params, parent }) => {
+  const operation = params.operation as 'buy' | 'sell';
+  const { tokens, portfolioBalance, tokensError } = await parent();
+  if (!tokensError) {
+    if (operation === 'sell') {
+      return {
+        tokens: portfolioBalance.filter(filterFiat).map((balance) => {
+          return {
+            value: balance.symbol.symbol,
+            label: balance.symbol.symbol
+          };
+        }),
+        operation
+      };
+    } else {
+      return {
+        tokens: tokens.filter(filterFiat).map((token) => {
+          return {
+            value: token.symbol,
+            label: token.symbol
+          };
+        }),
+        operation
+      };
+    }
   }
-  return { error: generalTokenList.message, operation };
+
+  return { error: tokensError, operation };
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
   default: async ({ cookies, locals, request, params }) => {
     const formData = await request.formData();
-    const operationForm = Object.fromEntries(formData) as operationForm;
+    const operationForm = Object.fromEntries(formData) as BuySellForm;
     const errors: Record<string, unknown> = {};
     const operationAPI = params.operation;
     if (Object.keys(errors).length > 0) {
