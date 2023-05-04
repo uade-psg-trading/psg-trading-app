@@ -26,7 +26,9 @@
             <tr>
               {#each columns as column (column.key)}
                 {#if column.visible || column.visible === undefined}
-                  <th scope="col" class="px-6 py-3">{column.title}</th>
+                  <th scope="col" class="px-6 py-3">
+                    {column.title}
+                  </th>
                 {/if}
               {/each}
               {#if showOptionsMenu}
@@ -39,7 +41,7 @@
               <tr class="border">
                 {#each columns as column (column.key)}
                   {#if column.visible || column.visible === undefined}
-                    <td class={`${column.classes || ''} whitespace-nowrap px-6 py-4 font-medium`}>
+                    <td class={`${column.classes || ''} whitespace-nowrap px-6 py-4`}>
                       {column.value(row)}
                     </td>
                   {/if}

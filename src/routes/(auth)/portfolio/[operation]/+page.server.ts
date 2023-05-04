@@ -59,14 +59,10 @@ export const actions: Actions = {
       });
     }
 
-    const createTransactionResponse = await apiEndpoints.transaction.createTransaction(
-      jwt,
-      operationAPI,
-      {
-        token: operationForm.tokenSelection,
-        quantity: Number(operationForm.amount)
-      }
-    );
+    const createTransactionResponse = await apiEndpoints.transaction.create(jwt, operationAPI, {
+      token: operationForm.tokenSelection,
+      quantity: Number(operationForm.amount)
+    });
     if (createTransactionResponse.success) {
       return {};
     }
