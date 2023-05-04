@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { PageData } from './$types';
+  import type { ActionData, PageData } from './$types';
   import FormInput from '$lib/components/input/input-with-title.svelte';
   import PrimaryButton from '$lib/components/buttons/primary-button.svelte';
   import Selector from '$lib/components/selector/selector.svelte';
@@ -10,23 +10,42 @@
   import { goto } from '$app/navigation';
   import { onMount } from 'svelte';
   import { headerStore } from '$lib/stores';
-
-  let selectedValue: string;
+  import ErrorLabel from '$lib/components/error-label/error-label.svelte';
+  import { error } from '@sveltejs/kit';
 
   export let data: PageData;
-  const tokenList = data.result.data;
+  export let form: ActionData;
+  let selectedValue: string;
+  const tokenList = data.result;
   const operation = data.operation;
   const operationLabel = data.operation == 'sell' ? 'Vender' : 'Comprar';
 
   function goHome() {
     goto('/');
   }
+
   onMount(() => {
     headerStore.update((value) => {
       value.title = `${operationLabel} token`;
       return value;
     });
   });
+
+  function onEnhanceSubmit() {
+    return async ({ update, result }: any) => {
+      await update();
+      if (result.type === 'success') {
+        Swal.fire({
+          title: 'Venta exitosa',
+          text: 'Vendiste de manera exitosa el Token',
+          icon: 'success',
+          confirmButtonText: 'Aceptar'
+        }).then(() => {
+          goHome();
+        });
+      }
+    };
+  }
 </script>
 
 <svelte:head>
@@ -76,7 +95,7 @@
             value={selectedValue}
             list={tokenList
               ?.filter((symbol) => symbol.symbol != 'USD')
-              .map((symbol) => symbol.symbol)}
+              .map((symbol) => symbol.symbol) || []}
             labelTitle="Token"
           />
         </div>
@@ -86,6 +105,12 @@
       </div>
       <div class="justify-end items-end flex px-3 mb-6 md:mb-0">
         <div class="md:w-1/2 flex flex-row justify-end">
+          {#if data.error}
+            <ErrorLabel message={data.error} />
+          {/if}
+          {#if form?.errors?.message}
+            <ErrorLabel message={form.errors?.message} />
+          {/if}
           <div class="md:w-1/4">
             <PrimaryButton title={operationLabel} buttonType="submit" />
           </div>

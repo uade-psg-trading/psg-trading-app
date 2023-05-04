@@ -17,6 +17,24 @@
   function goSignIn() {
     goto('/sign-in');
   }
+
+  function onEnhanceSubmit() {
+    loading = true;
+    return async ({ update, result }: any) => {
+      await update();
+      loading = false;
+      if (result.type === 'success') {
+        Swal.fire({
+          title: 'Registro finalizado',
+          text: 'Serás redirigido a la pantalla de inicio de sesión.',
+          icon: 'success',
+          confirmButtonText: 'Aceptar'
+        }).then(() => {
+          goSignIn();
+        });
+      }
+    };
+  }
 </script>
 
 <svelte:head>
@@ -31,28 +49,7 @@
         Registro de cuenta
       </h2>
     </div>
-    <form
-      action="?/register"
-      method="POST"
-      class="w-full"
-      use:enhance={() => {
-        loading = true;
-        return async ({ update, result }) => {
-          await update();
-          loading = false;
-          if (result.type === 'success') {
-            Swal.fire({
-              title: 'Registro finalizado',
-              text: 'Serás redirigido a la pantalla de inicio de sesión.',
-              icon: 'success',
-              confirmButtonText: 'Aceptar'
-            }).then(() => {
-              goSignIn();
-            });
-          }
-        };
-      }}
-    >
+    <form action="?/register" method="POST" class="w-full" use:enhance={onEnhanceSubmit}>
       <div class="flex flex-wrap -mx-3 mb-6">
         <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <FormInput
@@ -198,7 +195,7 @@
             <SecondaryButton on:click={goSignIn} disabled={loading} title="Cancelar" />
           </div>
           <div class="md:w-1/4">
-            <PrimaryButton {loading} title="Registrarse" buttonType="submit" />
+            <PrimaryButton disabled={loading} {loading} title="Registrarse" buttonType="submit" />
           </div>
         </div>
       </div>

@@ -13,7 +13,10 @@ export const load = (async ({ locals, cookies, params }) => {
   const operation = params.operation;
   const jwt = getCurrentSession(cookies, locals);
   const result = await apiEndpoints.tokenList.getTokenList(jwt ?? '');
-  return { result, operation };
+  if (result.success) {
+    return { result: result.data, operation };
+  }
+  return { error: result.message, operation };
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
@@ -21,7 +24,7 @@ export const actions: Actions = {
     const formData = await request.formData();
     const operationForm = Object.fromEntries(formData) as operationForm;
     const errors: Record<string, unknown> = {};
-    const operationAPI = params.operation == 'Vender' ? 'sell' : 'buy';
+    const operationAPI = params.operation;
     if (Object.keys(errors).length > 0) {
       return fail(400, errors);
     }

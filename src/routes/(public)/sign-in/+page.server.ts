@@ -1,5 +1,5 @@
 import type { Actions } from './$types';
-import { redirect, type Cookies } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
 import { isValidEmail, isValidPassword } from '$lib/utils/validator';
 import { apiEndpoints } from '$lib/api';
 import { newSession } from '$lib/server/cookie-manager';
@@ -14,8 +14,9 @@ export const actions: Actions = {
     const valid = isValidEmail(email) && isValidPassword(password);
     if (valid) {
       const loginApi = await apiEndpoints.session.login(email, password);
-      if (loginApi) {
-        newSession(cookies, email, loginApi.jwt);
+      if (loginApi.success && loginApi.data) {
+        const { jwt, username } = loginApi.data;
+        newSession(cookies, username, jwt);
         throw redirect(302, '/');
       }
     }

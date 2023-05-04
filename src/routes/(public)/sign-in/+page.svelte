@@ -86,9 +86,14 @@
       {#if form?.errorMessage}
         <ErrorLabel message={form.errorMessage} />
       {/if}
-
-      <SecurityButton loading={signInButtonLoading} title="Iniciar sesion" buttonType="submit" />
+      <SecurityButton
+        disabled={signInButtonLoading || redirectLoading}
+        loading={signInButtonLoading}
+        title="Iniciar sesion"
+        buttonType="submit"
+      />
       <SsoButton
+        disabled={signInButtonLoading || redirectLoading}
         loading={redirectLoading}
         on:click={goToGoogle}
         title="Iniciar sesion con Google"
