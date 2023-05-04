@@ -72,6 +72,10 @@
       href: '/portfolio'
     },
     {
+      name: 'Historial de Operaciones',
+      href: '/history'
+    },
+    {
       name: 'Ingresar Dinero',
       href: '/cash-in'
     },
@@ -89,10 +93,6 @@
         }
       ]
     }
-    // {
-    //   name: 'Historial de Operaciones',
-    //   href: '/history'
-    // }
   ];
 
   const profileMenuRoutes = [
