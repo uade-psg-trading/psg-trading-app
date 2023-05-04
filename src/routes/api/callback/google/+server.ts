@@ -12,24 +12,22 @@ export const GET = (async ({ url, cookies, locals }) => {
 
   const code = url.searchParams.get('code');
   if (code) {
-    try {
-      const {
-        tokens: { id_token }
-      } = await oauth2client.getToken(code);
+    const {
+      tokens: { id_token }
+    } = await oauth2client.getToken(code);
 
-      if (id_token) {
-        const currentTenant = getCurrentTenant(locals);
-        const sessionData = await session.validateGoogleToken(id_token, currentTenant.id);
-        if (sessionData.success && sessionData.data) {
-          const { jwt, username } = sessionData.data;
-          newSession(cookies, username, jwt);
-          throw redirect(307, '/portfolio');
-        } else {
-          throw error(500, 'Hubo un error con nuestros servidores');
-        }
+    if (id_token) {
+      const currentTenant = getCurrentTenant(locals);
+      const sessionData = await session.validateGoogleToken(id_token, currentTenant.id);
+      if (sessionData.success && sessionData.data) {
+        const { jwt, username } = sessionData.data;
+        newSession(cookies, username, jwt);
+        throw redirect(307, '/');
+      } else {
+        throw error(500, `Hubo un error con nuestros servidores. Internal: ${sessionData.message}`);
       }
-    } catch {
-      throw error(500, 'Hubo un error con nuestros servidores');
+    } else {
+      throw error(500, 'No pudimos validar tu sesion con Google');
     }
   }
 
