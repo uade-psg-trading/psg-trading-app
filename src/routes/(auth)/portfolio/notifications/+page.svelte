@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { enhance } from '$app/forms';
+  import { goto } from '$app/navigation';
   import { headerStore } from '$lib/stores';
   import type { ActionData, PageData } from './$types';
   import WhiteCard from '$lib/components/cards/white-card.svelte';
@@ -8,9 +9,9 @@
   import PrimaryButton from '$lib/components/buttons/primary-button.svelte';
   import Table from '$lib/components/table/table.svelte';
   import Selector from '$lib/components/selector/selector.svelte';
-  import Swal from 'sweetalert2';
-  import { goto } from '$app/navigation';
   import ErrorLabel from '$lib/components/error-label/error-label.svelte';
+  import DeleteIcon from '$lib/icons/delete-icon.svelte';
+  import Swal from 'sweetalert2';
 
   export let data: PageData;
   export let form: ActionData;
@@ -25,7 +26,9 @@
   let loading = false;
   let selectedToken: string | undefined = undefined;
   let selectedReason: string | undefined = undefined;
-  const { tokens, reasons } = data;
+  const { tokens, reasons, alerts } = data;
+
+  let tableAlerts = alerts || [];
   const columns = [
     { key: 'id', title: 'ID', value: (row: { id: any }) => row.id, visible: false },
     { key: 'symbolName', title: 'Simbolo', value: (row: { tokenName: any }) => row.symbolName },
@@ -45,10 +48,27 @@
           icon: 'success',
           confirmButtonText: 'Aceptar'
         }).then(() => {
-          goto('/portfolio/notifications');
+          window?.location?.reload();
         });
       }
     };
+  }
+
+  async function handleCustomButtonClick(row: any) {
+    const response = await (
+      await fetch('/portfolio/notifications', {
+        method: 'DELETE',
+        body: JSON.stringify({ alertId: row.id }),
+        headers: {
+          'content-type': 'application/json'
+        }
+      })
+    ).json();
+
+    if (response.alerts) {
+      tableAlerts = response.alerts;
+      window?.location?.reload();
+    }
   }
 </script>
 
@@ -115,7 +135,14 @@
 
   <WhiteCard>
     <h2 class="text-left text-lg font-bold text-indigo-800">Mis alarmas configuradas</h2>
-    <Table showOptionsMenu={true} rows={data.alerts || []} {columns} />
+    <Table
+      onCustomButtonClick={handleCustomButtonClick}
+      showCustomButton={true}
+      rows={tableAlerts}
+      {columns}
+    >
+      <DeleteIcon slot="custom-button" />
+    </Table>
     {#if data.errors?.alertsError}
       <ErrorLabel message={data.errors.alertsError} />
     {/if}

@@ -14,7 +14,7 @@
 
   export let data: PageData;
   export let form: ActionData;
-  let selectedValue: string | undefined = undefined;
+  let selectedValue: string | undefined = data.queryStringSymbol;
   const tokens = data.tokens ?? [];
   const operation = data.operation;
   const operationLabel = data.operation == 'sell' ? 'Vender' : 'Comprar';
