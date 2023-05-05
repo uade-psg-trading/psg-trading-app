@@ -4,7 +4,6 @@
   import { headerStore } from '$lib/stores';
   import PieChart from '$lib/components/charts/pie-chart/pie-chart.svelte';
   import Table from '$lib/components/table/table.svelte';
-  import { balance } from '$lib/api/endpoints.js';
 
   onMount(() => {
     headerStore.update((value) => {

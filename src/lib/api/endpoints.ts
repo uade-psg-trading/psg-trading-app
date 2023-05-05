@@ -62,9 +62,8 @@ export const tokenList = {
 };
 
 export const balance = {
-  getBalanceList: async (jwt: string) => await authenticatedGet<Balance[]>('/api/balances', jwt),
-  getFiatBalance: async (jwt: string) =>
-    await authenticatedGet<FiatBalance>('/api/balances/fiat', jwt)
+  getBalances: async (jwt: string) => await authenticatedGet<Balance[]>('/api/balances', jwt),
+  getFiat: async (jwt: string) => await authenticatedGet<FiatBalance>('/api/balances/fiat', jwt)
 };
 
 type NewAlert = {

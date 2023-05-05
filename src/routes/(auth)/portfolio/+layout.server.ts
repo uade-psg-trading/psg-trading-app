@@ -40,7 +40,7 @@ async function getAllTokens(jwt: string) {
 }
 
 async function getPortfolioBalance(jwt: string) {
-  const result = await apiEndpoints.balance.getBalanceList(jwt ?? '');
+  const result = await apiEndpoints.balance.getBalances(jwt ?? '');
   if (result.success) {
     return { message: undefined, data: result.data || [] };
   }
@@ -49,7 +49,7 @@ async function getPortfolioBalance(jwt: string) {
 }
 
 async function getFiatBalance(jwt: string) {
-  const result = await apiEndpoints.balance.getFiatBalance(jwt ?? '');
+  const result = await apiEndpoints.balance.getFiat(jwt ?? '');
   if (result.success) {
     return { message: undefined, data: result.data };
   }
