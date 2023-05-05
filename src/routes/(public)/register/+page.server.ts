@@ -62,7 +62,7 @@ export const actions: Actions = {
     }
 
     const tenant = getCurrentTenant(locals).id;
-    const registerResponse = await apiEndpoints.user.createUser({
+    const registerResponse = await apiEndpoints.user.create({
       firstName: registerForm.name,
       dni: Number(registerForm.dni),
       email: registerForm.email,

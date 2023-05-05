@@ -17,15 +17,15 @@ export const session = {
     await unauthenticatedPost<Credentials>('/api/session/google', { token, tenant })
 };
 
-type UserWithSecureData = {
+type CreateUpdateUser = Pick<User, 'email' | 'location' | 'dni' | 'firstName' | 'lastName'> & {
+  tenantId: string;
   password: string;
-} & User;
-
+};
 export const user = {
   me: async (jwt: string) => await authenticatedGet<User>('/api/users/me', jwt),
-  createUser: async (newUser: UserWithSecureData) =>
+  create: async (newUser: CreateUpdateUser) =>
     await unauthenticatedPost<User>('/api/users', newUser),
-  updateUser: async (jwt: string, updatedUser: UserWithSecureData) =>
+  update: async (jwt: string, updatedUser: CreateUpdateUser) =>
     await authenticatedPut<User>('/api/users', jwt, updatedUser)
 };
 
@@ -55,8 +55,8 @@ export const payments = {
     await authenticatedPost<Payment>('/api/payments', jwt, newPayment)
 };
 
-export const tokenList = {
-  getTokenList: async (jwt: string) => await authenticatedGet<Token[]>('/api/coin', jwt)
+export const tokens = {
+  get: async (jwt: string) => await authenticatedGet<Token[]>('/api/coin', jwt)
 };
 
 export const balance = {
