@@ -1,12 +1,15 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import { page } from '$app/stores';
+  import { profileRouteStore, globalRouteStore } from '$lib/stores/route-store';
   import AppLogo from '$lib/components/app-logo/app-logo.svelte';
   import type { TenantType } from '$lib/tenant-manager';
+  import FloatingMenu from '../floating-menu/floating-menu.svelte';
 
   type Route = {
+    id: string;
     name: string;
     href: string;
+    isSubMenuVisible?: boolean;
     subMenuRoutes?: SubMenuRoute[];
   };
 
@@ -16,12 +19,11 @@
   };
 
   export let tenant: TenantType;
-  let showUserMenu = false;
+  let showProfileMenu = false;
   let showMobileMenu = false;
-  let showTradeSubmenu = false;
 
   function toggleUserMenu() {
-    showUserMenu = !showUserMenu;
+    showProfileMenu = !showProfileMenu;
   }
 
   function toggleMobileMenu() {
@@ -30,88 +32,19 @@
 
   function toggleSubMenu(route: Route) {
     if (route.subMenuRoutes) {
-      showTradeSubmenu = !showTradeSubmenu;
+      route.isSubMenuVisible = !route.isSubMenuVisible;
+      // reactiveness de svelte
+      // Si borras esto no detecta cambios entonces no renderiza.
+      routes = routes;
     }
   }
+
   function isCurrentRoute(currentRoute: string) {
     return $page.url.pathname === currentRoute ? 'bg-gray-900' : '';
   }
 
-  onMount(() => {
-    const userMenuListener = (e: MouseEvent) => {
-      if (e.target instanceof HTMLElement) {
-        if (e.target.closest('#user-menu-button')) {
-          return;
-        }
-      }
-
-      showUserMenu = false;
-    };
-
-    const mobileMenuListener = (e: MouseEvent) => {
-      if (e.target instanceof HTMLElement) {
-        if (e.target.closest('#mobile-button-container')) {
-          return;
-        }
-      }
-
-      showMobileMenu = false;
-    };
-
-    document.addEventListener('click', userMenuListener);
-    document.addEventListener('click', mobileMenuListener);
-    return () => {
-      document.removeEventListener('click', userMenuListener);
-      document.removeEventListener('click', mobileMenuListener);
-    };
-  });
-
-  const routes = [
-    {
-      name: 'Portfolio',
-      href: '/portfolio'
-    },
-    {
-      name: 'Historial de Operaciones',
-      href: '/history'
-    },
-    {
-      name: 'Ingresar Dinero',
-      href: '/cash-in'
-    },
-    {
-      name: 'Operar',
-      href: '#',
-      subMenuRoutes: [
-        {
-          name: 'Vender',
-          href: '/portfolio/sell'
-        },
-        {
-          name: 'Comprar',
-          href: '/portfolio/buy'
-        }
-      ]
-    },
-    {
-      name: 'Mis alertas',
-      href: '/portfolio/notifications'
-    }
-  ];
-
-  const profileMenuRoutes = [
-    {
-      name: 'Perfil',
-      href: '/profile'
-    },
-    {
-      name: 'Cerrar Sesión',
-      href: '/sign-out',
-      shouldReload: true,
-      preloadData: false,
-      generateRandom: true
-    }
-  ];
+  let routes = $globalRouteStore;
+  const profileMenuRoutes = $profileRouteStore;
 </script>
 
 <nav class="bg-gray-800">
@@ -165,30 +98,30 @@
             {#each routes as route}
               <div class="relative">
                 <a
+                  id={route.id}
                   on:click={() => toggleSubMenu(route)}
                   href={route.href}
                   class="{isCurrentRoute(
                     route.href
                   )} text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
-                  data-sveltekit-reload
-                  data-sveltekit-preload-data="off">{route.name}</a
+                  >{route.name}</a
                 >
 
                 {#if route.subMenuRoutes}
-                  <div hidden={!showTradeSubmenu}>
-                    <div class="absolute top-full left-0 mt-2 bg-gray-800">
-                      {#each route.subMenuRoutes as subMenuRoute}
-                        <a
-                          href={subMenuRoute.href}
-                          class="{isCurrentRoute(
-                            subMenuRoute.href
-                          )} block text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
-                          data-sveltekit-reload
-                          data-sveltekit-preload-data="off">{subMenuRoute.name}</a
-                        >
-                      {/each}
-                    </div>
-                  </div>
+                  <FloatingMenu
+                    actionButtonId={route.id}
+                    isVisible={route.isSubMenuVisible}
+                    classes="top-full left-0 mt-2"
+                  >
+                    {#each route.subMenuRoutes as subMenuRoute}
+                      <a
+                        href={subMenuRoute.href}
+                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 text-left"
+                        data-sveltekit-reload
+                        data-sveltekit-preload-data="off">{subMenuRoute.name}</a
+                      >
+                    {/each}
+                  </FloatingMenu>
                 {/if}
               </div>
             {/each}
@@ -237,13 +170,10 @@
               />
             </button>
           </div>
-          <div
-            hidden={!showUserMenu}
-            class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-            role="menu"
-            aria-orientation="vertical"
-            aria-labelledby="user-menu-button"
-            tabindex="-1"
+          <FloatingMenu
+            isVisible={showProfileMenu}
+            classes="right-0 z-10 mt-2"
+            actionButtonId="user-menu-button"
           >
             {#each profileMenuRoutes as route, index}
               <a
@@ -256,7 +186,7 @@
                 data-sveltekit-preload-data={route.preloadData ? '' : 'off'}>{route.name}</a
               >
             {/each}
-          </div>
+          </FloatingMenu>
         </div>
       </div>
     </div>

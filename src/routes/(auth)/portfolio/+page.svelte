@@ -4,6 +4,9 @@
   import { headerStore } from '$lib/stores';
   import PieChart from '$lib/components/charts/pie-chart/pie-chart.svelte';
   import Table from '$lib/components/table/table.svelte';
+  import type { PageData } from './$types';
+
+  export let data: PageData;
 
   onMount(() => {
     headerStore.update((value) => {
@@ -31,19 +34,11 @@
     { key: 'realYield', title: 'Valorizado', value: (row: { realYield: any }) => row.realYield },
     { key: 'alert', title: 'Alarma', value: (row: { alert: any }) => row.alert ?? '' }
   ];
-  const rowDefault = [
-    {
-      id: 1,
-      name: '',
-      price: '',
-      quantity: '',
-      variation: '',
-      yield: '',
-      realYield: '',
-      alert: undefined
-    }
+
+  const tableMenuOptions = [
+    { title: 'Comprar', calcHref: (row: { id: string }) => `/portfolio/buy?symbol=${row.id}` },
+    { title: 'Vender', calcHref: (row: { id: string }) => `/portfolio/sell?symbol=${row.id}` }
   ];
-  export let data;
 </script>
 
 <svelte:head>
@@ -69,7 +64,12 @@
       <PieChart />
     </WhiteCard>
     <div class="col-span-6">
-      <Table showOptionsMenu={true} rows={data.balanceList ?? rowDefault} {columns} />
+      <Table
+        showOptionsMenu={true}
+        rows={data.balanceList || []}
+        {columns}
+        menuOptions={tableMenuOptions}
+      />
     </div>
   </div>
 </div>

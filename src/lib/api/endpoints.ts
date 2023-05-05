@@ -3,7 +3,8 @@ import {
   unauthenticatedPost,
   authenticatedGet,
   authenticatedPost,
-  authenticatedPut
+  authenticatedPut,
+  authenticatedDelete
 } from './calls';
 import type { Alert, AlertOperator, Balance, Credentials, Payment, Token, User } from './types';
 
@@ -71,5 +72,6 @@ type NewAlert = {
 export const alerts = {
   get: async (jwt: string) => await authenticatedGet<Alert[]>('/api/alert', jwt),
   create: async (jwt: string, newAlert: NewAlert) =>
-    await authenticatedPost<Alert>('/api/alert', jwt, newAlert)
+    await authenticatedPost<Alert>('/api/alert', jwt, newAlert),
+  delete: async (jwt: string, id: number) => await authenticatedDelete(`/api/alert/${id}`, jwt)
 };

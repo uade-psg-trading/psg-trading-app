@@ -10,9 +10,14 @@ type BuySellForm = {
   tokenSelection: string;
 };
 
-export const load = (async ({ params, parent }) => {
+export const load = (async ({ url, params, parent }) => {
   const operation = params.operation as 'buy' | 'sell';
+  let queryStringSymbol: string | undefined = url.searchParams.get('symbol') as string;
   const { tokens, portfolioBalance, tokensError } = await parent();
+  if (!tokens.some((token) => token.symbol === queryStringSymbol)) {
+    queryStringSymbol = undefined;
+  }
+
   if (!tokensError) {
     if (operation === 'sell') {
       return {
@@ -22,7 +27,8 @@ export const load = (async ({ params, parent }) => {
             label: balance.symbol.symbol
           };
         }),
-        operation
+        operation,
+        queryStringSymbol
       };
     } else {
       return {
@@ -32,7 +38,8 @@ export const load = (async ({ params, parent }) => {
             label: token.symbol
           };
         }),
-        operation
+        operation,
+        queryStringSymbol
       };
     }
   }
