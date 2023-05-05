@@ -21,12 +21,14 @@ type UserWithSecureData = {
   password: string;
 } & User;
 
+type UpdatedUser = Omit<User, 'tenant'>;
+
 export const user = {
   me: async (jwt: string) => await authenticatedGet<User>('/api/users/me', jwt),
   createUser: async (newUser: UserWithSecureData) =>
     await unauthenticatedPost<User>('/api/users', newUser),
-  updateUser: async (jwt: string, updatedUser: UserWithSecureData) =>
-    await authenticatedPut<User>('/api/users', jwt, updatedUser)
+  updateUser: async (jwt: string, updatedUser: UpdatedUser) =>
+    await authenticatedPut<UpdatedUser>('/api/users', jwt, updatedUser)
 };
 
 type Transaction = {
