@@ -5,7 +5,16 @@ import {
   authenticatedPost,
   authenticatedPut
 } from './calls';
-import type { Alert, AlertOperator, Balance, Credentials, Payment, Token, User } from './types';
+import type {
+  Alert,
+  AlertOperator,
+  Balance,
+  Credentials,
+  FiatBalance,
+  Payment,
+  Token,
+  User
+} from './types';
 
 export const session = {
   login: async (email: string, password: string) =>
@@ -53,7 +62,9 @@ export const tokenList = {
 };
 
 export const balance = {
-  getBalanceList: async (jwt: string) => await authenticatedGet<Balance[]>('/api/balances', jwt)
+  getBalanceList: async (jwt: string) => await authenticatedGet<Balance[]>('/api/balances', jwt),
+  getFiatBalance: async (jwt: string) =>
+    await authenticatedGet<FiatBalance>('/api/balances/fiat', jwt)
 };
 
 type NewAlert = {

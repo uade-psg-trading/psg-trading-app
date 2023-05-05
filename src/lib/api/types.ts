@@ -43,6 +43,17 @@ export type Balance = {
   total: number;
 };
 
+export type FiatBalance = {
+  balance_id: number;
+  symbol: {
+    symbol: string;
+    name: string;
+    token: boolean;
+  };
+  amount: number;
+  updateTime: string;
+};
+
 export type Token = {
   symbol: string;
   name: string;
