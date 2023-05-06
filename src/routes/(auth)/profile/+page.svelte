@@ -22,7 +22,7 @@
           icon: 'success',
           confirmButtonText: 'Aceptar'
         }).then(() => {
-          goHome();
+          window?.location?.reload();
         });
       }
     };

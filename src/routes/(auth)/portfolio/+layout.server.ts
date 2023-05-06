@@ -23,7 +23,7 @@ export const load = (async ({ parent }): Promise<PortfolioPageLoad> => {
 }) satisfies LayoutServerLoad;
 
 async function getAllTokens(jwt: string) {
-  const result = await apiEndpoints.tokenList.getTokenList(jwt ?? '');
+  const result = await apiEndpoints.tokens.get(jwt ?? '');
   if (result.success) {
     return { message: undefined, data: result.data || [] };
   }
