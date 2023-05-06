@@ -26,7 +26,7 @@ type UpdateUser = Pick<User, 'email' | 'location' | 'dni' | 'firstName' | 'lastN
 export const user = {
   me: async (jwt: string) => await authenticatedGet<User>('/api/users/me', jwt),
   create: async (newUser: CreateUser) => await unauthenticatedPost<User>('/api/users', newUser),
-  updateUser: async (jwt: string, updatedUser: UpdateUser) =>
+  update: async (jwt: string, updatedUser: UpdateUser) =>
     await authenticatedPut<User>('/api/users', jwt, updatedUser)
 };
 

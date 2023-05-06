@@ -49,7 +49,7 @@ export const actions: Actions = {
         }
       });
     }
-    const updateUserResponse = await apiEndpoints.user.updateUser(jwt, {
+    const updateUserResponse = await apiEndpoints.user.update(jwt, {
       firstName: profileForm.name,
       dni: Number(profileForm.dni),
       email: profileForm.email,
