@@ -69,12 +69,12 @@
       </div>
     </WhiteCard>
     <WhiteCard classes="col-span-3 md:col-span-4 lg:col-span-5">
-      <PieChart labels={data.dataset?.labels} data={data.dataset?.labelsData} />
+      <PieChart labels={data.dataset?.labels ?? []} data={data.dataset?.labelsData ?? []} />
     </WhiteCard>
     <div class="col-span-6">
       <Table
         showOptionsMenu={true}
-        rows={data.balanceList || []}
+        rows={data.balances || []}
         {columns}
         menuOptions={tableMenuOptions}
       />
