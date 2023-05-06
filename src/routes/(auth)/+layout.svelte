@@ -9,7 +9,7 @@
 <div class="bg-gray-50 app">
   <Header tenant={data.tenant.id} />
   <header class="mb-8">
-    <div class="bg-white p-6 text-gray-900 dark:bg-neutral-700 dark:text-neutral-200">
+    <div class="bg-white p-6 text-gray-900">
       <h3 class="ml-6 text-3xl font-bold">{$headerStore.title}</h3>
     </div>
   </header>

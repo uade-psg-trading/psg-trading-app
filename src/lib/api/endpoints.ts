@@ -3,7 +3,8 @@ import {
   unauthenticatedPost,
   authenticatedGet,
   authenticatedPost,
-  authenticatedPut
+  authenticatedPut,
+  authenticatedDelete
 } from './calls';
 import type {
   Alert,
@@ -26,29 +27,36 @@ export const session = {
     await unauthenticatedPost<Credentials>('/api/session/google', { token, tenant })
 };
 
-type UserWithSecureData = {
+type CreateUser = Pick<User, 'email' | 'location' | 'dni' | 'firstName' | 'lastName'> & {
+  tenantId: string;
   password: string;
-} & User;
-
+};
+type UpdateUser = Pick<User, 'email' | 'location' | 'dni' | 'firstName' | 'lastName'>;
 export const user = {
   me: async (jwt: string) => await authenticatedGet<User>('/api/users/me', jwt),
-  createUser: async (newUser: UserWithSecureData) =>
-    await unauthenticatedPost<User>('/api/users', newUser),
-  updateUser: async (jwt: string, updatedUser: UserWithSecureData) =>
+  create: async (newUser: CreateUser) => await unauthenticatedPost<User>('/api/users', newUser),
+  update: async (jwt: string, updatedUser: UpdateUser) =>
     await authenticatedPut<User>('/api/users', jwt, updatedUser)
 };
 
 type Transaction = {
-  id: string;
-  transactionTime: string;
-} & NewTransaction;
+  id: number;
+  token: Token;
+  quantity: number;
+  price: number;
+  balance: number;
+  operation: string;
+  transactionTime: Date;
+};
 
 type NewTransaction = {
   token: string;
   quantity: number;
 };
+
 export const transaction = {
-  createTransaction: async (jwt: string, operation: string, newTransaction: NewTransaction) =>
+  get: async (jwt: string) => await authenticatedGet<Transaction[]>('/api/transaction', jwt),
+  create: async (jwt: string, operation: string, newTransaction: NewTransaction) =>
     await authenticatedPost<Transaction>(`/api/transaction/${operation}`, jwt, newTransaction)
 };
 
@@ -57,8 +65,8 @@ export const payments = {
     await authenticatedPost<Payment>('/api/payments', jwt, newPayment)
 };
 
-export const tokenList = {
-  getTokenList: async (jwt: string) => await authenticatedGet<Token[]>('/api/coin', jwt)
+export const tokens = {
+  get: async (jwt: string) => await authenticatedGet<Token[]>('/api/coin', jwt)
 };
 
 export const balance = {
@@ -74,5 +82,6 @@ type NewAlert = {
 export const alerts = {
   get: async (jwt: string) => await authenticatedGet<Alert[]>('/api/alert', jwt),
   create: async (jwt: string, newAlert: NewAlert) =>
-    await authenticatedPost<Alert>('/api/alert', jwt, newAlert)
+    await authenticatedPost<Alert>('/api/alert', jwt, newAlert),
+  delete: async (jwt: string, id: number) => await authenticatedDelete(`/api/alert/${id}`, jwt)
 };

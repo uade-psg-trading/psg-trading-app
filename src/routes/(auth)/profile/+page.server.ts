@@ -1,10 +1,9 @@
 import { apiEndpoints } from '$lib/api';
-import { getCurrentSession } from '$lib/server/cookie-manager';
 import { fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ cookies, locals }) => {
-  const jwt = getCurrentSession(cookies, locals);
+export const load: PageServerLoad = async ({ locals }) => {
+  const jwt = locals.session?.jwt;
   if (jwt == null) {
     return fail(400, {
       errors: {
@@ -12,13 +11,15 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
       }
     });
   }
-  const userResponse = await apiEndpoints.user.me(jwt);
-  if (userResponse.success) {
-    return userResponse.data;
+
+  const userResponse = locals.UserData;
+  if (userResponse) {
+    return userResponse;
   }
+
   return fail(400, {
     errors: {
-      message: userResponse.message
+      message: 'Su sesión ha expirado, por favor vuelva a iniciar sesión.'
     }
   });
 };
@@ -37,23 +38,22 @@ type ProfileForm = {
   confirmPassword: string;
 };
 export const actions: Actions = {
-  default: async ({ request, cookies, locals }) => {
+  default: async ({ request, locals }) => {
     const formData = await request.formData();
     const profileForm = Object.fromEntries(formData) as ProfileForm;
-    const jwt = getCurrentSession(cookies, locals);
+    const jwt = locals.session?.jwt;
     if (jwt == null) {
       return fail(400, {
         errors: {
-          message: 'Error with token'
+          message: 'Su sesión ha expirado, por favor vuelva a iniciar sesión.'
         }
       });
     }
-    const updateUserResponse = await apiEndpoints.user.updateUser(jwt, {
+    const updateUserResponse = await apiEndpoints.user.update(jwt, {
       firstName: profileForm.name,
       dni: Number(profileForm.dni),
       email: profileForm.email,
       lastName: profileForm.lastName,
-      password: profileForm.password,
       location: {
         country: profileForm.country,
         address: profileForm.address,
@@ -62,7 +62,9 @@ export const actions: Actions = {
         zipCode: profileForm.zipCode
       }
     });
+
     if (updateUserResponse.success) {
+      locals.UserData = updateUserResponse.data;
       return {};
     }
 
