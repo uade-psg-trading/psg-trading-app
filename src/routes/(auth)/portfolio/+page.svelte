@@ -53,15 +53,23 @@
     <WhiteCard classes="col-span-3 md:col-span-2 lg:col-span-1 flex flex-col justify-between">
       <div class="mb-4">
         <h3 class="text-lg text-black">Ganancia - Pérdida</h3>
-        <span class="text-base text-green-400">$345.545,70</span>
+        <span
+          class="text-base {Number(data.summary?.totalYield) >= 0
+            ? 'text-green-400'
+            : 'text-red-400'}">$ {data.summary?.totalYield}</span
+        >
       </div>
       <div>
         <h3 class="text-lg text-black">Activos valorizados</h3>
-        <span class="text-base text-gray-900">$1.004.234,82</span>
+        <span class="text-base text-gray-900">{data.summary?.totalRealYield}</span>
+      </div>
+      <div>
+        <h3 class="text-lg text-black">Disponible para operar</h3>
+        <span class="text-base text-gray-900">{data.fiatBalance?.amount.toFixed(2)}</span>
       </div>
     </WhiteCard>
     <WhiteCard classes="col-span-3 md:col-span-4 lg:col-span-5">
-      <PieChart />
+      <PieChart labels={data.dataset?.labels} data={data.dataset?.labelsData} />
     </WhiteCard>
     <div class="col-span-6">
       <Table
