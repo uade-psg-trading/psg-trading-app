@@ -137,26 +137,6 @@
             />
           </div>
         </div>
-        <div class="w-full flex flex-wrap">
-          <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-            <FormInput
-              id="password"
-              name="password"
-              isRequired={true}
-              labelTitle="Contraseña"
-              type="password"
-            />
-          </div>
-          <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-            <FormInput
-              id="confirmPassword"
-              name="confirmPassword"
-              isRequired={true}
-              labelTitle="Repetir contraseña"
-              type="password"
-            />
-          </div>
-        </div>
       </div>
       <div class="justify-end items-end flex px-3 mb-6 md:mb-0">
         <div class="md:w-1/2 flex flex-row justify-end">

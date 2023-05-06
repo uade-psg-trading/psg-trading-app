@@ -54,8 +54,6 @@ export const actions: Actions = {
       dni: Number(profileForm.dni),
       email: profileForm.email,
       lastName: profileForm.lastName,
-      tenantId: locals.tenant.id,
-      password: profileForm.password,
       location: {
         country: profileForm.country,
         address: profileForm.address,

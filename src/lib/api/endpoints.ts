@@ -18,15 +18,15 @@ export const session = {
     await unauthenticatedPost<Credentials>('/api/session/google', { token, tenant })
 };
 
-type CreateUpdateUser = Pick<User, 'email' | 'location' | 'dni' | 'firstName' | 'lastName'> & {
+type CreateUser = Pick<User, 'email' | 'location' | 'dni' | 'firstName' | 'lastName'> & {
   tenantId: string;
   password: string;
 };
+type UpdateUser = Pick<User, 'email' | 'location' | 'dni' | 'firstName' | 'lastName'>;
 export const user = {
   me: async (jwt: string) => await authenticatedGet<User>('/api/users/me', jwt),
-  create: async (newUser: CreateUpdateUser) =>
-    await unauthenticatedPost<User>('/api/users', newUser),
-  update: async (jwt: string, updatedUser: CreateUpdateUser) =>
+  create: async (newUser: CreateUser) => await unauthenticatedPost<User>('/api/users', newUser),
+  update: async (jwt: string, updatedUser: UpdateUser) =>
     await authenticatedPut<User>('/api/users', jwt, updatedUser)
 };
 
