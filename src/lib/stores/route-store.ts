@@ -31,6 +31,11 @@ export const globalRouteStore = readable([
         href: '/portfolio/buy'
       }
     ]
+  },
+  {
+    id: 'notifications',
+    name: 'Mis alertas',
+    href: '/portfolio/notifications'
   }
 ]);
 
