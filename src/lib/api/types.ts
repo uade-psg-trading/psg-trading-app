@@ -60,6 +60,7 @@ export type Token = {
   token: boolean;
   tokenPrice: {
     price: number;
+    percentChange24h: number;
   };
 };
 

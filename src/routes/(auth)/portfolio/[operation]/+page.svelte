@@ -54,12 +54,21 @@
       </div>
       <div class="w-4/6">
         <h1 class="mt-6 text-center text-4xl font-bold tracking-tight text-gray-900">
-          {tokens.find((t) => t.value == selectedValue)?.symbolName ?? 'Fan Token'}
+          {tokens.find((token) => token.value == selectedValue)?.symbolName ?? 'Fan Token'}
         </h1>
       </div>
       <div class="w-1/6">
         <h2 class="mt-10 text-center text-base text-gray-900">
-          $ {tokens.find((t) => t.value == selectedValue)?.price.toFixed(2) || 0}
+          $ {tokens.find((token) => token.value == selectedValue)?.price.toFixed(2) || 0}
+        </h2>
+        <h2
+          class="text-base text-center {Number(
+            tokens.find((token) => token.value == selectedValue)?.variation
+          ) < 0
+            ? 'text-red-400'
+            : 'text-green-400'}"
+        >
+          % {tokens.find((token) => token.value == selectedValue)?.variation.toFixed(2) || 0}
         </h2>
       </div>
     </div>

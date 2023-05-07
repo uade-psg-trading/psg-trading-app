@@ -26,7 +26,8 @@ export const load = (async ({ url, params, parent }) => {
             value: balance.symbol.symbol,
             label: balance.symbol.symbol,
             symbolName: balance.symbol.name,
-            price: balance.price
+            price: balance.price,
+            variation: balance.percent_change_24h
           };
         }),
         operation,
@@ -39,7 +40,8 @@ export const load = (async ({ url, params, parent }) => {
             value: token.symbol,
             label: token.symbol,
             symbolName: token.name,
-            price: token.tokenPrice.price
+            price: token.tokenPrice.price,
+            variation: token.tokenPrice.percentChange24h
           };
         }),
         operation,
