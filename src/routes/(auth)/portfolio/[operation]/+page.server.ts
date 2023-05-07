@@ -37,7 +37,7 @@ export const load = (async ({ url, params, parent }) => {
           return {
             value: token.symbol,
             label: token.name,
-            price: 0
+            price: token.tokenPrice.price
           };
         }),
         operation,

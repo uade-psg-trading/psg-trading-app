@@ -58,6 +58,9 @@ export type Token = {
   symbol: string;
   name: string;
   token: boolean;
+  tokenPrice: {
+    price: number;
+  }
 };
 
 export type AlertOperator = 'GREATER' | 'LOWER';
