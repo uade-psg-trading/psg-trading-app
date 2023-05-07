@@ -60,7 +60,7 @@ export type Token = {
   token: boolean;
   tokenPrice: {
     price: number;
-  }
+  };
 };
 
 export type AlertOperator = 'GREATER' | 'LOWER';
