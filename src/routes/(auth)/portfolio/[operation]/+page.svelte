@@ -54,7 +54,7 @@
       </div>
       <div class="w-4/6">
         <h1 class="mt-6 text-center text-4xl font-bold tracking-tight text-gray-900">
-          {tokens.find((t) => t.value == selectedValue)?.label ?? 'Fan Token'}
+          {tokens.find((t) => t.value == selectedValue)?.symbolName ?? 'Fan Token'}
         </h1>
       </div>
       <div class="w-1/6">

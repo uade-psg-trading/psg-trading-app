@@ -18,7 +18,7 @@
   <option value="-1">--Seleccionar--</option>
   {#each list as item}
     <option value={item.value}>
-      {item.value}
+      {item.label}
     </option>
   {/each}
 </select>
