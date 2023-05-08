@@ -8,8 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
-      contents: write              # This is required for actions/checkout@v1
-      security-events: write   # To upload sarif files
+      contents: write
+      security-events: write
     steps:
       - uses: actions/checkout@v2
       - name: Bump version and push tag
