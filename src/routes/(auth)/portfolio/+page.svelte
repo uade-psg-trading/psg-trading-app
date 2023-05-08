@@ -56,16 +56,16 @@
         <span
           class="text-base {Number(data.summary?.totalYield) >= 0
             ? 'text-green-400'
-            : 'text-red-400'}">$ {data.summary?.totalYield}</span
+            : 'text-red-400'}">$ {data.summary?.totalYield || 0}</span
         >
       </div>
       <div>
         <h3 class="text-lg text-black">Activos valorizados</h3>
-        <span class="text-base text-gray-900">{data.summary?.totalRealYield}</span>
+        <span class="text-base text-gray-900">$ {data.summary?.totalRealYield || 0}</span>
       </div>
       <div>
         <h3 class="text-lg text-black">Disponible para operar</h3>
-        <span class="text-base text-gray-900">{data.fiatBalance?.amount.toFixed(2)}</span>
+        <span class="text-base text-gray-900">$ {data.fiatBalance?.amount.toFixed(2) || 0}</span>
       </div>
     </WhiteCard>
     <WhiteCard classes="col-span-3 md:col-span-4 lg:col-span-5">
