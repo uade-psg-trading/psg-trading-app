@@ -29,7 +29,7 @@ export const newSession = (cookies: Cookies, username: string, jwt: string) => {
   }
 
   const sessionJwt = createSession(username, sessionMaxAge, jwt);
-  if (VERCEL_ENV === 'preview') {
+  if (VERCEL_ENV !== 'production') {
     cookies.set(jwtCookie, sessionJwt, {
       path: '/',
       maxAge: sessionMaxAge
@@ -41,15 +41,13 @@ export const newSession = (cookies: Cookies, username: string, jwt: string) => {
       domain: PUBLIC_COOKIE_DOMAIN
     });
   }
-
-  console.log('cookies', cookies.getAll());
 };
 
 export const removeSession = (cookies: Cookies, locals: App.Locals) => {
   const jwt = cookies.get(jwtCookie);
   if (jwt) {
     deleteSession(jwt);
-    if (VERCEL_ENV === 'preview') {
+    if (VERCEL_ENV !== 'production') {
       cookies.set(jwtCookie, '', {
         path: '/',
         maxAge: 0

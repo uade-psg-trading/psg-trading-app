@@ -1,39 +1,45 @@
-import { apiEndpoints } from '$lib/api';
-import { getCurrentSession } from '$lib/server/cookie-manager';
-import { fail } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ cookies, locals }) => {
-  const jwt = getCurrentSession(cookies, locals);
-  if (jwt == null) {
-    return {
-      errors: {
-        message: 'Error with token'
-      }
-    };
-  }
+export const load: PageServerLoad = async ({ parent }) => {
+  const { portfolioBalance, portfolioError } = await parent();
+  let totalYield = 0;
+  let totalRealYield = 0;
+  const labels: string[] = [];
+  const labelsData: number[] = [];
 
-  const balanceResponse = await apiEndpoints.balance.getBalanceList(jwt);
-  if (balanceResponse.success && balanceResponse.data) {
-    return {
-      balanceList: balanceResponse.data.map((balance) => {
+  if (!portfolioError) {
+    const balanceData = {
+      balances: portfolioBalance.map((balance) => {
+        totalYield += balance.yield;
+        totalRealYield += balance.total;
+        labels.push(balance.symbol.name);
+        labelsData.push(balance.total);
         return {
           id: balance.symbol.symbol,
           name: balance.symbol.name,
           price: `$ ${balance.price.toFixed(2)}`,
           quantity: balance.amount.toFixed(0),
-          variation: `${(balance.percent_change_24h * 100).toFixed(2)}%`,
+          variation: `${balance.percent_change_24h.toFixed(2)}%`,
           yield: `$ ${balance.yield.toFixed(2)}`,
           realYield: `$ ${balance.total.toFixed(2)}`,
           alert: undefined
         };
-      })
+      }),
+      summary: {
+        totalRealYield: totalRealYield.toFixed(2),
+        totalYield: totalYield.toFixed(2)
+      },
+      dataset: {
+        labels,
+        labelsData
+      }
     };
+    return balanceData;
   }
 
   return {
     errors: {
-      message: balanceResponse.message
+      message: portfolioError
     }
   };
 };

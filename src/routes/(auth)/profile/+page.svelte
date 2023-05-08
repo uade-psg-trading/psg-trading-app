@@ -22,7 +22,7 @@
           icon: 'success',
           confirmButtonText: 'Aceptar'
         }).then(() => {
-          goHome();
+          window?.location?.reload();
         });
       }
     };
@@ -134,26 +134,6 @@
               isRequired={true}
               labelTitle="Código postal"
               value={data.location?.zipCode}
-            />
-          </div>
-        </div>
-        <div class="w-full flex flex-wrap">
-          <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-            <FormInput
-              id="password"
-              name="password"
-              isRequired={true}
-              labelTitle="Contraseña"
-              type="password"
-            />
-          </div>
-          <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-            <FormInput
-              id="confirmPassword"
-              name="confirmPassword"
-              isRequired={true}
-              labelTitle="Repetir contraseña"
-              type="password"
             />
           </div>
         </div>

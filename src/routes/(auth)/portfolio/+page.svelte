@@ -4,10 +4,10 @@
   import { headerStore } from '$lib/stores';
   import PieChart from '$lib/components/charts/pie-chart/pie-chart.svelte';
   import Table from '$lib/components/table/table.svelte';
+  import type { PageData } from './$types';
 
-  // Hay que cambiar esto. No sirve
-  // Es 0 reusable
-  // Tampoco me copa mucho la idea de crear una libreria de rutas.
+  export let data: PageData;
+
   onMount(() => {
     headerStore.update((value) => {
       value.title = 'Portfolio';
@@ -16,28 +16,29 @@
   });
 
   const columns = [
-    { key: 'id', title: 'ID', value: (row) => row.id, visible: false },
-    { key: 'name', title: 'Activo', value: (row) => row.name, classes: 'text-gray-900' },
-    { key: 'price', title: 'Precio', value: (row) => row.price },
-    { key: 'quantity', title: 'Cantidad', value: (row) => row.quantity },
-    { key: 'variation', title: 'Variacion diaria', value: (row) => row.variation },
-    { key: 'yield', title: 'Rendimiento', value: (row) => row.yield },
-    { key: 'realYield', title: 'Valorizado', value: (row) => row.realYield },
-    { key: 'alert', title: 'Alarma', value: (row) => row.alert ?? '' }
-  ];
-  const rowDefault = [
+    { key: 'id', title: 'ID', value: (row: { id: any }) => row.id, visible: false },
     {
-      id: 1,
-      name: '',
-      price: '',
-      quantity: '',
-      variation: '',
-      yield: '',
-      realYield: '',
-      alert: undefined
-    }
+      key: 'name',
+      title: 'Activo',
+      value: (row: { name: string }) => row.name,
+      classes: 'text-gray-900'
+    },
+    { key: 'price', title: 'Precio', value: (row: { price: any }) => row.price },
+    { key: 'quantity', title: 'Cantidad', value: (row: { quantity: any }) => row.quantity },
+    {
+      key: 'variation',
+      title: 'Variacion diaria',
+      value: (row: { variation: any }) => row.variation
+    },
+    { key: 'yield', title: 'Rendimiento', value: (row: { yield: any }) => row.yield },
+    { key: 'realYield', title: 'Valorizado', value: (row: { realYield: any }) => row.realYield },
+    { key: 'alert', title: 'Alarma', value: (row: { alert: any }) => row.alert ?? '' }
   ];
-  export let data;
+
+  const tableMenuOptions = [
+    { title: 'Comprar', calcHref: (row: { id: string }) => `/portfolio/buy?symbol=${row.id}` },
+    { title: 'Vender', calcHref: (row: { id: string }) => `/portfolio/sell?symbol=${row.id}` }
+  ];
 </script>
 
 <svelte:head>
@@ -52,26 +53,31 @@
     <WhiteCard classes="col-span-3 md:col-span-2 lg:col-span-1 flex flex-col justify-between">
       <div class="mb-4">
         <h3 class="text-lg text-black">Ganancia - Pérdida</h3>
-        <span class="text-base text-green-400">$345.545,70</span>
+        <span
+          class="text-base {Number(data.summary?.totalYield) >= 0
+            ? 'text-green-400'
+            : 'text-red-400'}">$ {data.summary?.totalYield || 0}</span
+        >
       </div>
       <div>
         <h3 class="text-lg text-black">Activos valorizados</h3>
-        <span class="text-base text-gray-900">$1.004.234,82</span>
+        <span class="text-base text-gray-900">$ {data.summary?.totalRealYield || 0}</span>
+      </div>
+      <div>
+        <h3 class="text-lg text-black">Disponible para operar</h3>
+        <span class="text-base text-gray-900">$ {data.fiatBalance?.amount.toFixed(2) || 0}</span>
       </div>
     </WhiteCard>
     <WhiteCard classes="col-span-3 md:col-span-4 lg:col-span-5">
-      <PieChart />
+      <PieChart labels={data.dataset?.labels ?? []} data={data.dataset?.labelsData ?? []} />
     </WhiteCard>
     <div class="col-span-6">
-      <Table showOptionsMenu={true} rows={data.balanceList ?? rowDefault} {columns} />
+      <Table
+        showOptionsMenu={true}
+        rows={data.balances || []}
+        {columns}
+        menuOptions={tableMenuOptions}
+      />
     </div>
   </div>
-  <!-- <div class="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-    <div class="rounded p-6 bg-white w-full max-w-screen-lg space-y-8">
-      <div class="buttons">
-        <a href="/portfolio/sell"><button class="large row">Vender</button></a>
-        <a href="/portfolio/buy"><button class="large row">Comprar</button></a>
-      </div>
-    </div>
-  </div> -->
 </div>

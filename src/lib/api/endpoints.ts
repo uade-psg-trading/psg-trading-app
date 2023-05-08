@@ -3,15 +3,20 @@ import {
   unauthenticatedPost,
   authenticatedGet,
   authenticatedPost,
-  authenticatedPut
+  authenticatedPut,
+  authenticatedDelete
 } from './calls';
+import type {
+  Alert,
+  AlertOperator,
+  Balance,
+  Credentials,
+  FiatBalance,
+  Payment,
+  Token,
+  User
+} from './types';
 
-type Credentials = {
-  username: string;
-  jwt: string;
-  refreshToken: string;
-  tenant: string;
-};
 export const session = {
   login: async (email: string, password: string) =>
     await unauthenticatedPost<Credentials>('/api/session', {
@@ -22,68 +27,61 @@ export const session = {
     await unauthenticatedPost<Credentials>('/api/session/google', { token, tenant })
 };
 
-type User = {
-  firstName: string;
-  lastName: string;
-  dni: number;
-  email: string;
+type CreateUser = Pick<User, 'email' | 'location' | 'dni' | 'firstName' | 'lastName'> & {
   tenantId: string;
-  location: {
-    country: string;
-    address: string;
-    city: string;
-    province: string;
-    zipCode: string;
-  };
-};
-
-type UserWithSecureData = {
   password: string;
-} & User;
-
+};
+type UpdateUser = Pick<User, 'email' | 'location' | 'dni' | 'firstName' | 'lastName'>;
 export const user = {
   me: async (jwt: string) => await authenticatedGet<User>('/api/users/me', jwt),
-  createUser: async (newUser: UserWithSecureData) =>
-    await unauthenticatedPost<User>('/api/users', newUser),
-  updateUser: async (jwt: string, updatedUser: UserWithSecureData) =>
+  create: async (newUser: CreateUser) => await unauthenticatedPost<User>('/api/users', newUser),
+  update: async (jwt: string, updatedUser: UpdateUser) =>
     await authenticatedPut<User>('/api/users', jwt, updatedUser)
 };
 
 type Transaction = {
-  id: string;
-  transactionTime: string;
-} & NewTransaction;
+  id: number;
+  token: Token;
+  quantity: number;
+  price: number;
+  balance: number;
+  operation: string;
+  transactionTime: Date;
+};
 
 type NewTransaction = {
   token: string;
   quantity: number;
 };
+
 export const transaction = {
-  createTransaction: async (jwt: string, operation: string, newTransaction: NewTransaction) =>
+  get: async (jwt: string) => await authenticatedGet<Transaction[]>('/api/transaction', jwt),
+  create: async (jwt: string, operation: string, newTransaction: NewTransaction) =>
     await authenticatedPost<Transaction>(`/api/transaction/${operation}`, jwt, newTransaction)
 };
 
-type Payment = {
-  amount: number;
-  paymentMethod: string;
-};
 export const payments = {
   createPayment: async (jwt: string, newPayment: Payment) =>
     await authenticatedPost<Payment>('/api/payments', jwt, newPayment)
 };
 
-type Balance = {
-  symbol: {
-    symbol: string;
-    name: string;
-    token: boolean;
-  };
-  price: number;
-  percent_change_24h: number;
-  amount: number;
-  yield: number;
-  total: number;
+export const tokens = {
+  get: async (jwt: string) => await authenticatedGet<Token[]>('/api/coin/price', jwt)
 };
+
 export const balance = {
-  getBalanceList: async (jwt: string) => await authenticatedGet<Balance[]>('/api/balances', jwt)
+  getBalances: async (jwt: string) => await authenticatedGet<Balance[]>('/api/balances', jwt),
+  getFiat: async (jwt: string) => await authenticatedGet<FiatBalance>('/api/balances/fiat', jwt)
+};
+
+type NewAlert = {
+  operator: AlertOperator;
+  token: string;
+  amount: number;
+};
+export const alerts = {
+  get: async (jwt: string) => await authenticatedGet<Alert[]>('/api/alert', jwt),
+  create: async (jwt: string, newAlert: NewAlert) =>
+    await authenticatedPost<Alert>('/api/alert', jwt, newAlert),
+  delete: async (jwt: string, id: number) => await authenticatedDelete(`/api/alert/${id}`, jwt)
 };
