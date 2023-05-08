@@ -58,6 +58,10 @@ export type Token = {
   symbol: string;
   name: string;
   token: boolean;
+  tokenPrice: {
+    price: number;
+    percentChange24h: number;
+  };
 };
 
 export type AlertOperator = 'GREATER' | 'LOWER';

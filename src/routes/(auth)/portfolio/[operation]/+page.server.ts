@@ -24,7 +24,10 @@ export const load = (async ({ url, params, parent }) => {
         tokens: portfolioBalance.filter(filterFiat).map((balance) => {
           return {
             value: balance.symbol.symbol,
-            label: balance.symbol.symbol
+            label: balance.symbol.symbol,
+            symbolName: balance.symbol.name,
+            price: balance.price,
+            variation: balance.percent_change_24h
           };
         }),
         operation,
@@ -35,7 +38,10 @@ export const load = (async ({ url, params, parent }) => {
         tokens: tokens.filter(filterFiat).map((token) => {
           return {
             value: token.symbol,
-            label: token.symbol
+            label: token.symbol,
+            symbolName: token.name,
+            price: token.tokenPrice.price,
+            variation: token.tokenPrice.percentChange24h
           };
         }),
         operation,

@@ -18,7 +18,6 @@
   const tokens = data.tokens ?? [];
   const operation = data.operation;
   const operationLabel = data.operation == 'sell' ? 'Vender' : 'Comprar';
-
   onMount(() => {
     headerStore.update((value) => {
       value.title = `${operationLabel} token`;
@@ -47,7 +46,7 @@
   <title>{operationLabel} Activo</title>
 </svelte:head>
 
-<div class="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+<div class="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 min-w-full">
   <div class="rounded p-6 bg-white w-full max-w-screen-lg space-y-8">
     <div class="flex">
       <div class="w-1/6">
@@ -55,11 +54,22 @@
       </div>
       <div class="w-4/6">
         <h1 class="mt-6 text-center text-4xl font-bold tracking-tight text-gray-900">
-          Paris Saint-Germain Fan Token
+          {tokens.find((token) => token.value == selectedValue)?.symbolName ?? 'Fan Token'}
         </h1>
       </div>
       <div class="w-1/6">
-        <h2 class="mt-10 text-center text-base text-gray-900">$ 5.2808112</h2>
+        <h2 class="mt-10 text-center text-base text-gray-900">
+          $ {tokens.find((token) => token.value == selectedValue)?.price.toFixed(2) || 0}
+        </h2>
+        <h2
+          class="text-base text-center {Number(
+            tokens.find((token) => token.value == selectedValue)?.variation
+          ) < 0
+            ? 'text-red-400'
+            : 'text-green-400'}"
+        >
+          % {tokens.find((token) => token.value == selectedValue)?.variation.toFixed(2) || 0}
+        </h2>
       </div>
     </div>
     <form
@@ -73,7 +83,7 @@
           <Selector
             id="tokenSelection"
             name="tokenSelection"
-            value={selectedValue}
+            bind:value={selectedValue}
             list={tokens}
             labelTitle="Token"
           />

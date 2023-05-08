@@ -66,7 +66,7 @@ export const payments = {
 };
 
 export const tokens = {
-  get: async (jwt: string) => await authenticatedGet<Token[]>('/api/coin', jwt)
+  get: async (jwt: string) => await authenticatedGet<Token[]>('/api/coin/price', jwt)
 };
 
 export const balance = {
