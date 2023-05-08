@@ -5,6 +5,7 @@
   import PieChart from '$lib/components/charts/pie-chart/pie-chart.svelte';
   import Table from '$lib/components/table/table.svelte';
   import type { PageData } from './$types';
+  import { formatNumber } from '$lib/utils/helpers';
 
   export let data: PageData;
 
@@ -65,7 +66,7 @@
       </div>
       <div>
         <h3 class="text-lg text-black">Disponible para operar</h3>
-        <span class="text-base text-gray-900">{data.fiatBalance?.amount.toFixed(2)}</span>
+        <span class="text-base text-gray-900">$ {formatNumber(data.fiatBalance?.amount)}</span>
       </div>
     </WhiteCard>
     <WhiteCard classes="col-span-3 md:col-span-4 lg:col-span-5">
