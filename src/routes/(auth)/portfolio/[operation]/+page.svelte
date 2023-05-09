@@ -59,7 +59,7 @@
       </div>
       <div class="w-1/6">
         <h2 class="mt-10 text-center text-base text-gray-900">
-          $ {tokens.find((token) => token.value == selectedValue)?.price.toFixed(2) || 0}
+          $ {tokens.find((token) => token.value == selectedValue)?.price || 0}
         </h2>
         <h2
           class="text-base text-center {Number(
@@ -68,7 +68,7 @@
             ? 'text-red-400'
             : 'text-green-400'}"
         >
-          % {tokens.find((token) => token.value == selectedValue)?.variation.toFixed(2) || 0}
+          % {tokens.find((token) => token.value == selectedValue)?.variation || 0}
         </h2>
       </div>
     </div>
@@ -100,7 +100,7 @@
         {#if operation == 'buy'}
           <div class="px-3 my-6 flex flex-row justify-between w-full">
             <h1 class="text-center text-lg font-bold tracking-tight text-gray-700">
-              Saldo disponible para operar: $ {data.fiatBalance?.amount.toFixed(2) || 0}
+              Saldo disponible para operar: $ {data.fiatBalance || 0}
             </h1>
             <a class="text-indigo-800 underline self-center" href="/cash-in"
               >Ingresar dinero en la plataforma</a

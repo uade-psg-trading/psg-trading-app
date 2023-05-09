@@ -1,7 +1,8 @@
+import { formatNumber } from '$lib/utils/helpers';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ parent }) => {
-  const { portfolioBalance, portfolioError } = await parent();
+  const { portfolioBalance, portfolioError, fiatBalance } = await parent();
   let totalYield = 0;
   let totalRealYield = 0;
   const labels: string[] = [];
@@ -17,22 +18,23 @@ export const load: PageServerLoad = async ({ parent }) => {
         return {
           id: balance.symbol.symbol,
           name: balance.symbol.name,
-          price: `$ ${balance.price.toFixed(2)}`,
+          price: `$ ${formatNumber(balance.price)}`,
           quantity: balance.amount.toFixed(0),
-          variation: `${balance.percent_change_24h.toFixed(2)}%`,
-          yield: `$ ${balance.yield.toFixed(2)}`,
-          realYield: `$ ${balance.total.toFixed(2)}`,
+          variation: `${formatNumber(balance.percent_change_24h)}%`,
+          yield: `$ ${formatNumber(balance.yield)}`,
+          realYield: `$ ${formatNumber(balance.total)}`,
           alert: undefined
         };
       }),
       summary: {
-        totalRealYield: totalRealYield.toFixed(2),
-        totalYield: totalYield.toFixed(2)
+        totalRealYield: formatNumber(totalRealYield),
+        totalYield: formatNumber(totalYield)
       },
       dataset: {
         labels,
         labelsData
-      }
+      },
+      fiatBalance: formatNumber(fiatBalance?.amount)
     };
     return balanceData;
   }

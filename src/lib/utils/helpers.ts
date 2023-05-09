@@ -14,4 +14,5 @@ export function formatNumber(value: number | undefined) {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     });
+  return 0;
 }
