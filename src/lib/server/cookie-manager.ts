@@ -14,9 +14,7 @@ export const getCurrentSession = (cookies: Cookies, locals: App.Locals): string 
 
   const session = getSession(jwt);
   if (!session) {
-    cookies.delete(jwtCookie);
-    locals.session = undefined;
-    return null;
+    createSession('not-defined', sessionMaxAge, jwt);
   }
 
   locals.session = { jwt };
