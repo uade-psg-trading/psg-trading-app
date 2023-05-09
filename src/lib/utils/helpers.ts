@@ -8,7 +8,7 @@ export function translateAlertOperator(operator: AlertOperator) {
   return operator === 'GREATER' ? 'SUBE' : 'BAJA';
 }
 
-export function formatNumber(value: number | undefined) {
+export function formatNumber(value: number) {
   if (value)
     return value.toLocaleString('es-ES', {
       minimumFractionDigits: 2,

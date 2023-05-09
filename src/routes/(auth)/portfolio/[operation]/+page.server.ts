@@ -26,13 +26,13 @@ export const load = (async ({ url, params, parent }) => {
             value: balance.symbol.symbol,
             label: balance.symbol.symbol,
             symbolName: balance.symbol.name,
-            price: formatNumber(balance.price),
-            variation: formatNumber(balance.percent_change_24h)
+            price: formatNumber(balance.price || 0),
+            variation: formatNumber(balance.percent_change_24h || 0)
           };
         }),
         operation,
         queryStringSymbol,
-        fiatBalance: formatNumber(fiatBalance?.amount)
+        fiatBalance: formatNumber(fiatBalance?.amount || 0)
       };
     } else {
       return {
@@ -41,13 +41,13 @@ export const load = (async ({ url, params, parent }) => {
             value: token.symbol,
             label: token.symbol,
             symbolName: token.name,
-            price: formatNumber(token.tokenPrice.price),
-            variation: formatNumber(token.tokenPrice.percentChange24h)
+            price: formatNumber(token.tokenPrice.price || 0),
+            variation: formatNumber(token.tokenPrice.percentChange24h || 0)
           };
         }),
         operation,
         queryStringSymbol,
-        fiatBalance: formatNumber(fiatBalance?.amount)
+        fiatBalance: formatNumber(fiatBalance?.amount || 0)
       };
     }
   }

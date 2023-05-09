@@ -18,23 +18,23 @@ export const load: PageServerLoad = async ({ parent }) => {
         return {
           id: balance.symbol.symbol,
           name: balance.symbol.name,
-          price: `$ ${formatNumber(balance.price)}`,
+          price: `$ ${formatNumber(balance.price || 0)}`,
           quantity: balance.amount.toFixed(0),
-          variation: `${formatNumber(balance.percent_change_24h)}%`,
-          yield: `$ ${formatNumber(balance.yield)}`,
-          realYield: `$ ${formatNumber(balance.total)}`,
+          variation: `${formatNumber(balance.percent_change_24h || 0)}%`,
+          yield: `$ ${formatNumber(balance.yield || 0)}`,
+          realYield: `$ ${formatNumber(balance.total || 0)}`,
           alert: undefined
         };
       }),
       summary: {
-        totalRealYield: formatNumber(totalRealYield),
-        totalYield: formatNumber(totalYield)
+        totalRealYield: formatNumber(totalRealYield || 0),
+        totalYield: formatNumber(totalYield || 0)
       },
       dataset: {
         labels,
         labelsData
       },
-      fiatBalance: formatNumber(fiatBalance?.amount)
+      fiatBalance: formatNumber(fiatBalance?.amount || 0)
     };
     return balanceData;
   }
