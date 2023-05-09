@@ -122,6 +122,6 @@
         </div>
       </div>
     </form>
-    <CandleChart />
+    <CandleChart symbol={selectedValue || 'PSG'} />
   </div>
 </div>
