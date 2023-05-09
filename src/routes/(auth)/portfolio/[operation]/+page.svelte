@@ -100,7 +100,7 @@
         {#if operation == 'buy'}
           <div class="px-3 my-6 flex flex-row justify-between w-full">
             <h1 class="text-center text-lg font-bold tracking-tight text-gray-700">
-              Saldo disponible para operar: $ {data.fiatBalance || 0}
+              Saldo disponible para operar: $ {data.fiatBalance}
             </h1>
             <a class="text-indigo-800 underline self-center" href="/cash-in"
               >Ingresar dinero en la plataforma</a
