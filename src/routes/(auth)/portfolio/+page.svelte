@@ -5,7 +5,6 @@
   import PieChart from '$lib/components/charts/pie-chart/pie-chart.svelte';
   import Table from '$lib/components/table/table.svelte';
   import type { PageData } from './$types';
-  import { formatNumber } from '$lib/utils/helpers';
 
   export let data: PageData;
 
