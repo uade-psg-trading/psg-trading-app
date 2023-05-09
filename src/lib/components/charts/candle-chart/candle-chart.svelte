@@ -1,14 +1,24 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, afterUpdate } from 'svelte';
+
+  let script;
+  export let symbol: string;
 
   onMount(() => {
     appendScript(initWidget);
   });
+
+  afterUpdate(() => {
+    appendScript(initWidget);
+  });
+
   function initWidget() {
     if (typeof TradingView !== 'undefined') {
       new window.TradingView.widget({
         autosize: true,
-        symbol: 'SKILLING:PSGUSD',
+        symbol: `${symbol === 'NAP' ? 'MEXC' : 'CRYPTO'}:${symbol}${
+          symbol === 'NAP' ? 'USDT' : 'USD'
+        }`,
         interval: 'D',
         timezone: 'Etc/UTC',
         theme: 'light',
@@ -22,8 +32,8 @@
     }
   }
 
-  function appendScript(onload) {
-    const script = document.createElement('script');
+  function appendScript(onload: () => void) {
+    script = document.createElement('script');
     script.id = 'tradingview-widget-script';
     script.type = 'text/javascript';
     script.async = true;
