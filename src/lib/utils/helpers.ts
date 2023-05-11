@@ -7,3 +7,12 @@ export function filterFiat(token: Token | Balance): boolean {
 export function translateAlertOperator(operator: AlertOperator) {
   return operator === 'GREATER' ? 'SUBE' : 'BAJA';
 }
+
+export function formatNumber(value: number) {
+  if (value)
+    return value.toLocaleString('es-ES', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  return 0;
+}
