@@ -85,7 +85,7 @@
       use:enhance={onEnhanceSubmit}
     >
       <div class="flex flex-wrap">
-        <div class="w-full md:w-1/2 px-3 mb-6">
+        <div class="w-full md:w-1/2 px-3 mb-1.5">
           <Selector
             id="tokenSelection"
             name="tokenSelection"
@@ -94,7 +94,7 @@
             labelTitle="Token"
           />
         </div>
-        <div class="w-full md:w-1/2 px-3 mb-6">
+        <div class="w-full md:w-1/2 px-3 mb-1.5">
           <FormInput
             step={'0.01'}
             min={'1'}
@@ -106,14 +106,24 @@
             bind:value={amount}
           />
         </div>
-        <div class="w-full justify-end items-end flex px-3 mb-6">
-          <p class="text-sm text-gray-700">
-            $ {formatNumber(tokens.find((token) => token.value == selectedValue)?.price || 0)} * {amount ||
-              0} = $ {formatNumber(
-              Number(tokens.find((token) => token.value == selectedValue)?.price) *
-                Number(amount) || 0
-            )}
-          </p>
+        <div class="w-full justify-end items-end flex flex-col px-3">
+          {#if operation == 'sell'}
+            <div class="mb-4">
+              <p class="text-xs text-gray-400">
+                Cantidad disponible {tokens.find((token) => token.value == selectedValue)?.amount ||
+                  0}
+              </p>
+            </div>
+          {/if}
+          <div class="mb-4">
+            <p class="text-sm text-gray-700">
+              $ {formatNumber(tokens.find((token) => token.value == selectedValue)?.price || 0)} * {amount ||
+                0} = $ {formatNumber(
+                Number(tokens.find((token) => token.value == selectedValue)?.price) *
+                  Number(amount) || 0
+              )}
+            </p>
+          </div>
         </div>
         {#if operation == 'buy'}
           <div class="px-3 my-6 flex flex-row justify-between w-full">
