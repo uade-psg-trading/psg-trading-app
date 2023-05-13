@@ -15,9 +15,11 @@
   export let data: PageData;
   export let form: ActionData;
   let selectedValue: string | undefined = data.queryStringSymbol;
+  let loading = false;
   const tokens = data.tokens ?? [];
   const operation = data.operation;
   const operationLabel = data.operation == 'sell' ? 'Vender' : 'Comprar';
+
   onMount(() => {
     headerStore.update((value) => {
       value.title = `${operationLabel} token`;
@@ -26,8 +28,10 @@
   });
 
   function onEnhanceSubmit() {
+    loading = true;
     return async ({ update, result }: any) => {
       await update();
+      loading = false;
       if (result.type === 'success') {
         Swal.fire({
           title: 'Operación exitosa',
@@ -90,6 +94,8 @@
         </div>
         <div class="w-full md:w-1/2 px-3 mb-6">
           <FormInput
+            step={'0.01'}
+            min={'1'}
             type="number"
             id="amount"
             name="amount"
@@ -117,7 +123,7 @@
             <ErrorLabel message={form.errors?.message} />
           {/if}
           <div class="md:w-1/4">
-            <PrimaryButton title={operationLabel} buttonType="submit" />
+            <PrimaryButton {loading} title={operationLabel} buttonType="submit" />
           </div>
         </div>
       </div>

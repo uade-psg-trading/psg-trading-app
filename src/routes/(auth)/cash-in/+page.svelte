@@ -7,10 +7,14 @@
   import CopyText from '$lib/components/text/copy-text.svelte';
   import Swal from 'sweetalert2';
   import { goto } from '$app/navigation';
+  import type { ActionData } from './$types';
+  import ErrorLabel from '$lib/components/error-label/error-label.svelte';
 
   // Hay que cambiar esto. No sirve
   // Es 0 reusable
   // Tampoco me copa mucho la idea de crear una libreria de rutas.
+  export let form: ActionData;
+  let loading = false;
   onMount(() => {
     headerStore.update((value) => {
       value.title = 'Ingresar dinero';
@@ -19,8 +23,10 @@
   });
 
   function onEnhanceSubmit() {
+    loading = true;
     return async ({ update, result }: any) => {
       await update();
+      loading = false;
       if (result.type === 'success') {
         Swal.fire({
           title: 'Ingreso de dinero exitoso',
@@ -66,6 +72,7 @@
         <div class="-mx-3">
           <div class="w-3/6 mb-4 px-3">
             <FormInput
+              step="0.01"
               id="amount"
               name="amount"
               isRequired={true}
@@ -104,8 +111,11 @@
           </div>
         </div>
         <div class="justify-end flex">
+          {#if form?.errors}
+            <ErrorLabel message={form?.errors?.message || ''} />
+          {/if}
           <div class="px-3 mb-6 md:mb-0">
-            <PrimaryButton title="Ingresar dinero" buttonType="submit" />
+            <PrimaryButton {loading} title="Ingresar dinero" buttonType="submit" />
           </div>
         </div>
       </form>
