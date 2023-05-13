@@ -90,13 +90,7 @@
               />
             </div>
             <div class="w-3/6 mb-4 px-3">
-              <FormInput
-                id="cvc"
-                name="cvc"
-                isRequired={true}
-                labelTitle="CVC"
-                type="number"
-              />
+              <FormInput id="cvc" name="cvc" isRequired={true} labelTitle="CVC" type="number" />
             </div>
           </div>
           <div class="w-3/6 mb-4 px-3">
@@ -109,22 +103,10 @@
           </div>
           <div class="flex">
             <div class="w-2/6 mb-4 px-3">
-              <FormInput
-                id="month"
-                name="month"
-                isRequired={true}
-                labelTitle="Mes"
-                type="number"
-              />
+              <FormInput id="month" name="month" isRequired={true} labelTitle="Mes" type="number" />
             </div>
             <div class="w-2/6 mb-4 px-3">
-              <FormInput
-                id="year"
-                name="year"
-                isRequired={true}
-                labelTitle="Año"
-                type="number"
-              />
+              <FormInput id="year" name="year" isRequired={true} labelTitle="Año" type="number" />
             </div>
           </div>
         </div>
