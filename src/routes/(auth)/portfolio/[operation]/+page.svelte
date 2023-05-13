@@ -98,7 +98,7 @@
           <FormInput
             step={'0.01'}
             min={'1'}
-            inputType="number"
+            type="number"
             id="amount"
             name="amount"
             isRequired={true}

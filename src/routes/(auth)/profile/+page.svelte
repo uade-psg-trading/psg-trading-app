@@ -82,7 +82,7 @@
               autocomplete="email"
               isRequired={true}
               labelTitle="Correo electronico"
-              inputType="email"
+              type="email"
               value={data.email}
               readonly={true}
             />

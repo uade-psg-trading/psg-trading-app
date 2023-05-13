@@ -77,7 +77,7 @@
               name="amount"
               isRequired={true}
               labelTitle="Importe a cargar"
-              inputType="number"
+              type="number"
             />
           </div>
           <div class="flex">
@@ -95,7 +95,7 @@
                 name="cvc"
                 isRequired={true}
                 labelTitle="CVC"
-                inputType="number"
+                type="number"
               />
             </div>
           </div>
@@ -114,7 +114,7 @@
                 name="month"
                 isRequired={true}
                 labelTitle="Mes"
-                inputType="number"
+                type="number"
               />
             </div>
             <div class="w-2/6 mb-4 px-3">
@@ -123,7 +123,7 @@
                 name="year"
                 isRequired={true}
                 labelTitle="Año"
-                inputType="number"
+                type="number"
               />
             </div>
           </div>

@@ -12,11 +12,11 @@
   export let max: string | undefined = undefined;
   export let disabled = false;
   export let readonly = false;
-  export let inputType = 'text';
-  let inputElement: HTMLInputElement;
-  onMount(() => {
-    inputElement.type = inputType;
-  });
+  export let type = 'text';
+
+  const setType = (node: HTMLInputElement) => {
+    node.type = type;
+  };
   const classBase =
     'appearance-none block w-full  text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500';
   const classReadOnly = `${classBase} bg-gray-300`;
@@ -38,6 +38,6 @@
   required={isRequired}
   {disabled}
   {readonly}
-  bind:this={inputElement}
+  use:setType
   on:input
 />

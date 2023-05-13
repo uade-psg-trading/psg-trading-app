@@ -91,7 +91,7 @@
               autocomplete="email"
               isRequired={true}
               labelTitle="Correo electronico"
-              inputType="email"
+              type="email"
               disabled={loading}
             />
             {#if form?.errors?.email}
@@ -155,7 +155,7 @@
               name="password"
               isRequired={true}
               labelTitle="Contraseña"
-              inputType="password"
+              type="password"
               disabled={loading}
             />
             {#if form?.errors?.password}
@@ -170,7 +170,7 @@
               name="confirmPassword"
               isRequired={true}
               labelTitle="Repetir contraseña"
-              inputType="password"
+              type="password"
               disabled={loading}
             />
             {#if form?.errors?.confirmPassword}
