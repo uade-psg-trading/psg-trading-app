@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-
   export let id: string | undefined = undefined;
   export let name: string;
   export let labelTitle: string;
