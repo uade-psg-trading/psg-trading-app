@@ -1,6 +1,7 @@
 <script lang="ts">
   import MenuIcon from '$lib/icons/menu-icon.svelte';
   import FloatingMenu from '../floating-menu/floating-menu.svelte';
+  import AlertIcon from '$lib/icons/alert-icon.svelte';
 
   type Column = {
     key: string;
@@ -79,7 +80,11 @@
                 {#each columns as column (column.key)}
                   {#if column.visible || column.visible === undefined}
                     <td class={`${column.classes || ''} whitespace-nowrap px-6 py-4`}>
-                      {column.value(row)}
+                      {#if column.value(row) === 'showAlert'}
+                        <AlertIcon />
+                      {:else}
+                        {column.value(row)}
+                      {/if}
                     </td>
                   {/if}
                 {/each}
