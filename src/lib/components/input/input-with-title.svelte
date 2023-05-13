@@ -1,13 +1,11 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import type { HTMLInputAttributes } from 'svelte/elements';
 
   export let id: string | undefined = undefined;
   export let name: string;
   export let labelTitle: string;
   export let isRequired: boolean;
   export let autocomplete: string | undefined = undefined;
-  export let type: HTMLInputAttributes['type'] = 'text';
   export let value = '';
   export let step: string | undefined = undefined;
   export let min: string | undefined = undefined;
