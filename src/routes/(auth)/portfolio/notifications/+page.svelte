@@ -115,7 +115,7 @@
                 name="amount"
                 isRequired={true}
                 labelTitle="Valor"
-                type="number"
+                inputType="number"
               />
               {#if form?.errors?.amount}
                 <ErrorLabel message={form.errors.amount} />

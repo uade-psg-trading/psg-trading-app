@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import type { HTMLInputAttributes } from 'svelte/elements';
 
   export let id: string | undefined = undefined;
@@ -12,6 +13,11 @@
   export let max: string | undefined = undefined;
   export let disabled = false;
   export let readonly = false;
+  export let inputType = 'text';
+  let inputElement: HTMLInputElement;
+  onMount(() => {
+    inputElement.type = inputType;
+  });
   const classBase =
     'appearance-none block w-full  text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500';
   const classReadOnly = `${classBase} bg-gray-300`;
@@ -27,11 +33,11 @@
   class={readonly ? classReadOnly : classDefault}
   {id}
   {name}
-  {type}
   {autocomplete}
-  {value}
+  bind:value
   required={isRequired}
   {disabled}
   {readonly}
+  bind:this={inputElement}
   on:input
 />
