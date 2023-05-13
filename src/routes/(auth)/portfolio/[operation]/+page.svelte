@@ -11,6 +11,8 @@
   import AppLogo from '$lib/components/app-logo/app-logo.svelte';
   import ErrorLabel from '$lib/components/error-label/error-label.svelte';
   import Swal from 'sweetalert2';
+  import Toast from '$lib/components/toast/toast.svelte';
+  import { notifications } from '$lib/components/toast/notifications';
 
   export let data: PageData;
   export let form: ActionData;
@@ -120,7 +122,8 @@
             <ErrorLabel message={data.error} />
           {/if}
           {#if form?.errors?.message}
-            <ErrorLabel message={form.errors?.message} />
+            {notifications.danger(form?.errors.message, 5000)}
+            <Toast />
           {/if}
           <div class="md:w-1/4">
             <PrimaryButton {loading} title={operationLabel} buttonType="submit" />
