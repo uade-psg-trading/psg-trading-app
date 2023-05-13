@@ -57,7 +57,7 @@
             name="name"
             autocomplete="name"
             isRequired={true}
-            labelTitle="Name"
+            labelTitle="Nombre"
             value={form?.data?.name ?? ''}
             disabled={loading}
           />

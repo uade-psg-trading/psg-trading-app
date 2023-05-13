@@ -57,7 +57,7 @@
             name="email"
             isRequired={true}
             placeholder="Email"
-            inputType="email"
+            type="email"
             value={form?.email ?? ''}
           />
         </div>
@@ -69,7 +69,7 @@
             name="password"
             isRequired={true}
             placeholder="Contraseña"
-            inputType="password"
+            type="password"
           />
         </div>
         <div />
