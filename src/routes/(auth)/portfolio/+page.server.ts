@@ -23,7 +23,7 @@ export const load: PageServerLoad = async ({ parent }) => {
           variation: `${formatNumber(balance.percent_change_24h || 0)}%`,
           yield: `$ ${formatNumber(balance.yield || 0)}`,
           realYield: `$ ${formatNumber(balance.total || 0)}`,
-          alert: balance.isAlerted ? 'showAlert' : undefined
+          alert: undefined
         };
       }),
       summary: {
