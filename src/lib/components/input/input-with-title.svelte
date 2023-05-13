@@ -9,6 +9,7 @@
   export let autocomplete: string | undefined = undefined;
   export let type: HTMLInputAttributes['type'] = 'text';
   export let value = '';
+  export let step: string | undefined = undefined;
   export let min: string | undefined = undefined;
   export let max: string | undefined = undefined;
   export let disabled = false;
@@ -28,6 +29,7 @@
   {labelTitle}
 </label>
 <input
+  {step}
   {min}
   {max}
   class={readonly ? classReadOnly : classDefault}
