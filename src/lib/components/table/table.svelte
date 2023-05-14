@@ -47,7 +47,7 @@
     return {
       isMenuActive: false,
       ...row
-    };
+    } as InternalRow;
   });
 </script>
 
