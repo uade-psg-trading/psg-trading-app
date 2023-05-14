@@ -47,11 +47,20 @@ export const apiCall = async <T>({
       body: body && JSON.stringify(body)
     });
 
+    if (response.status === 401) {
+      return {
+        success: false,
+        message: 'Lo que estas buscando parece que no existe'
+      };
+    }
     const responseMessage = (await response.json()) as BasicResponse<T>;
     if (!response.ok) {
       const message = responseMessage.message;
       if (response.status === 401) {
-        throw new Error('Unauthorized');
+        return {
+          success: false,
+          message: 'Lo que estas buscando parece que no existe'
+        };
       }
 
       throw new Error(response.statusText + ' message:' + message);
