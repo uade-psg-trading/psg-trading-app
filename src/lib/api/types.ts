@@ -41,6 +41,7 @@ export type Balance = {
   amount: number;
   yield: number;
   total: number;
+  isAlerted: boolean;
 };
 
 export type FiatBalance = {

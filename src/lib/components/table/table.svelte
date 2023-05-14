@@ -1,14 +1,16 @@
 <script lang="ts">
   import MenuIcon from '$lib/icons/menu-icon.svelte';
+  import type { SvelteComponentTyped } from 'svelte';
   import FloatingMenu from '../floating-menu/floating-menu.svelte';
 
   type Column = {
     key: string;
     title: string;
-    value: (row: Row) => string | number | undefined;
+    value: (row: Row) => { component: SvelteComponentTyped } | string | number | undefined;
     sortable?: boolean;
     visible?: boolean;
-    classes?: string;
+    parentClasses?: string;
+    valueClasses?: (row: Row) => string;
   };
 
   type Row = {
@@ -78,8 +80,12 @@
               <tr class="border">
                 {#each columns as column (column.key)}
                   {#if column.visible || column.visible === undefined}
-                    <td class={`${column.classes || ''} whitespace-nowrap px-6 py-4`}>
-                      {column.value(row)}
+                    <td class={`${column.parentClasses || ''} whitespace-nowrap px-6 py-4`}>
+                      {#if typeof column.value(row) !== 'object'}
+                        <div class={column.valueClasses?.(row)}>{column.value(row)}</div>
+                      {:else}
+                        <svelte:component this={column.value(row)?.component} />
+                      {/if}
                     </td>
                   {/if}
                 {/each}
