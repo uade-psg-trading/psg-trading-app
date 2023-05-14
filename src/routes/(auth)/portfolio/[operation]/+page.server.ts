@@ -1,6 +1,6 @@
 import { apiEndpoints } from '$lib/api';
 import { getCurrentSession } from '$lib/server/cookie-manager';
-import { filterFiat } from '$lib/utils/helpers';
+import { filterFiat, formatNumber } from '$lib/utils/helpers';
 import { fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -13,7 +13,7 @@ type BuySellForm = {
 export const load = (async ({ url, params, parent }) => {
   const operation = params.operation as 'buy' | 'sell';
   let queryStringSymbol: string | undefined = url.searchParams.get('symbol') as string;
-  const { tokens, portfolioBalance, tokensError } = await parent();
+  const { tokens, portfolioBalance, tokensError, fiatBalance } = await parent();
   if (!tokens.some((token) => token.symbol === queryStringSymbol)) {
     queryStringSymbol = undefined;
   }
@@ -26,12 +26,14 @@ export const load = (async ({ url, params, parent }) => {
             value: balance.symbol.symbol,
             label: balance.symbol.symbol,
             symbolName: balance.symbol.name,
-            price: balance.price,
-            variation: balance.percent_change_24h
+            price: balance.price || 0,
+            variation: formatNumber(balance.percent_change_24h || 0),
+            amount: balance.amount
           };
         }),
         operation,
-        queryStringSymbol
+        queryStringSymbol,
+        fiatBalance: formatNumber(fiatBalance?.amount || 0)
       };
     } else {
       return {
@@ -40,12 +42,14 @@ export const load = (async ({ url, params, parent }) => {
             value: token.symbol,
             label: token.symbol,
             symbolName: token.name,
-            price: token.tokenPrice.price,
-            variation: token.tokenPrice.percentChange24h
+            price: token.tokenPrice.price || 0,
+            variation: formatNumber(token.tokenPrice.percentChange24h || 0),
+            amount: 0
           };
         }),
         operation,
-        queryStringSymbol
+        queryStringSymbol,
+        fiatBalance: formatNumber(fiatBalance?.amount || 0)
       };
     }
   }

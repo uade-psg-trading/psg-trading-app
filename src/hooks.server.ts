@@ -1,19 +1,19 @@
 import { VERCEL_ENV } from '$env/static/private';
 import { PUBLIC_HOST_URL } from '$env/static/public';
 import { apiEndpoints } from '$lib/api';
-import { getCurrentSession } from '$lib/server/cookie-manager';
+import { getCurrentSession, removeSession } from '$lib/server/cookie-manager';
 import { getTenant, isTenantUrl, setCurrentTenant, type TenantType } from '$lib/tenant-manager';
-import { redirect, type Handle } from '@sveltejs/kit';
+import { redirect, type Handle, type Cookies } from '@sveltejs/kit';
 
 export const handle = (async ({ event, resolve }) => {
   const { cookies, locals, url } = event;
   const jwt = getCurrentSession(cookies, locals);
-  await handleTenant(url, locals, jwt);
+  await handleTenant(url, locals, cookies, jwt);
 
   return await resolve(event);
 }) satisfies Handle;
 
-async function handleTenant(url: URL, locals: App.Locals, jwt: string | null) {
+async function handleTenant(url: URL, locals: App.Locals, cookies: Cookies, jwt: string | null) {
   if (jwt) {
     const meApi = await apiEndpoints.user.me(jwt);
     let currentTenantId = 'trading' as TenantType;
@@ -24,7 +24,7 @@ async function handleTenant(url: URL, locals: App.Locals, jwt: string | null) {
       defaultUrl = meApi.data?.tenant?.domain || PUBLIC_HOST_URL;
       setCurrentTenant(locals, currentTenantId);
     } else {
-      locals.UserData = undefined;
+      removeSession(cookies, locals);
       setCurrentTenant(locals, getTenant(url, locals));
     }
 

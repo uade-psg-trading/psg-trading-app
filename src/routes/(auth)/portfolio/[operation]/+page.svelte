@@ -11,13 +11,17 @@
   import AppLogo from '$lib/components/app-logo/app-logo.svelte';
   import ErrorLabel from '$lib/components/error-label/error-label.svelte';
   import Swal from 'sweetalert2';
+  import { formatNumber } from '$lib/utils/helpers';
 
   export let data: PageData;
   export let form: ActionData;
   let selectedValue: string | undefined = data.queryStringSymbol;
+  let loading = false;
+  let amount = '';
   const tokens = data.tokens ?? [];
   const operation = data.operation;
   const operationLabel = data.operation == 'sell' ? 'Vender' : 'Comprar';
+
   onMount(() => {
     headerStore.update((value) => {
       value.title = `${operationLabel} token`;
@@ -26,8 +30,10 @@
   });
 
   function onEnhanceSubmit() {
+    loading = true;
     return async ({ update, result }: any) => {
       await update();
+      loading = false;
       if (result.type === 'success') {
         Swal.fire({
           title: 'Operación exitosa',
@@ -59,7 +65,7 @@
       </div>
       <div class="w-1/6">
         <h2 class="mt-10 text-center text-base text-gray-900">
-          $ {tokens.find((token) => token.value == selectedValue)?.price.toFixed(2) || 0}
+          $ {formatNumber(tokens.find((token) => token.value == selectedValue)?.price || 0)}
         </h2>
         <h2
           class="text-base text-center {Number(
@@ -68,7 +74,7 @@
             ? 'text-red-400'
             : 'text-green-400'}"
         >
-          % {tokens.find((token) => token.value == selectedValue)?.variation.toFixed(2) || 0}
+          % {tokens.find((token) => token.value == selectedValue)?.variation || 0}
         </h2>
       </div>
     </div>
@@ -79,7 +85,7 @@
       use:enhance={onEnhanceSubmit}
     >
       <div class="flex flex-wrap">
-        <div class="w-full md:w-1/2 px-3 mb-6">
+        <div class="w-full md:w-1/2 px-3 mb-1.5">
           <Selector
             id="tokenSelection"
             name="tokenSelection"
@@ -88,19 +94,41 @@
             labelTitle="Token"
           />
         </div>
-        <div class="w-full md:w-1/2 px-3 mb-6">
+        <div class="w-full md:w-1/2 px-3 mb-1.5">
           <FormInput
+            step={'0.01'}
+            min={'1'}
             type="number"
             id="amount"
             name="amount"
             isRequired={true}
             labelTitle="Cantidad"
+            bind:value={amount}
           />
+        </div>
+        <div class="w-full justify-end items-end flex flex-col px-3">
+          {#if operation == 'sell'}
+            <div class="mb-4">
+              <p class="text-xs text-gray-400">
+                Cantidad disponible {tokens.find((token) => token.value == selectedValue)?.amount ||
+                  0}
+              </p>
+            </div>
+          {/if}
+          <div class="mb-4">
+            <p class="text-sm text-gray-700">
+              $ {formatNumber(tokens.find((token) => token.value == selectedValue)?.price || 0)} * {amount ||
+                0} = $ {formatNumber(
+                Number(tokens.find((token) => token.value == selectedValue)?.price) *
+                  Number(amount) || 0
+              )}
+            </p>
+          </div>
         </div>
         {#if operation == 'buy'}
           <div class="px-3 my-6 flex flex-row justify-between w-full">
             <h1 class="text-center text-lg font-bold tracking-tight text-gray-700">
-              Saldo disponible para operar: $ {data.fiatBalance?.amount.toFixed(2) || 0}
+              Saldo disponible para operar: $ {data.fiatBalance}
             </h1>
             <a class="text-indigo-800 underline self-center" href="/cash-in"
               >Ingresar dinero en la plataforma</a
@@ -117,11 +145,11 @@
             <ErrorLabel message={form.errors?.message} />
           {/if}
           <div class="md:w-1/4">
-            <PrimaryButton title={operationLabel} buttonType="submit" />
+            <PrimaryButton {loading} title={operationLabel} buttonType="submit" />
           </div>
         </div>
       </div>
     </form>
-    <CandleChart />
+    <CandleChart symbol={selectedValue || 'PSG'} />
   </div>
 </div>

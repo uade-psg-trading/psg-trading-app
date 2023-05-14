@@ -109,6 +109,7 @@
             </div>
             <div class="w-1/4 mb-4 px-3">
               <FormInput
+                step={'.01'}
                 min={'0'}
                 max={'100000'}
                 id="amount"
