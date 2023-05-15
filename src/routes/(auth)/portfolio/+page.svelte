@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import AlertIcon from '$lib/icons/alert-icon.svelte';
   import WhiteCard from '$lib/components/cards/white-card.svelte';
   import { headerStore } from '$lib/stores';
   import PieChart from '$lib/components/charts/pie-chart/pie-chart.svelte';
@@ -22,18 +23,42 @@
       key: 'name',
       title: 'Activo',
       value: (row: { name: string }) => row.name,
-      classes: 'text-gray-900'
+      parentClasses: 'text-gray-900'
     },
     { key: 'price', title: 'Precio', value: (row: { price: any }) => row.price },
-    { key: 'quantity', title: 'Cantidad', value: (row: { quantity: any }) => row.quantity },
+    {
+      key: 'quantity',
+      title: 'Cantidad',
+      value: (row: { quantity: any }) => row.quantity
+    },
     {
       key: 'variation',
       title: 'Variacion diaria',
-      value: (row: { variation: any }) => row.variation
+      value: (row: { variation: any }) => row.variation,
+      valueClasses: (row: { positiveVariation: boolean }) =>
+        `${
+          row.positiveVariation ? 'bg-green-100 text-green-800' : 'bg-red-400 text-red-800'
+        } w-16 rounded font-bold h-100 m-auto text-center`
     },
-    { key: 'yield', title: 'Rendimiento', value: (row: { yield: any }) => row.yield },
+    {
+      key: 'yield',
+      title: 'Rendimiento',
+      value: (row: { yield: any }) => row.yield,
+      valueClasses: (row: { positiveYield: boolean }) =>
+        `${row.positiveYield ? 'text-green-600' : 'text-red-400'}`
+    },
     { key: 'realYield', title: 'Valorizado', value: (row: { realYield: any }) => row.realYield },
-    { key: 'alert', title: 'Alarma', value: (row: { alert: any }) => row.alert ?? '' }
+    {
+      key: 'alert',
+      title: 'Alarma',
+      value: (row: { isAlerted: any }) => {
+        if (row.isAlerted) {
+          return { component: AlertIcon };
+        }
+
+        return '';
+      }
+    }
   ];
 
   const tableMenuOptions = [

@@ -21,9 +21,11 @@ export const load: PageServerLoad = async ({ parent }) => {
           price: `$ ${formatNumber(balance.price || 0)}`,
           quantity: balance.amount.toFixed(0),
           variation: `${formatNumber(balance.percent_change_24h || 0)}%`,
+          positiveVariation: balance.percent_change_24h > 0,
           yield: `$ ${formatNumber(balance.yield || 0)}`,
+          positiveYield: balance.yield > 0,
           realYield: `$ ${formatNumber(balance.total || 0)}`,
-          alert: undefined
+          isAlerted: balance.isAlerted
         };
       }),
       summary: {
