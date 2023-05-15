@@ -29,6 +29,7 @@ export const load: PageServerLoad = async ({ parent }) => {
         };
       }),
       summary: {
+        positiveTotalYield: totalYield > 0,
         totalRealYield: formatNumber(totalRealYield || 0),
         totalYield: formatNumber(totalYield || 0)
       },
