@@ -28,7 +28,7 @@ export const load: PageServerLoad = async ({ parent }) => {
       }),
       summary: {
         totalRealYield: formatNumber(totalRealYield || 0),
-        totalYield: formatNumber(totalYield || 0)
+        totalYield: totalYield || 0
       },
       dataset: {
         labels,

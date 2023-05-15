@@ -5,6 +5,7 @@
   import PieChart from '$lib/components/charts/pie-chart/pie-chart.svelte';
   import Table from '$lib/components/table/table.svelte';
   import type { PageData } from './$types';
+  import { formatNumber } from '$lib/utils/helpers';
 
   export let data: PageData;
 
@@ -56,7 +57,7 @@
         <span
           class="text-base {Number(data.summary?.totalYield) >= 0
             ? 'text-green-400'
-            : 'text-red-400'}">$ {data.summary?.totalYield}</span
+            : 'text-red-400'}">$ {formatNumber(data.summary?.totalYield || 0)}</span
         >
       </div>
       <div>
