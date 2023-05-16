@@ -11,7 +11,6 @@
   import AppLogo from '$lib/components/app-logo/app-logo.svelte';
   import ErrorLabel from '$lib/components/error-label/error-label.svelte';
   import Swal from 'sweetalert2';
-  import Toast from '$lib/components/toast/toast.svelte';
   import { notifications } from '$lib/components/toast/notifications';
 
   export let data: PageData;
@@ -43,6 +42,10 @@
         }).then(() => {
           goto(`/portfolio/${operation}`);
         });
+      }
+      if (result.type === 'failure') {
+        console.log(result);
+        notifications.danger(result?.data?.errors.message, 5000);
       }
     };
   }
@@ -118,13 +121,9 @@
       </div>
       <div class="justify-end items-end flex px-3 mb-6 md:mb-0">
         <div class="md:w-1/2 flex flex-row justify-end">
-          {#if data.error}
-            <ErrorLabel message={data.error} />
-          {/if}
-          {#if form?.errors?.message}
+          <!-- {#if form?.errors?.message}
             {notifications.danger(form?.errors.message, 5000)}
-            <Toast />
-          {/if}
+          {/if} -->
           <div class="md:w-1/4">
             <PrimaryButton {loading} title={operationLabel} buttonType="submit" />
           </div>

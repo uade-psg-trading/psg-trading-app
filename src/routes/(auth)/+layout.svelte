@@ -2,11 +2,12 @@
   import type { LayoutServerData } from './$types';
   import Header from '$lib/components/header/header.svelte';
   import { headerStore } from '$lib/stores';
-
+  import Toast from '$lib/components/toast/toast.svelte';
   export let data: LayoutServerData;
 </script>
 
 <div class="bg-gray-50 app">
+  <Toast />
   <Header tenant={data.tenant.id} />
   <header class="mb-8">
     <div class="bg-white p-6 text-gray-900">

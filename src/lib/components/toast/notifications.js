@@ -4,6 +4,7 @@ const TIMEOUT = 3000;
 let notificationStore = null;
 
 function getNotificacionStore() {
+  // @ts-ignore
   if (!notificationStore) {
     notificationStore = createNotificationStore();
   }
