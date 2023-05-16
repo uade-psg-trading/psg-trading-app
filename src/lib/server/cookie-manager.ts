@@ -59,5 +59,6 @@ export const removeSession = (cookies: Cookies, locals: App.Locals) => {
     }
 
     locals.session = undefined;
+    locals.UserData = undefined;
   }
 };

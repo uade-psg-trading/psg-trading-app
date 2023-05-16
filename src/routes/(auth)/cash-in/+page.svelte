@@ -10,9 +10,6 @@
   import type { ActionData } from './$types';
   import ErrorLabel from '$lib/components/error-label/error-label.svelte';
 
-  // Hay que cambiar esto. No sirve
-  // Es 0 reusable
-  // Tampoco me copa mucho la idea de crear una libreria de rutas.
   export let form: ActionData;
   let loading = false;
   onMount(() => {
