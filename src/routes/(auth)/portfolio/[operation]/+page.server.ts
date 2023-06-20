@@ -42,8 +42,8 @@ export const load = (async ({ url, params, parent }) => {
             value: token.symbol,
             label: token.symbol,
             symbolName: token.name,
-            price: token.tokenPrice.price || 0,
-            variation: formatNumber(token.tokenPrice.percentChange24h || 0),
+            price: token.tokenPrice?.price || 0,
+            variation: formatNumber(token.tokenPrice?.percentChange24h || 0),
             amount: 0
           };
         }),
